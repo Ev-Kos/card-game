@@ -6,3 +6,4 @@ dist
 tmp
 
 *.log
+lerna-debug.log*
