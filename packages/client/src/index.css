@@ -1,0 +1,91 @@
+:root {
+  width: 100%;
+  height: 100%;
+
+  --color-primary: #ffffff;
+  --color-secondary: #350f68;
+  --color-background: #9b5cf0;
+  --color-background-light: #b38ff1;
+  --color-contrast: #d61e1e;
+  --color-dark: #3a3a3a;
+  --color-link: #4f2982;
+}
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  font-size: 13px;
+  background-color: var(--color-background);
+  overflow: hidden;
+}
+
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+ol,
+ul,
+li,
+form,
+label {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  font-weight: 500;
+}
+
+main,
+footer {
+  width: 100%;
+  display: inherit;
+  flex-direction: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+}
+
+h1 {
+  font-weight: 500;
+}
+
+form {
+  width: 100%;
+}
+
+input {
+  border: none;
+}
+
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  appearance: none;
+}
+
+a.text:active,
+a.text:hover,
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+:active,
+:hover,
+:focus {
+  outline: 0;
+  outline-offset: 0;
+}
+
+button {
+  font-family: Inter, Arial, sans-serif;
+  border: none;
+  cursor: pointer;
+}
