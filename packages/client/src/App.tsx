@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
-import './App.css'
 
 import styles from './styles.module.css'
 
@@ -20,7 +19,7 @@ function App() {
 
   return (
     <>
-      <img src={Logo} className={styles.logo} />
+      <img src={Logo} className={styles.logo} alt="Desc Masters" />
       <img src={BackgroundImage} className={styles.backgrounImage} />
     </>
   )

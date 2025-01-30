@@ -10,11 +10,7 @@ type TErrorProps = {
   children: React.ReactNode
 }
 
-export const Error: React.FC<TErrorProps> = ({
-  description,
-  text,
-  children,
-}) => {
+export const Error = ({ description, text, children }: TErrorProps) => {
   return (
     <div className={styles.pageContentContainer}>
       <div className={styles.textContentContainer}>

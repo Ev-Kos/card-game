@@ -4,18 +4,12 @@ import classNames from 'classnames'
 import styles from './styles.module.css'
 
 type TButtonProps = {
-  size: 's' | 'm' | 'l' | 'xl'
+  size?: 's' | 'm' | 'l' | 'xl'
   color: 'primary' | 'secondary' | 'contrast'
   label: string
-  onClick?: () => void
-}
+} & React.HTMLAttributes<HTMLButtonElement>
 
-export const Button: React.FC<TButtonProps> = ({
-  size,
-  color,
-  label,
-  onClick,
-}) => {
+export const Button = ({ size = 's', color, label, onClick }: TButtonProps) => {
   const className = classNames(styles.buttonContainer, {
     [styles.buttonS]: size === 's',
     [styles.buttonM]: size === 'm',
