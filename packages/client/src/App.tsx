@@ -1,5 +1,10 @@
 import { useEffect } from 'react'
+
+import BackgroundImage from './assets/BackgroundImage.svg'
+import Logo from './assets/Logo.svg'
 import './App.css'
+
+import styles from './styles.module.css'
 
 function App() {
   useEffect(() => {
@@ -12,7 +17,13 @@ function App() {
 
     fetchServerData()
   }, [])
-  return <div className="App">Вот тут будет жить ваше приложение :)</div>
+
+  return (
+    <>
+      <img src={Logo} className={styles.logo} />
+      <img src={BackgroundImage} className={styles.backgrounImage} />
+    </>
+  )
 }
 
 export default App
