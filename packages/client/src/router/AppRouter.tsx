@@ -6,11 +6,7 @@ const AppRouter = () => {
   return (
     <Routes>
       {arrayRoutes.map(route => (
-        <Route
-          key={route.path}
-          path={route.path}
-          element={<route.component />}
-        />
+        <Route key={route.path} path={route.path} element={route.element} />
       ))}
     </Routes>
   )

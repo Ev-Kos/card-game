@@ -15,12 +15,9 @@ function App() {
     fetchServerData()
   }, [])
   return (
-    <>
-      <div className="App">Вот тут будет жить ваше приложение :)</div>
-      <Router>
-        <AppRouter />
-      </Router>
-    </>
+    <Router>
+      <AppRouter />
+    </Router>
   )
 }
 

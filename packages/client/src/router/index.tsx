@@ -1,28 +1,27 @@
-import LoginPage from '../pages/login/LoginPage'
-import RegistrationPage from '../pages/registration/RegistrationPage'
-import ForumPage from '../pages/forum/ForumPage'
-import ForumTopicPage from '../pages/forum/ForumTopicPage'
-import GamePage from '../pages/game/GamePage'
-import HomePage from '../pages/home/HomePage'
-import LeaderboardPage from '../pages/leaderboard/LeaderboardPage'
-import NotFoundPage from '../pages/not-found/NotFoundPage'
-import ProfilePage from '../pages/profile/ProfilePage'
+import { RouteObject } from 'react-router-dom'
 
-interface ArrayRoutesInterface {
-  path: string
-  component: React.ComponentType
-}
+import {
+  LoginPage,
+  RegistrationPage,
+  ForumPage,
+  ForumTopicPage,
+  GamePage,
+  HomePage,
+  LeaderboardPage,
+  NotFoundPage,
+  ProfilePage,
+} from '../pages'
 
-const arrayRoutes: ArrayRoutesInterface[] = [
-  { path: '/', component: LoginPage },
-  { path: '/home', component: HomePage },
-  { path: '/registration', component: RegistrationPage },
-  { path: '/forum', component: ForumPage },
-  { path: '/forum/topic', component: ForumTopicPage },
-  { path: '/game', component: GamePage },
-  { path: '/leaderboard', component: LeaderboardPage },
-  { path: '/profile', component: ProfilePage },
-  { path: '/*', component: NotFoundPage },
+const arrayRoutes: RouteObject[] = [
+  { path: '/', element: <LoginPage /> },
+  { path: '/home', element: <HomePage /> },
+  { path: '/registration', element: <RegistrationPage /> },
+  { path: '/forum', element: <ForumPage /> },
+  { path: '/forum/topic', element: <ForumTopicPage /> },
+  { path: '/game', element: <GamePage /> },
+  { path: '/leaderboard', element: <LeaderboardPage /> },
+  { path: '/profile', element: <ProfilePage /> },
+  { path: '/*', element: <NotFoundPage /> },
 ]
 
 export default arrayRoutes
