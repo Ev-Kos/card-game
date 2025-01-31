@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { Error } from '../../shared/error'
+import { Error } from '../../entities/error'
 import Hearts from '../../assets/Hearts.svg'
 
 import styles from './styles.module.css'
