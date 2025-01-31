@@ -1,5 +1,7 @@
+import { BrowserRouter as Router } from 'react-router-dom'
 import { useEffect } from 'react'
 import './App.css'
+import AppRouter from './router/AppRouter'
 
 function App() {
   useEffect(() => {
@@ -12,7 +14,14 @@ function App() {
 
     fetchServerData()
   }, [])
-  return <div className="App">Вот тут будет жить ваше приложение :)</div>
+  return (
+    <>
+      <div className="App">Вот тут будет жить ваше приложение :)</div>
+      <Router>
+        <AppRouter />
+      </Router>
+    </>
+  )
 }
 
 export default App
