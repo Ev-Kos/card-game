@@ -1,4 +1,4 @@
-type TDeskCards = {
+export type TDeskCards = {
   id: number
   suit: string
   rang: string
@@ -80,4 +80,31 @@ export const createDeskCards = () => {
     })
   })
   return res
+}
+
+export const debounce = (callback: any, delay: number) => {
+  let timeoutId: any = null
+  return (...args: any) => {
+    window.clearTimeout(timeoutId)
+    timeoutId = window.setTimeout(() => {
+      callback(...args)
+    }, delay)
+  }
+}
+
+export const shuffle = (array: TDeskCards[]) => {
+  const newArr = array.slice()
+  let m = newArr.length,
+    t,
+    i
+
+  while (m) {
+    i = Math.floor(Math.random() * m--)
+
+    t = newArr[m]
+    newArr[m] = newArr[i]
+    newArr[i] = t
+  }
+
+  return newArr
 }

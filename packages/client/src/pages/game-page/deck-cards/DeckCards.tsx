@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Card } from '../card/card'
 import { CARD_HEIGHT, CARD_WIDTH } from '../utils/constans'
 
@@ -5,10 +6,15 @@ export const DeskCard = (
   ctx: CanvasRenderingContext2D,
   widthGame: number,
   heightGame: number,
-  cardsCount: number
+  cardsCount: number,
+  suitTrumpCard: string,
+  rangTrumpCard: string
 ) => {
-  const x = widthGame - CARD_WIDTH - 50
-  const y = heightGame / 2 - CARD_HEIGHT / 2
+  const x = widthGame - CARD_WIDTH - CARD_WIDTH / 1.5
+  const y = heightGame / 2 - CARD_HEIGHT
+
+  const xTrumpCard = x - CARD_WIDTH / 1.5
+  const yTrumpCard = y + CARD_HEIGHT + CARD_HEIGHT / 2.5
   const suit = '../../../../public/sprites/card.png'
 
   function loadImage(imagePath: string) {
@@ -29,13 +35,23 @@ export const DeskCard = (
   Promise.all(imageSources.map(i => loadImage(i)))
     .then(() => {
       let i = y
-      console.log(i)
       imageSources.forEach(item => {
-        Card(ctx, widthGame, heightGame, item, '0', 0, false, 0, 0, x, i)
+        Card(ctx, item, '0', 0, false, false, x, i)
         i = i + 3
       })
     })
     .catch(err => {
       console.error(err)
     })
+
+  Card(
+    ctx,
+    suitTrumpCard,
+    rangTrumpCard,
+    0,
+    false,
+    true,
+    xTrumpCard,
+    yTrumpCard
+  )
 }
