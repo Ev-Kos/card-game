@@ -1,4 +1,4 @@
-export type TDeskCards = {
+export type TCard = {
   id: number
   suit: string
   rang: string
@@ -229,7 +229,7 @@ export const initialDeskCard = [
     suit: SUITS.HEARTS,
     rang: '7',
     value: 7,
-    image: '../../../../public/sprites/deck/6-hearts.png',
+    image: '../../../../public/sprites/deck/7-hearts.png',
   },
   {
     id: 32,
@@ -268,37 +268,6 @@ export const initialDeskCard = [
   },
 ]
 
-// export const createDeskCards = () => {
-//   const res: TDeskCards[] = []
-//   rang.forEach(item => {
-//     res.push({
-//       id: res.length + 1,
-//       suit: SUITS.CLUBS,
-//       rang: item.rang,
-//       value: item.value,
-//     })
-//     res.push({
-//       id: res.length + 1,
-//       suit: SUITS.DIAMONDS,
-//       rang: item.rang,
-//       value: item.value,
-//     })
-//     res.push({
-//       id: res.length + 1,
-//       suit: SUITS.HEARTS,
-//       rang: item.rang,
-//       value: item.value,
-//     })
-//     res.push({
-//       id: res.length + 1,
-//       suit: SUITS.SPADES,
-//       rang: item.rang,
-//       value: item.value,
-//     })
-//   })
-//   return res
-// }
-
 export const debounce = (callback: any, delay: number) => {
   let timeoutId: any = null
   return (...args: any) => {
@@ -309,7 +278,7 @@ export const debounce = (callback: any, delay: number) => {
   }
 }
 
-export const shuffle = (array: TDeskCards[]) => {
+export const shuffle = (array: TCard[]) => {
   const newArr = array.slice()
   let m = newArr.length,
     t,
@@ -326,41 +295,12 @@ export const shuffle = (array: TDeskCards[]) => {
   return newArr
 }
 
-export const rang = [
-  {
-    rang: 'T',
-    value: 14,
-  },
-  {
-    rang: 'K',
-    value: 13,
-  },
-  {
-    rang: 'Q',
-    value: 12,
-  },
-  {
-    rang: 'V',
-    value: 11,
-  },
-  {
-    rang: '10',
-    value: 10,
-  },
-  {
-    rang: '9',
-    value: 9,
-  },
-  {
-    rang: '8',
-    value: 8,
-  },
-  {
-    rang: '7',
-    value: 7,
-  },
-  {
-    rang: '6',
-    value: 6,
-  },
-]
+export const spritesLoaded = (arr: string[]) => {
+  const promises = arr.map(async url => {
+    const img = new Image()
+    img.src = url
+    await img.decode()
+    return img
+  })
+  return promises
+}
