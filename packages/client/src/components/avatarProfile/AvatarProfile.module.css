@@ -1,0 +1,44 @@
+.profileAvatar {
+	position: relative;
+	width: 128px;
+	height: 128px;
+	border: 2px solid var(--color-secondary);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: 0.1s all ease;
+	background-color: var(--color-background-light);
+	overflow: hidden;
+}
+
+.profileAvatar:hover {
+	background-color: rgba(21, 6, 41, 0.5);
+}
+
+.profileAvatar:hover .profileAvatarText {
+	opacity: 1;
+	background-color: rgba(21, 6, 41, 0.5);
+}
+
+.profileAvatarText {
+	position: absolute;
+  width: 128px;
+	height: 128px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  text-align: center;
+  color: var(--color-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: .1s all ease;
+}
+
+.profileAvatarImg {
+	pointer-events: none;
+}

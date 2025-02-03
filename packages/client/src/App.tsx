@@ -4,6 +4,7 @@ import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 
 import styles from './styles.module.css'
+import ProfilePage from './pages/profile'
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <>
+      <ProfilePage />
       <img src={Logo} className={styles.logo} alt="Desc Masters" />
       <img src={BackgroundImage} className={styles.backgrounImage} />
     </>
