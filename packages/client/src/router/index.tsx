@@ -5,11 +5,13 @@ import {
   RegistrationPage,
   ForumPage,
   ForumTopicPage,
+  ForumTopicPageId,
   GamePage,
   HomePage,
   LeaderboardPage,
   NotFoundPage,
   ProfilePage,
+  ServerErrorPage,
 } from '../pages'
 
 const arrayRoutes: RouteObject[] = [
@@ -22,6 +24,8 @@ const arrayRoutes: RouteObject[] = [
   { path: '/leaderboard', element: <LeaderboardPage /> },
   { path: '/profile', element: <ProfilePage /> },
   { path: '/*', element: <NotFoundPage /> },
+  { path: '/error', element: <ServerErrorPage /> },
+  { path: '/forum/topic/:id', element: <ForumTopicPageId /> },
 ]
 
 export default arrayRoutes
