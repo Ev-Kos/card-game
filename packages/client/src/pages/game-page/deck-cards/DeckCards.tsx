@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
 import { Card } from '../card/card'
 import { CARD_HEIGHT, CARD_WIDTH } from '../utils/constans'
+import { TDeskCards } from '../utils/game-helpers'
 
 export const DeskCard = (
   ctx: CanvasRenderingContext2D,
   widthGame: number,
   heightGame: number,
   cardsCount: number,
-  suitTrumpCard: string,
-  rangTrumpCard: string
+  deckCards: TDeskCards[],
+  image: string
 ) => {
   const x = widthGame - CARD_WIDTH - CARD_WIDTH / 1.5
   const y = heightGame / 2 - CARD_HEIGHT
@@ -30,28 +31,23 @@ export const DeskCard = (
     })
   }
 
-  const imageSources = Array(cardsCount).fill(suit)
+  const newDeckCards = deckCards.map((item, index) =>
+    index === 0 ? item : { ...item, image: suit }
+  )
 
-  Promise.all(imageSources.map(i => loadImage(i)))
+  Promise.all(newDeckCards.map(i => loadImage(i.image)))
     .then(() => {
       let i = y
-      imageSources.forEach(item => {
-        Card(ctx, item, '0', 0, false, false, x, i)
+      newDeckCards.forEach((item, index) => {
+        if (index === 0) {
+          Card(ctx, false, true, item.image, x, y)
+        }
+        Card(ctx, false, false, item.image, x, i)
         i = i + 3
       })
     })
+
     .catch(err => {
       console.error(err)
     })
-
-  Card(
-    ctx,
-    suitTrumpCard,
-    rangTrumpCard,
-    0,
-    false,
-    true,
-    xTrumpCard,
-    yTrumpCard
-  )
 }
