@@ -5,12 +5,13 @@
   transition: box-shadow 0.2s ease;
 
   &:hover {
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15),
+    box-shadow:
+      0 4px 4px rgba(0, 0, 0, 0.15),
       inset 0 -5px 7px rgba(0, 0, 0, 0.23);
   }
 }
 
-.buttonS {
+.button-s {
   min-width: 140px;
   height: 37px;
   font-size: 13px;
@@ -19,7 +20,7 @@
   padding: 0 20px;
 }
 
-.buttonM {
+.button-m {
   height: 45px;
   font-size: 20px;
   font-weight: 700;
@@ -27,7 +28,7 @@
   padding: 0 44px;
 }
 
-.buttonL {
+.button-l {
   height: 52px;
   font-size: 20px;
   font-weight: 700;
@@ -35,7 +36,7 @@
   padding: 0 20px;
 }
 
-.buttonXL {
+.button-xl {
   height: 72px;
   min-width: 140px;
   font-size: 20px;
@@ -44,13 +45,13 @@
   padding: 0 54px;
 }
 
-.buttonPrimary,
-.buttonSecondary,
-.buttonContrast {
+.button-primary,
+.button-secondary,
+.button-contrast {
   transition: color 0.2s ease;
 }
 
-.buttonPrimary {
+.button-primary {
   color: var(--color-primary);
   background-color: var(--color-secondary);
 
@@ -59,12 +60,12 @@
   }
 }
 
-.buttonSecondary,
-.buttonContrast {
+.button-secondary,
+.button-contrast {
   border: solid var(--color-secondary) 1px;
 }
 
-.buttonSecondary {
+.button-secondary {
   color: var(--color-primary);
   background-color: var(--color-background-light);
 
@@ -73,7 +74,7 @@
   }
 }
 
-.buttonContrast {
+.button-contrast {
   color: var(--color-secondary);
   background-color: var(--color-contrast);
 
