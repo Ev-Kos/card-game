@@ -15,7 +15,7 @@ export const CardGame = (
   isPlayerCards: boolean,
   cardsArray: TCard[],
 ) => {
-  const x = widthGame / 3
+  const x = (widthGame - cardsArray.length * (CARD_WIDTH + 15)) / 2
   const yBot = 10
   const yPlayer = heightGame - CARD_HEIGHT - 30
 
