@@ -304,3 +304,10 @@ export const spritesLoaded = (arr: string[]) => {
   })
   return promises
 }
+
+export const enum NOTICEGAME {
+  firstMoveBot = 'Первым ходит противник',
+  firstMovePlayer = 'Вы ходите первым',
+  moveBot = 'Ход противника',
+  movePlayer = 'Ваш ход',
+}

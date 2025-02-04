@@ -9,9 +9,7 @@ export const GamePage = () => {
         <div>buttonback</div>
         <img src={Logo} className={styles.logo} alt="Desc Masters" />
       </div>
-      <div className={styles.canvas}>
-        <Game />
-      </div>
+      <Game />
     </div>
   )
 }

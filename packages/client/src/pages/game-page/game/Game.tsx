@@ -2,13 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { LOGO_HEIGHT, PADDING_GAME_PAGE } from '../utils/constans'
 import { DeskCard } from '../deck-cards/DeckCards'
 import { useWindowSize } from '../hooks/hooks'
+import styles from './Game.module.css'
 import {
   debounce,
   initialDeskCard,
+  NOTICEGAME,
   shuffle,
   TCard,
 } from '../utils/game-helpers'
 import { CardGame } from '../card-game/CardGame'
+import { NoticeGame } from '../notice-game/NoticeGame'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -20,6 +23,8 @@ export const Game = () => {
   const [isFirstGetCards, setFirstGetCards] = useState(false)
   const [playerCards, setPlayerCards] = useState<TCard[]>([])
   const [botCards, setBotCards] = useState<TCard[]>([])
+
+  const [isNoticeText, setNoticeText] = useState('')
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvas = canvasRef.current
@@ -58,8 +63,29 @@ export const Game = () => {
       const length = playerCards.length + botCards.length
       const waite = debounce(() => {
         setDeckCards(deckCards.slice(0, length * 2))
+        const t = debounce(() => {
+          const minTrumpCardBot = Math.min(
+            ...botCards
+              .filter(item => item.suit === trumpCard?.suit)
+              .map(el => el.value),
+          )
+          const minTrumpCartPlayer = Math.min(
+            ...playerCards
+              .filter(item => item.suit === trumpCard?.suit)
+              .map(el => el.value),
+          )
+          if (isFinite(minTrumpCardBot) && isFinite(minTrumpCartPlayer)) {
+            minTrumpCardBot > minTrumpCartPlayer
+              ? setNoticeText(NOTICEGAME.firstMovePlayer)
+              : setNoticeText(NOTICEGAME.firstMoveBot)
+          } else {
+            isFinite(minTrumpCardBot)
+              ? setNoticeText(NOTICEGAME.firstMoveBot)
+              : setNoticeText(NOTICEGAME.firstMovePlayer)
+          }
+        }, 100)
+        t()
       }, 1000)
-
       waite()
     }
   }, [playerCards, botCards])
@@ -74,5 +100,15 @@ export const Game = () => {
     }
   }, [widthGame, heightGame, deckCards])
 
-  return <canvas width={widthGame} height={heightGame} ref={canvasRef} />
+  return (
+    <div className={styles.game}>
+      <canvas
+        width={widthGame}
+        height={heightGame}
+        ref={canvasRef}
+        id="canvas"
+      />
+      {isNoticeText.length !== 0 && <NoticeGame text={isNoticeText} />}
+    </div>
+  )
 }

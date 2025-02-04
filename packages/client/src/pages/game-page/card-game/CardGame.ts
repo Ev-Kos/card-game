@@ -13,16 +13,16 @@ export const CardGame = (
   widthGame: number,
   heightGame: number,
   isPlayerCards: boolean,
-  cardsArray: TCard[]
+  cardsArray: TCard[],
 ) => {
-  const x = widthGame / 3.5
+  const x = widthGame / 3
   const yBot = 10
   const yPlayer = heightGame - CARD_HEIGHT - 30
 
   const canvas = document.querySelector('canvas')
 
   const newCardsArray = cardsArray.map(item =>
-    isPlayerCards ? item.image : closedCard
+    isPlayerCards ? item.image : closedCard,
   )
 
   const sprites = spritesLoaded(newCardsArray)
