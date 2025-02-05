@@ -5,6 +5,7 @@ import { useWindowSize } from '../hooks/hooks'
 import styles from './Game.module.css'
 import {
   checkCard,
+  checkCardToAdd,
   debounce,
   findCard,
   findCartToAdd,
@@ -181,6 +182,21 @@ export const Game = () => {
           setSelectedSrcCardToMove('')
           setMoveBot(true)
           setMovePlayer(false)
+        }
+        if (battleCards.length !== 0 && battleCards[0].isPlayer === true) {
+          const checkCard = checkCardToAdd(selectedCard, battleCards)
+          if (checkCard) {
+            setPlayerCards(
+              playerCards.filter(item => item.id !== selectedCard.id),
+            )
+            setBattleCards([
+              ...battleCards,
+              { ...selectedCard, isPlayer: true },
+            ])
+            setSelectedSrcCardToMove('')
+            setMoveBot(true)
+            setMovePlayer(false)
+          }
         }
       }
     }

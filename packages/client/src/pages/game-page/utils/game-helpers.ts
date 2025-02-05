@@ -420,6 +420,17 @@ export const findCartToAdd = (
   return res
 }
 
+export const checkCardToAdd = (
+  playerCard: TCard,
+  arrBattle: TBattleCart[],
+): boolean => {
+  const battleCards = arrBattle.map(item => item.rang)
+  if (battleCards.includes(playerCard.rang)) {
+    return true
+  }
+  return false
+}
+
 export const checkCard = (
   arr: TBattleCart[],
   card: TCard,
