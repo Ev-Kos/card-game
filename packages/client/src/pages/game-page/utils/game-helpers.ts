@@ -457,3 +457,9 @@ export const trimStr = (str: string, trimValue = 'deck/') => {
   const i = str.indexOf(trimValue)
   return str.slice(i + trimValue.length)
 }
+
+export const enum BUTTON_TEXT {
+  ITake = 'Беру',
+  HeTake = 'Пусть берет',
+  Ok = 'Бито',
+}

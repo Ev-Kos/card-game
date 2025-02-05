@@ -4,6 +4,7 @@ import { DeskCard } from '../deck-cards/DeckCards'
 import { useWindowSize } from '../hooks/hooks'
 import styles from './Game.module.css'
 import {
+  BUTTON_TEXT,
   checkCard,
   checkCardToAdd,
   debounce,
@@ -22,6 +23,7 @@ import { CardsGame } from '../cards-game/CardsGame'
 import { NoticeGame } from '../notice-game/NoticeGame'
 import { Card } from '../card/card'
 import { BattleField } from '../battle-field/battleField'
+import { Button } from '../../../shared/button'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -46,6 +48,7 @@ export const Game = () => {
   const [isMovePlayer, setMovePlayer] = useState(false)
 
   const [battleCards, setBattleCards] = useState<TBattleCart[]>([])
+  const [buttonText, setButtonText] = useState('')
 
   useEffect(() => {
     setWidthGame(width - (width * PADDING_GAME_PAGE * 2) / 100)
@@ -117,6 +120,10 @@ export const Game = () => {
         setBotCards(botCards.filter(item => item.id !== cardToMove.id))
         setMoveBot(false)
         setMovePlayer(true)
+        const t = debounce(() => {
+          setButtonText(BUTTON_TEXT.ITake)
+        }, 1000)
+        t()
       } else {
         if (battleCards.length !== 0 && battleCards[0].isPlayer === true) {
           if (findCard(battleCards, botCards, trumpCard)) {
@@ -125,11 +132,20 @@ export const Game = () => {
               const wait = debounce(() => {
                 setBattleCards([...battleCards, card])
                 setBotCards(botCards.filter(item => item.id !== card.id))
+                const t = debounce(() => {
+                  setButtonText(BUTTON_TEXT.Ok)
+                }, 1900)
+                t()
               }, 1000)
               wait()
               setMoveBot(false)
               setMovePlayer(true)
             }
+          } else {
+            const t = debounce(() => {
+              setButtonText(BUTTON_TEXT.HeTake)
+            }, 1000)
+            t()
           }
         }
         if (battleCards.length !== 0 && battleCards[0].isPlayer === false) {
@@ -145,8 +161,7 @@ export const Game = () => {
             setMoveBot(false)
             setMovePlayer(true)
           } else {
-            console.log('бито')
-            setMoveBot(false)
+            setButtonText('')
           }
         }
       }
@@ -202,6 +217,8 @@ export const Game = () => {
     }
   }, [isMovePlayer, selectedSrcCardToMove])
 
+  console.log(buttonText)
+
   useEffect(() => {
     if (canvasRef.current && widthGame !== 0 && widthGame !== 0 && trumpCard) {
       if (ctx) {
@@ -252,7 +269,7 @@ export const Game = () => {
             setSelectedSrcCardToMove,
             isMovePlayer,
           )
-        }, 700)
+        }, 1000)
         wait()
       }
     }
@@ -287,6 +304,13 @@ export const Game = () => {
         id="canvas"
       />
       {isNoticeText.length !== 0 && <NoticeGame text={isNoticeText} />}
+      <div className={styles.button}>
+        {buttonText.length !== 0 && (
+          <Button onClick={() => console.log(85)}>
+            <p className={styles.buttonText}>{buttonText}</p>
+          </Button>
+        )}
+      </div>
     </div>
   )
 }
