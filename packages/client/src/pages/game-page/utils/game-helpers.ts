@@ -6,6 +6,21 @@ export type TCard = {
   image: string
 }
 
+export type TBattleCart = {
+  id: number
+  suit: string
+  rang: string
+  value: number
+  image: string
+  isPlayer: boolean
+}
+
+export type TRect = {
+  x: number
+  y: number
+  image: HTMLImageElement
+}
+
 export const enum SUITS {
   CLUBS = 'clubs',
   DIAMONDS = 'diamonds',
@@ -311,3 +326,108 @@ export const enum NOTICEGAME {
   moveBot = 'Ход противника',
   movePlayer = 'Ваш ход',
 }
+
+export const getRect = (canvas: HTMLCanvasElement, e: MouseEvent) => {
+  const rect = canvas.getBoundingClientRect(),
+    xMouse = e.clientX - rect.left,
+    yMouse = e.clientY - rect.top
+
+  return { xMouse, yMouse }
+}
+
+export const findMinCard = (arr: TCard[], trumpCard: TCard): TBattleCart => {
+  let cardsToMove: TBattleCart
+  const trumpCards = arr.filter(item => item.suit === trumpCard.suit)
+  const otherCards = arr.filter(item => item.suit !== trumpCard.suit)
+  if (otherCards.length !== 0) {
+    const minValue = otherCards.sort((a, b) => a.value - b.value)[0].value
+    cardsToMove = otherCards
+      .filter(item => item.value === minValue)
+      .map(el => {
+        return { ...el, isPlayer: false }
+      })[0]
+  } else {
+    const minValue = trumpCards.sort((a, b) => a.value - b.value)[0].value
+    cardsToMove = trumpCards
+      .filter(item => item.value === minValue)
+      .map(el => {
+        return { ...el, isPlayer: false }
+      })[0]
+  }
+  return cardsToMove
+}
+
+export const findCard = (
+  arrBattle: TBattleCart[],
+  arrBotCard: TCard[],
+  trumpCard: TCard,
+) => {
+  const card = arrBattle[arrBattle.length - 1]
+
+  const similarSuit = arrBotCard
+    .filter(item => item.suit === card.suit)
+    .sort((a, b) => a.value - b.value)
+    .map(el => {
+      return { ...el, isPlayer: false }
+    })
+
+  const trumpCards = arrBotCard
+    .filter(item => item.suit === trumpCard.suit)
+    .sort((a, b) => a.value - b.value)
+    .map(el => {
+      return { ...el, isPlayer: false }
+    })
+
+  if (similarSuit.length !== 0) {
+    const foundCard = similarSuit.find(item => item.value > card.value)
+    if (foundCard) {
+      return foundCard
+    } else {
+      if (trumpCards.length !== 0) {
+        return trumpCards[0]
+      }
+    }
+  } else {
+    if (trumpCards.length !== 0) {
+      return trumpCards[0]
+    }
+  }
+}
+
+export const checkCard = (
+  arr: TBattleCart[],
+  card: TCard,
+  trumpCard: TCard,
+): boolean => {
+  const lastCardArr = arr[arr.length - 1]
+  if (lastCardArr.suit === card.suit && lastCardArr.value < card.value) {
+    return true
+  }
+  if (lastCardArr.suit !== trumpCard.suit && card.suit === trumpCard.suit) {
+    return true
+  }
+  if (
+    lastCardArr.suit === trumpCard.suit &&
+    card.suit === trumpCard.suit &&
+    lastCardArr.value < card.value
+  ) {
+    return true
+  }
+  return false
+}
+
+export const trimStr = (str: string, trimValue = 'deck/') => {
+  const i = str.indexOf(trimValue)
+  return str.slice(i + trimValue.length)
+}
+
+// export const deleteCards = (arr: TCard[], cart:TCard) => {
+//   let res:TCard[] = []
+//   const indexes = deleteArr.map((item) => item.id)
+//   arr.forEach((item) => {
+//     if(!indexes.includes(item.id)) {
+//       res.push(item)
+//     }
+//   })
+//   return res
+// }
