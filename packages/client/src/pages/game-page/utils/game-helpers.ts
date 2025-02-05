@@ -293,7 +293,7 @@ export const debounce = (callback: any, delay: number) => {
   }
 }
 
-export const shuffle = (array: TCard[]) => {
+export const shuffle = (array: any[]) => {
   const newArr = array.slice()
   let m = newArr.length,
     t,
@@ -394,6 +394,32 @@ export const findCard = (
   }
 }
 
+export const findCartToAdd = (
+  arrBotCard: TCard[],
+  arrBattle: TBattleCart[],
+  trumpCard: TCard,
+): TBattleCart[] => {
+  const res: TBattleCart[] = []
+  const botBattleCards = arrBattle
+    .filter(item => !item.isPlayer)
+    .map(item => item.rang)
+  const botCardNotTrump = arrBotCard.filter(
+    item => item.suit !== trumpCard.suit,
+  )
+  const playerBattleCards = arrBattle
+    .filter(item => item.isPlayer)
+    .map(item => item.rang)
+  botCardNotTrump.forEach(item => {
+    if (
+      botBattleCards.includes(item.rang) ||
+      playerBattleCards.includes(item.rang)
+    ) {
+      res.push({ ...item, isPlayer: false })
+    }
+  })
+  return res
+}
+
 export const checkCard = (
   arr: TBattleCart[],
   card: TCard,
@@ -420,14 +446,3 @@ export const trimStr = (str: string, trimValue = 'deck/') => {
   const i = str.indexOf(trimValue)
   return str.slice(i + trimValue.length)
 }
-
-// export const deleteCards = (arr: TCard[], cart:TCard) => {
-//   let res:TCard[] = []
-//   const indexes = deleteArr.map((item) => item.id)
-//   arr.forEach((item) => {
-//     if(!indexes.includes(item.id)) {
-//       res.push(item)
-//     }
-//   })
-//   return res
-// }

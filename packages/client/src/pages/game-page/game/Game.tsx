@@ -7,6 +7,7 @@ import {
   checkCard,
   debounce,
   findCard,
+  findCartToAdd,
   findMinCard,
   initialDeskCard,
   NOTICEGAME,
@@ -116,7 +117,7 @@ export const Game = () => {
         setMoveBot(false)
         setMovePlayer(true)
       } else {
-        if (battleCards.length !== 0 && battleCards[0].isPlayer === true)
+        if (battleCards.length !== 0 && battleCards[0].isPlayer === true) {
           if (findCard(battleCards, botCards, trumpCard)) {
             const card = findCard(battleCards, botCards, trumpCard)
             if (card) {
@@ -129,6 +130,24 @@ export const Game = () => {
               setMovePlayer(true)
             }
           }
+        }
+        if (battleCards.length !== 0 && battleCards[0].isPlayer === false) {
+          const cardToAdd = shuffle(
+            findCartToAdd(botCards, battleCards, trumpCard),
+          )[0]
+          if (cardToAdd) {
+            const wait = debounce(() => {
+              setBattleCards([...battleCards, cardToAdd])
+              setBotCards(botCards.filter(item => item.id !== cardToAdd.id))
+            }, 1000)
+            wait()
+            setMoveBot(false)
+            setMovePlayer(true)
+          } else {
+            console.log('бито')
+            setMoveBot(false)
+          }
+        }
       }
     }
   }, [isMoveBot])

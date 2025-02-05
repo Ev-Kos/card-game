@@ -26,7 +26,7 @@ export const BattleField = (
         x - 2,
         y - CARD_HEIGHT,
         cardsArray.length * (CARD_WIDTH + 15),
-        CARD_HEIGHT * 2 + 5,
+        CARD_HEIGHT * 2 + 50,
       )
 
       arr.forEach(item => {
