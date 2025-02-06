@@ -5,26 +5,12 @@ export const Card = (
   isTrumpCard: boolean,
   image: HTMLImageElement,
   x: number,
-  y: number
+  y: number,
+  isOpasity: boolean,
 ) => {
   if (!isTrumpCard) {
     ctx.drawImage(image, x, y, CARD_WIDTH, CARD_HEIGHT)
   }
-  // if (isOpened) {
-  //   ctx.lineWidth = 1
-  //   ctx.strokeStyle = 'black'
-  //   ctx.strokeRect(x, y, CARD_WIDTH, CARD_HEIGHT)
-  //   ctx.fillStyle = '#A9A9A9'
-  //   ctx.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT)
-  //   ctx.font = '20px Inter'
-  //   ctx.strokeStyle = 'white'
-  //   ctx.strokeText(rang, x, y)
-  //   const img = new Image()
-  //   img.src = suit
-  //   img.onload = () => {
-  //     ctx.drawImage(img, x, y, 20, 20)
-  //   }
-  // }
   if (isTrumpCard) {
     ctx.save()
     ctx.rotate((-90 * Math.PI) / 180)
@@ -33,9 +19,17 @@ export const Card = (
       -y - CARD_HEIGHT - CARD_WIDTH / 2,
       x - 50,
       CARD_WIDTH,
-      CARD_HEIGHT
+      CARD_HEIGHT,
     )
+    if (isOpasity) {
+      ctx.fillStyle = 'rgba(201, 204, 206, 0.5)'
+      ctx.fillRect(
+        -y - CARD_HEIGHT - CARD_WIDTH / 2,
+        x - 50,
+        CARD_WIDTH,
+        CARD_HEIGHT,
+      )
+    }
     ctx.restore()
-    // }
   }
 }

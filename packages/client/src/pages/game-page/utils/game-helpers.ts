@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react'
+
 export type TCard = {
   id: number
   suit: string
@@ -378,18 +380,21 @@ export const findCard = (
       return { ...el, isPlayer: false }
     })
 
-  if (similarSuit.length !== 0) {
-    const foundCard = similarSuit.find(item => item.value > card.value)
-    if (foundCard) {
-      return foundCard
-    } else {
-      if (trumpCards.length !== 0) {
+  if (card.suit !== trumpCard.suit) {
+    if (similarSuit.length !== 0) {
+      const foundCard = similarSuit.find(item => item.value > card.value)
+      if (foundCard) {
+        return foundCard
+      } else {
         return trumpCards[0]
       }
     }
   } else {
     if (trumpCards.length !== 0) {
-      return trumpCards[0]
+      const foundCard = trumpCards.find(item => item.value > card.value)
+      if (foundCard) {
+        return foundCard
+      }
     }
   }
 }
@@ -398,6 +403,7 @@ export const findCartToAdd = (
   arrBotCard: TCard[],
   arrBattle: TBattleCart[],
   trumpCard: TCard,
+  deckCards: TCard[],
 ): TBattleCart[] => {
   const res: TBattleCart[] = []
   const botBattleCards = arrBattle
@@ -409,14 +415,26 @@ export const findCartToAdd = (
   const playerBattleCards = arrBattle
     .filter(item => item.isPlayer)
     .map(item => item.rang)
-  botCardNotTrump.forEach(item => {
-    if (
-      botBattleCards.includes(item.rang) ||
-      playerBattleCards.includes(item.rang)
-    ) {
-      res.push({ ...item, isPlayer: false })
-    }
-  })
+  if (deckCards.length !== 0) {
+    botCardNotTrump.forEach(item => {
+      if (
+        botBattleCards.includes(item.rang) ||
+        playerBattleCards.includes(item.rang)
+      ) {
+        res.push({ ...item, isPlayer: false })
+      }
+    })
+  } else {
+    arrBotCard.forEach(item => {
+      if (
+        botBattleCards.includes(item.rang) ||
+        playerBattleCards.includes(item.rang)
+      ) {
+        res.push({ ...item, isPlayer: false })
+      }
+    })
+  }
+
   return res
 }
 
@@ -462,4 +480,78 @@ export const enum BUTTON_TEXT {
   ITake = 'Беру',
   HeTake = 'Пусть берет',
   Ok = 'Бито',
+}
+
+export const deleteField = (obj: TBattleCart, key: string) => {
+  if (!(key in obj)) {
+    return obj
+  }
+  return Object.fromEntries(Object.entries(obj).filter(([k]) => k !== key))
+}
+
+export const newCards = (
+  deckCards: TCard[],
+  playerCards: TCard[],
+  botCards: TCard[],
+  battleCards: TBattleCart[],
+  setDeckCards: Dispatch<SetStateAction<TCard[]>>,
+  setPlayerCards: Dispatch<SetStateAction<TCard[]>>,
+  setBotCards: Dispatch<SetStateAction<TCard[]>>,
+) => {
+  if (deckCards.length !== 0) {
+    let length = 0
+    if (battleCards[0].isPlayer) {
+      if (playerCards.length < 6) {
+        const cards = deckCards.slice(
+          deckCards.length - (6 - playerCards.length),
+          deckCards.length,
+        )
+        const waitNewCards = debounce(() => {
+          setPlayerCards([...playerCards, ...cards])
+        }, 500)
+        waitNewCards()
+        length = cards.length
+      }
+      if (botCards.length < 6) {
+        const cards = deckCards.slice(
+          deckCards.length - (6 - playerCards.length) - (6 - botCards.length),
+          deckCards.length - (6 - playerCards.length),
+        )
+        const waitNewCards = debounce(() => {
+          setBotCards([...botCards, ...cards])
+        }, 500)
+        waitNewCards()
+        length = length + cards.length
+      }
+      setDeckCards(deckCards.slice(0, deckCards.length - length))
+    }
+    if (!battleCards[0].isPlayer) {
+      if (botCards.length < 6) {
+        const cards = deckCards.slice(
+          deckCards.length - (6 - botCards.length),
+          deckCards.length,
+        )
+        console.log(cards)
+        const waitNewCards = debounce(() => {
+          setBotCards([...botCards, ...cards])
+        }, 500)
+        waitNewCards()
+        length = cards.length
+      }
+      if (playerCards.length < 6) {
+        const cards = deckCards.slice(
+          deckCards.length - (6 - playerCards.length) - (6 - botCards.length),
+          deckCards.length - (6 - botCards.length),
+        )
+        console.log(cards)
+        const waitNewCards = debounce(() => {
+          setPlayerCards([...playerCards, ...cards])
+        }, 500)
+        waitNewCards()
+        length = length + cards.length
+      }
+      console.log(deckCards.slice(0, deckCards.length - length))
+      setDeckCards(deckCards.slice(0, deckCards.length - length))
+    }
+  }
 }

@@ -12,7 +12,7 @@ export const CardsGame = (
   setSelectedSrcCardToMove: Dispatch<SetStateAction<string>>,
   isMovePlayer: boolean,
 ) => {
-  const x = (widthGame - cardsArray.length * (CARD_WIDTH + 15)) / 2
+  const x = widthGame - (widthGame * 69) / 100
   const yBot = 10
   const yPlayer = heightGame - CARD_HEIGHT - 30
 
@@ -26,22 +26,23 @@ export const CardsGame = (
   Promise.all(sprites).then(images => {
     const rects: TRect[] = []
     let newX = x
+
     images.forEach(item => {
       rects.push({ image: item, x: newX, y: isPlayerCards ? yPlayer : yBot })
       newX = newX + CARD_WIDTH + 15
     })
 
-    ctx.clearRect(0, isPlayerCards ? yPlayer : yBot, widthGame, 125)
+    ctx.clearRect(0, isPlayerCards ? yPlayer : yBot, widthGame, 200)
 
     rects.forEach(item => {
-      Card(ctx, false, item.image, item.x, item.y)
+      Card(ctx, false, item.image, item.x, item.y, false)
     })
 
     if (isPlayerCards) {
       if (canvas) {
         canvas.onmousemove = e => {
           const rect = getRect(canvas, e)
-          ctx.clearRect(x - CARD_WIDTH, yPlayer - 25, 600, 125)
+          ctx.clearRect(x - CARD_WIDTH, yPlayer - 25, widthGame, 200)
           rects.forEach(item => {
             if (
               rect.xMouse >= item.x &&
@@ -49,9 +50,9 @@ export const CardsGame = (
               rect.yMouse >= item.y &&
               rect.yMouse <= item.y + CARD_HEIGHT
             ) {
-              Card(ctx, false, item.image, item.x, item.y - 20)
+              Card(ctx, false, item.image, item.x, item.y - 20, false)
             } else {
-              Card(ctx, false, item.image, item.x, item.y)
+              Card(ctx, false, item.image, item.x, item.y, false)
             }
           })
         }

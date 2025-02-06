@@ -8,21 +8,21 @@ import {
   checkCard,
   checkCardToAdd,
   debounce,
+  deleteField,
   findCard,
   findCartToAdd,
   findMinCard,
   initialDeskCard,
+  newCards,
   NOTICEGAME,
   shuffle,
   TBattleCart,
   TCard,
-  TRect,
   trimStr,
 } from '../utils/game-helpers'
 import { CardsGame } from '../cards-game/CardsGame'
 import { NoticeGame } from '../notice-game/NoticeGame'
-import { Card } from '../card/card'
-import { BattleField } from '../battle-field/battleField'
+import { BattleField } from '../battle-field/BattleField'
 import { Button } from '../../../shared/button'
 
 export const Game = () => {
@@ -146,11 +146,13 @@ export const Game = () => {
               setButtonText(BUTTON_TEXT.HeTake)
             }, 1000)
             t()
+            setMoveBot(false)
+            setMovePlayer(true)
           }
         }
         if (battleCards.length !== 0 && battleCards[0].isPlayer === false) {
           const cardToAdd = shuffle(
-            findCartToAdd(botCards, battleCards, trumpCard),
+            findCartToAdd(botCards, battleCards, trumpCard, deckCards),
           )[0]
           if (cardToAdd) {
             const wait = debounce(() => {
@@ -162,6 +164,24 @@ export const Game = () => {
             setMovePlayer(true)
           } else {
             setButtonText('')
+            const waitDeckCards = debounce(() => {
+              setBattleCards([])
+              newCards(
+                deckCards,
+                playerCards,
+                botCards,
+                battleCards,
+                setDeckCards,
+                setPlayerCards,
+                setBotCards,
+              )
+              const transferMove = debounce(() => {
+                setMoveBot(false)
+                setMovePlayer(true)
+              }, 1000)
+              transferMove()
+            }, 700)
+            waitDeckCards()
           }
         }
       }
@@ -209,7 +229,11 @@ export const Game = () => {
               { ...selectedCard, isPlayer: true },
             ])
             setSelectedSrcCardToMove('')
-            setMoveBot(true)
+            if (buttonText === BUTTON_TEXT.HeTake) {
+              setMoveBot(false)
+            } else {
+              setMoveBot(true)
+            }
             setMovePlayer(false)
           }
         }
@@ -217,12 +241,11 @@ export const Game = () => {
     }
   }, [isMovePlayer, selectedSrcCardToMove])
 
-  console.log(buttonText)
-
   useEffect(() => {
     if (canvasRef.current && widthGame !== 0 && widthGame !== 0 && trumpCard) {
       if (ctx) {
-        DeskCard(ctx, widthGame, heightGame, deckCards)
+        const a: TCard[] = []
+        DeskCard(ctx, widthGame, heightGame, deckCards, trumpCard)
       }
     }
   }, [widthGame, heightGame, deckCards])
@@ -252,12 +275,7 @@ export const Game = () => {
   }, [widthGame, heightGame, botCards])
 
   useEffect(() => {
-    if (
-      canvasRef.current &&
-      widthGame !== 0 &&
-      widthGame !== 0 &&
-      playerCards.length !== 0
-    ) {
+    if (canvasRef.current && widthGame !== 0 && widthGame !== 0) {
       if (ctx) {
         const wait = debounce(() => {
           CardsGame(
@@ -276,12 +294,7 @@ export const Game = () => {
   }, [widthGame, heightGame, playerCards, isMovePlayer])
 
   useEffect(() => {
-    if (
-      canvasRef.current &&
-      widthGame !== 0 &&
-      widthGame !== 0 &&
-      battleCards.length !== 0
-    ) {
+    if (canvasRef.current && widthGame !== 0 && widthGame !== 0) {
       if (ctx) {
         const wait = debounce(() => {
           const t = debounce(() => {
@@ -295,6 +308,83 @@ export const Game = () => {
     }
   }, [widthGame, heightGame, battleCards])
 
+  const clickButton = () => {
+    const newBattleCards = battleCards.map(item =>
+      deleteField(item, 'isPlayer'),
+    )
+    setBattleCards([])
+    if (buttonText === BUTTON_TEXT.HeTake) {
+      setButtonText('')
+      const waitDeckCards = debounce(() => {
+        const arr = [...botCards, ...newBattleCards]
+        //@ts-ignore
+        setBotCards(arr)
+        //@ts-ignore
+        newCards(
+          deckCards,
+          playerCards,
+          //@ts-ignore
+          arr,
+          battleCards,
+          setDeckCards,
+          setPlayerCards,
+          setBotCards,
+        )
+        const transferMove = debounce(() => {
+          setMoveBot(false)
+          setMovePlayer(true)
+        }, 1000)
+        transferMove()
+      }, 700)
+      waitDeckCards()
+    }
+    if (buttonText === BUTTON_TEXT.ITake) {
+      setButtonText('')
+      const waitDeckCards = debounce(() => {
+        const arr = [...playerCards, ...newBattleCards]
+        //@ts-ignore
+        setPlayerCards(arr)
+        //@ts-ignore
+        newCards(
+          deckCards,
+          //@ts-ignore
+          arr,
+          botCards,
+          battleCards,
+          setDeckCards,
+          setPlayerCards,
+          setBotCards,
+        )
+        const transferMove = debounce(() => {
+          setMoveBot(true)
+          setMovePlayer(false)
+        }, 1000)
+        transferMove()
+      }, 700)
+      waitDeckCards()
+    }
+    if (buttonText === BUTTON_TEXT.Ok) {
+      setButtonText('')
+      const waitDeckCards = debounce(() => {
+        newCards(
+          deckCards,
+          playerCards,
+          botCards,
+          battleCards,
+          setDeckCards,
+          setPlayerCards,
+          setBotCards,
+        )
+        const transferMove = debounce(() => {
+          setMoveBot(true)
+          setMovePlayer(false)
+        }, 1000)
+        transferMove()
+      }, 700)
+      waitDeckCards()
+    }
+  }
+
   return (
     <div className={styles.game}>
       <canvas
@@ -306,7 +396,7 @@ export const Game = () => {
       {isNoticeText.length !== 0 && <NoticeGame text={isNoticeText} />}
       <div className={styles.button}>
         {buttonText.length !== 0 && (
-          <Button onClick={() => console.log(85)}>
+          <Button onClick={clickButton}>
             <p className={styles.buttonText}>{buttonText}</p>
           </Button>
         )}
