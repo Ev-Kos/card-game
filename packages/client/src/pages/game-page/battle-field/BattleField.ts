@@ -8,7 +8,14 @@ export const BattleField = (
   heightGame: number,
   cardsArray: TBattleCart[],
 ) => {
-  const x = widthGame - (widthGame * 69) / 100
+  const xResize = () => {
+    if (widthGame < 1098) {
+      return Math.round(widthGame - (widthGame * 77) / 100)
+    }
+    return Math.round(widthGame - (widthGame * 69) / 100)
+  }
+
+  const x = xResize()
   const y = heightGame / 2 - CARD_HEIGHT
 
   const images = cardsArray.map(item => item.image)
@@ -16,7 +23,12 @@ export const BattleField = (
   const sprites = spritesLoaded(images)
 
   if (cardsArray.length === 0) {
-    ctx.clearRect(widthGame - (widthGame * 70) / 100, y, 600, 200)
+    ctx.clearRect(
+      widthGame - (widthGame * 70) / 100,
+      y,
+      widthGame < 1098 ? 400 : 600,
+      200,
+    )
   } else {
     Promise.all(sprites)
       .then(images => {

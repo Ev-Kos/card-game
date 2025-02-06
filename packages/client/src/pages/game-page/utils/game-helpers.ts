@@ -531,7 +531,6 @@ export const newCards = (
           deckCards.length - (6 - botCards.length),
           deckCards.length,
         )
-        console.log(cards)
         const waitNewCards = debounce(() => {
           setBotCards([...botCards, ...cards])
         }, 500)
@@ -543,14 +542,12 @@ export const newCards = (
           deckCards.length - (6 - playerCards.length) - (6 - botCards.length),
           deckCards.length - (6 - botCards.length),
         )
-        console.log(cards)
         const waitNewCards = debounce(() => {
           setPlayerCards([...playerCards, ...cards])
         }, 500)
         waitNewCards()
         length = length + cards.length
       }
-      console.log(deckCards.slice(0, deckCards.length - length))
       setDeckCards(deckCards.slice(0, deckCards.length - length))
     }
   }

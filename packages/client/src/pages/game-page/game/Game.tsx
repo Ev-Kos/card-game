@@ -1,5 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import { LOGO_HEIGHT, PADDING_GAME_PAGE } from '../utils/constans'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  CARD_HEIGHT,
+  CARD_WIDTH,
+  closedCard,
+  LOGO_HEIGHT,
+  PADDING_GAME_PAGE,
+} from '../utils/constans'
 import { DeskCard } from '../deck-cards/DeckCards'
 import { useWindowSize } from '../hooks/hooks'
 import styles from './Game.module.css'
@@ -12,18 +18,22 @@ import {
   findCard,
   findCartToAdd,
   findMinCard,
+  getRect,
   initialDeskCard,
   newCards,
   NOTICEGAME,
   shuffle,
+  spritesLoaded,
   TBattleCart,
   TCard,
+  TRect,
   trimStr,
 } from '../utils/game-helpers'
 import { CardsGame } from '../cards-game/CardsGame'
 import { NoticeGame } from '../notice-game/NoticeGame'
 import { BattleField } from '../battle-field/BattleField'
 import { Button } from '../../../shared/button'
+import { Card } from '../card/card'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -48,11 +58,12 @@ export const Game = () => {
   const [isMovePlayer, setMovePlayer] = useState(false)
 
   const [battleCards, setBattleCards] = useState<TBattleCart[]>([])
+  const [leftCards, setLeftCards] = useState<TBattleCart[]>([])
   const [buttonText, setButtonText] = useState('')
-
+  console.log(22)
   useEffect(() => {
-    setWidthGame(width - (width * PADDING_GAME_PAGE * 2) / 100)
-    setHeightGame(height - LOGO_HEIGHT - 30)
+    setWidthGame(Math.round(width - (width * PADDING_GAME_PAGE * 2) / 100))
+    setHeightGame(Math.round(height - LOGO_HEIGHT - 30))
   }, [width, height])
 
   useEffect(() => {
@@ -74,40 +85,43 @@ export const Game = () => {
   useEffect(() => {
     if (playerCards.length !== 0 && botCards.length !== 0 && isFirstGetCards) {
       const length = playerCards.length + botCards.length
-      const waite = debounce(() => {
+      const wait = debounce(() => {
         setDeckCards(deckCards.slice(0, length * 2))
-        const t = debounce(() => {
-          const minTrumpCardBot = Math.min(
-            ...botCards
-              .filter(item => item.suit === trumpCard?.suit)
-              .map(el => el.value),
-          )
-          const minTrumpCartPlayer = Math.min(
-            ...playerCards
-              .filter(item => item.suit === trumpCard?.suit)
-              .map(el => el.value),
-          )
-          if (isFinite(minTrumpCardBot) && isFinite(minTrumpCartPlayer)) {
-            if (minTrumpCardBot > minTrumpCartPlayer) {
-              setMovePlayer(true)
-              setNoticeText(NOTICEGAME.firstMovePlayer)
-            } else {
-              setMoveBot(true)
-              setNoticeText(NOTICEGAME.firstMoveBot)
-            }
+        const minTrumpCardBot = Math.min(
+          ...botCards
+            .filter(item => item.suit === trumpCard?.suit)
+            .map(el => el.value),
+        )
+        const minTrumpCartPlayer = Math.min(
+          ...playerCards
+            .filter(item => item.suit === trumpCard?.suit)
+            .map(el => el.value),
+        )
+        if (isFinite(minTrumpCardBot) && isFinite(minTrumpCartPlayer)) {
+          if (minTrumpCardBot > minTrumpCartPlayer) {
+            setMovePlayer(true)
+            setNoticeText(NOTICEGAME.firstMovePlayer)
           } else {
-            if (isFinite(minTrumpCardBot)) {
+            const t = debounce(() => {
               setMoveBot(true)
-              setNoticeText(NOTICEGAME.firstMoveBot)
-            } else {
-              setMovePlayer(true)
-              setNoticeText(NOTICEGAME.firstMovePlayer)
-            }
+            }, 1400)
+            t()
+            setNoticeText(NOTICEGAME.firstMoveBot)
           }
-        }, 100)
-        t()
-      }, 1000)
-      waite()
+        } else {
+          if (isFinite(minTrumpCardBot)) {
+            const t = debounce(() => {
+              setMoveBot(true)
+            }, 1400)
+            t()
+            setNoticeText(NOTICEGAME.firstMoveBot)
+          } else {
+            setMovePlayer(true)
+            setNoticeText(NOTICEGAME.firstMovePlayer)
+          }
+        }
+      }, 900)
+      wait()
       setFirstGetCards(false)
     }
   }, [playerCards, botCards, isFirstGetCards])
@@ -122,7 +136,7 @@ export const Game = () => {
         setMovePlayer(true)
         const t = debounce(() => {
           setButtonText(BUTTON_TEXT.ITake)
-        }, 1000)
+        }, 900)
         t()
       } else {
         if (battleCards.length !== 0 && battleCards[0].isPlayer === true) {
@@ -134,9 +148,9 @@ export const Game = () => {
                 setBotCards(botCards.filter(item => item.id !== card.id))
                 const t = debounce(() => {
                   setButtonText(BUTTON_TEXT.Ok)
-                }, 1900)
+                }, 1800)
                 t()
-              }, 1000)
+              }, 900)
               wait()
               setMoveBot(false)
               setMovePlayer(true)
@@ -144,7 +158,7 @@ export const Game = () => {
           } else {
             const t = debounce(() => {
               setButtonText(BUTTON_TEXT.HeTake)
-            }, 1000)
+            }, 900)
             t()
             setMoveBot(false)
             setMovePlayer(true)
@@ -158,7 +172,7 @@ export const Game = () => {
             const wait = debounce(() => {
               setBattleCards([...battleCards, cardToAdd])
               setBotCards(botCards.filter(item => item.id !== cardToAdd.id))
-            }, 1000)
+            }, 900)
             wait()
             setMoveBot(false)
             setMovePlayer(true)
@@ -166,6 +180,7 @@ export const Game = () => {
             setButtonText('')
             const waitDeckCards = debounce(() => {
               setBattleCards([])
+              setLeftCards([...leftCards, ...battleCards])
               newCards(
                 deckCards,
                 playerCards,
@@ -178,9 +193,9 @@ export const Game = () => {
               const transferMove = debounce(() => {
                 setMoveBot(false)
                 setMovePlayer(true)
-              }, 1000)
+              }, 900)
               transferMove()
-            }, 700)
+            }, 600)
             waitDeckCards()
           }
         }
@@ -205,8 +220,13 @@ export const Game = () => {
               { ...selectedCard, isPlayer: true },
             ])
             setSelectedSrcCardToMove('')
-            setMoveBot(true)
-            setMovePlayer(false)
+            if (buttonText === BUTTON_TEXT.HeTake) {
+              setMoveBot(false)
+              setMovePlayer(true)
+            } else {
+              setMoveBot(true)
+              setMovePlayer(false)
+            }
           }
         }
         if (battleCards.length === 0) {
@@ -242,19 +262,31 @@ export const Game = () => {
   }, [isMovePlayer, selectedSrcCardToMove])
 
   useEffect(() => {
-    if (canvasRef.current && widthGame !== 0 && widthGame !== 0 && trumpCard) {
+    if (canvasRef.current && widthGame !== 0 && heightGame !== 0 && trumpCard) {
       if (ctx) {
-        const a: TCard[] = []
-        DeskCard(ctx, widthGame, heightGame, deckCards, trumpCard)
+        //const arr:any = []
+        DeskCard(ctx, widthGame, heightGame, deckCards, trumpCard, false)
       }
     }
   }, [widthGame, heightGame, deckCards])
 
   useEffect(() => {
+    if (canvasRef.current && widthGame !== 0 && heightGame !== 0 && trumpCard) {
+      if (ctx) {
+        const wait = debounce(() => {
+          DeskCard(ctx, widthGame, heightGame, leftCards, trumpCard, true)
+        }, 1100)
+
+        wait()
+      }
+    }
+  }, [widthGame, heightGame, leftCards])
+
+  useEffect(() => {
     if (
       canvasRef.current &&
       widthGame !== 0 &&
-      widthGame !== 0 &&
+      heightGame !== 0 &&
       botCards.length !== 0
     ) {
       if (ctx) {
@@ -268,14 +300,14 @@ export const Game = () => {
             setSelectedSrcCardToMove,
             isMovePlayer,
           )
-        }, 1000)
+        }, 800)
         wait()
       }
     }
   }, [widthGame, heightGame, botCards])
 
   useEffect(() => {
-    if (canvasRef.current && widthGame !== 0 && widthGame !== 0) {
+    if (canvasRef.current && widthGame !== 0 && heightGame !== 0) {
       if (ctx) {
         const wait = debounce(() => {
           CardsGame(
@@ -287,22 +319,22 @@ export const Game = () => {
             setSelectedSrcCardToMove,
             isMovePlayer,
           )
-        }, 1000)
+        }, 800)
         wait()
       }
     }
   }, [widthGame, heightGame, playerCards, isMovePlayer])
 
   useEffect(() => {
-    if (canvasRef.current && widthGame !== 0 && widthGame !== 0) {
+    if (canvasRef.current && widthGame !== 0 && heightGame !== 0) {
       if (ctx) {
         const wait = debounce(() => {
           const t = debounce(() => {
             BattleField(ctx, widthGame, heightGame, battleCards)
-          }, 500)
+          }, 400)
           t()
           setNoticeText('')
-        }, 800)
+        }, 700)
         wait()
       }
     }
@@ -333,9 +365,9 @@ export const Game = () => {
         const transferMove = debounce(() => {
           setMoveBot(false)
           setMovePlayer(true)
-        }, 1000)
+        }, 900)
         transferMove()
-      }, 700)
+      }, 600)
       waitDeckCards()
     }
     if (buttonText === BUTTON_TEXT.ITake) {
@@ -358,14 +390,16 @@ export const Game = () => {
         const transferMove = debounce(() => {
           setMoveBot(true)
           setMovePlayer(false)
-        }, 1000)
+        }, 900)
         transferMove()
-      }, 700)
+      }, 600)
       waitDeckCards()
     }
     if (buttonText === BUTTON_TEXT.Ok) {
       setButtonText('')
       const waitDeckCards = debounce(() => {
+        setBattleCards([])
+        setLeftCards([...leftCards, ...battleCards])
         newCards(
           deckCards,
           playerCards,
@@ -375,12 +409,13 @@ export const Game = () => {
           setPlayerCards,
           setBotCards,
         )
+
         const transferMove = debounce(() => {
           setMoveBot(true)
           setMovePlayer(false)
-        }, 1000)
+        }, 900)
         transferMove()
-      }, 700)
+      }, 600)
       waitDeckCards()
     }
   }

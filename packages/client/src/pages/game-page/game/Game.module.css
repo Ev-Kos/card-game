@@ -1,11 +1,13 @@
 .game {
   display: flex;
   box-sizing: border-box;
-  width: 100%;
-  height: 100%;
+  background-color: var(--color-background-light);
   justify-content: center;
   align-items: center;
   position: relative;
+  margin: 0 5% 3% 5%;
+  height: 100%;
+  border-radius: 10px;
 }
 
 canvas {
