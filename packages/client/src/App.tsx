@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
+import GamePage from './pages/game-page'
 
 // import BackgroundImage from './assets/BackgroundImage.svg'
 // import Logo from './assets/Logo.svg'
 
 // import styles from './styles.module.css'
-import GamePage from './pages/game-page'
 
 function App() {
   useEffect(() => {

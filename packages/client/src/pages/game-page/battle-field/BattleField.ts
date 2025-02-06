@@ -1,4 +1,4 @@
-import { Card } from '../card/card'
+import { Card } from '../card/Card'
 import { CARD_HEIGHT, CARD_WIDTH } from '../utils/constans'
 import { spritesLoaded, TBattleCart } from '../utils/game-helpers'
 
@@ -26,7 +26,7 @@ export const BattleField = (
     ctx.clearRect(
       widthGame - (widthGame * 70) / 100,
       y,
-      widthGame < 1098 ? 400 : 600,
+      widthGame < 1098 ? 400 : 580,
       200,
     )
   } else {
@@ -38,10 +38,11 @@ export const BattleField = (
 
         let oddX = x
         let evenX = x
+
         ctx.clearRect(
           x - 2,
           y - CARD_HEIGHT,
-          cardsArray.length * (CARD_WIDTH + 15),
+          cardsArray.length * CARD_WIDTH + 15,
           CARD_HEIGHT * 2 + 50,
         )
         arr.forEach(item => {

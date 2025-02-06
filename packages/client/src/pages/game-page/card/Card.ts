@@ -21,7 +21,7 @@ export const Card = (
   if (isTrumpCard && isOpasity) {
     ctx.imageSmoothingEnabled = true
     ctx.drawImage(image, x + 3, y + 3, CARD_WIDTH, CARD_HEIGHT)
-    ctx.fillStyle = 'rgba(211, 210, 210, 0.4)'
-    ctx.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT)
+    ctx.fillStyle = 'rgba(211, 210, 210, 0.5)'
+    ctx.fillRect(x + 3, y + 3, CARD_WIDTH, CARD_HEIGHT)
   }
 }

@@ -1,13 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import {
-  CARD_HEIGHT,
-  CARD_WIDTH,
-  closedCard,
-  LOGO_HEIGHT,
-  PADDING_GAME_PAGE,
-} from '../utils/constans'
+import { useEffect, useRef, useState } from 'react'
+import { LOGO_HEIGHT, PADDING_GAME_PAGE } from '../utils/constans'
 import { DeskCard } from '../deck-cards/DeckCards'
-import { useWindowSize } from '../hooks/hooks'
 import styles from './Game.module.css'
 import {
   BUTTON_TEXT,
@@ -18,29 +11,26 @@ import {
   findCard,
   findCartToAdd,
   findMinCard,
-  getRect,
   initialDeskCard,
   newCards,
   NOTICEGAME,
   shuffle,
-  spritesLoaded,
   TBattleCart,
   TCard,
-  TRect,
   trimStr,
 } from '../utils/game-helpers'
 import { CardsGame } from '../cards-game/CardsGame'
 import { NoticeGame } from '../notice-game/NoticeGame'
 import { BattleField } from '../battle-field/BattleField'
 import { Button } from '../../../shared/button'
-import { Card } from '../card/card'
+import { useWindowSize } from '../../../shared/hooks/useWindowSize'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
   const [heightGame, setHeightGame] = useState(0)
   const [isStartGame, setStartGame] = useState(true)
   const [deckCards, setDeckCards] = useState<TCard[]>([])
-  const [trumpCard, setTrumpCard] = useState<TCard>()
+  const [trumpCard, setTrumpCard] = useState<TCard | null>(null)
 
   const [isFirstGetCards, setFirstGetCards] = useState(false)
   const [playerCards, setPlayerCards] = useState<TCard[]>([])
@@ -60,7 +50,8 @@ export const Game = () => {
   const [battleCards, setBattleCards] = useState<TBattleCart[]>([])
   const [leftCards, setLeftCards] = useState<TBattleCart[]>([])
   const [buttonText, setButtonText] = useState('')
-  console.log(22)
+  const [isPlayer, setPlayer] = useState<boolean | undefined>(undefined)
+
   useEffect(() => {
     setWidthGame(Math.round(width - (width * PADDING_GAME_PAGE * 2) / 100))
     setHeightGame(Math.round(height - LOGO_HEIGHT - 30))
@@ -72,6 +63,7 @@ export const Game = () => {
       setTrumpCard(arr[0])
       setDeckCards(arr)
       setFirstGetCards(true)
+      setStartGame(false)
     }
   }, [isStartGame])
 
@@ -205,6 +197,7 @@ export const Game = () => {
 
   useEffect(() => {
     if (isMovePlayer && selectedSrcCardToMove.length !== 0) {
+      setPlayer(true)
       const selectedCard = playerCards.find(
         item => trimStr(item.image) === trimStr(selectedSrcCardToMove),
       )
@@ -264,7 +257,6 @@ export const Game = () => {
   useEffect(() => {
     if (canvasRef.current && widthGame !== 0 && heightGame !== 0 && trumpCard) {
       if (ctx) {
-        //const arr:any = []
         DeskCard(ctx, widthGame, heightGame, deckCards, trumpCard, false)
       }
     }
@@ -372,6 +364,7 @@ export const Game = () => {
     }
     if (buttonText === BUTTON_TEXT.ITake) {
       setButtonText('')
+      setPlayer(false)
       const waitDeckCards = debounce(() => {
         const arr = [...playerCards, ...newBattleCards]
         //@ts-ignore
@@ -397,6 +390,7 @@ export const Game = () => {
     }
     if (buttonText === BUTTON_TEXT.Ok) {
       setButtonText('')
+      setPlayer(false)
       const waitDeckCards = debounce(() => {
         setBattleCards([])
         setLeftCards([...leftCards, ...battleCards])
@@ -409,7 +403,6 @@ export const Game = () => {
           setPlayerCards,
           setBotCards,
         )
-
         const transferMove = debounce(() => {
           setMoveBot(true)
           setMovePlayer(false)
@@ -420,6 +413,35 @@ export const Game = () => {
     }
   }
 
+  useEffect(() => {
+    if ((playerCards.length === 0 || botCards.length === 0) && trumpCard) {
+      setButtonText('')
+      setPlayer(false)
+
+      const wait = debounce(() => {
+        if (ctx) {
+          ctx.clearRect(0, 0, widthGame, heightGame)
+          const wait = debounce(() => {
+            setBotCards([])
+            setPlayerCards([])
+            setLeftCards([])
+            setBattleCards([])
+            setTrumpCard(null)
+            if (ctx) {
+              ctx.clearRect(0, 0, widthGame, heightGame)
+            }
+            const t = debounce(() => {
+              setStartGame(true)
+            }, 700)
+            t()
+          }, 1600)
+          wait()
+        }
+      }, 1600)
+      wait()
+    }
+  }, [playerCards, botCards])
+
   return (
     <div className={styles.game}>
       <canvas
@@ -429,6 +451,9 @@ export const Game = () => {
         id="canvas"
       />
       {isNoticeText.length !== 0 && <NoticeGame text={isNoticeText} />}
+      {isPlayer && isNoticeText.length === 0 && battleCards.length === 0 && (
+        <NoticeGame className={styles.noticeToPlayer} text="Ваш ход" />
+      )}
       <div className={styles.button}>
         {buttonText.length !== 0 && (
           <Button onClick={clickButton}>

@@ -1,13 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
-import { Card } from '../card/card'
+import { Card } from '../card/Card'
 import { CARD_HEIGHT, CARD_WIDTH, closedCard } from '../utils/constans'
-import {
-  debounce,
-  getRect,
-  spritesLoaded,
-  TCard,
-  TRect,
-} from '../utils/game-helpers'
+import { getRect, spritesLoaded, TCard, TRect } from '../utils/game-helpers'
 
 export const CardsGame = (
   ctx: CanvasRenderingContext2D,
@@ -21,6 +15,9 @@ export const CardsGame = (
   const xResize = () => {
     if (widthGame < 1098) {
       return Math.round(widthGame - (widthGame * 77) / 100)
+    }
+    if (cardsArray.length > 8) {
+      return Math.round(widthGame - (widthGame * 84) / 100)
     }
     return Math.round(widthGame - (widthGame * 69) / 100)
   }
@@ -48,9 +45,7 @@ export const CardsGame = (
 
       ctx.clearRect(0, isPlayerCards ? yPlayer : yBot, widthGame, 200)
       rects.forEach(item => {
-        ctx.save()
         Card(ctx, false, item.image, item.x, item.y, false)
-        ctx.restore()
       })
 
       if (isPlayerCards) {

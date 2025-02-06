@@ -1,4 +1,4 @@
-import { Card } from '../card/card'
+import { Card } from '../card/Card'
 import { CARD_HEIGHT, CARD_WIDTH, closedCard } from '../utils/constans'
 import { spritesLoaded, TCard } from '../utils/game-helpers'
 
@@ -13,7 +13,6 @@ export const DeskCard = async (
   const x = Math.round(widthGame - CARD_WIDTH - CARD_WIDTH / 1.5)
   const y = Math.round(heightGame / 2 - CARD_HEIGHT)
   const xLeft = 50
-  //const yLeft = heightGame / 2 - CARD_HEIGHT
 
   const newDeckCards = cardsArray.map((item, index) =>
     index === 0 && !isLeft ? item.image : closedCard,
@@ -53,7 +52,7 @@ export const DeskCard = async (
         .then(images => {
           let i = y
           ctx.clearRect(xLeft - 2, y, 100, 500)
-          images.forEach((item, index) => {
+          images.forEach(item => {
             Card(ctx, false, item, xLeft, i, false)
             i = i + 3
           })
