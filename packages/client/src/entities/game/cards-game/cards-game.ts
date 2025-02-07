@@ -1,7 +1,12 @@
 import { Dispatch, SetStateAction } from 'react'
-import { Card } from '../card/Card'
-import { CARD_HEIGHT, CARD_WIDTH, closedCard } from '../utils/constans'
-import { getRect, spritesLoaded, TCard, TRect } from '../utils/game-helpers'
+import { Card } from '../../../shared/card/Card'
+import { TCard, TRect } from '../../../utils/types'
+import { CARD_HEIGHT, CARD_WIDTH, closedCard } from '../../../utils/constans'
+import {
+  debounce,
+  getRect,
+  spritesLoaded,
+} from '../../../features/game/helpers'
 
 export const CardsGame = (
   ctx: CanvasRenderingContext2D,
@@ -12,16 +17,7 @@ export const CardsGame = (
   setSelectedSrcCardToMove: Dispatch<SetStateAction<string>>,
   isMovePlayer: boolean,
 ) => {
-  const xResize = () => {
-    if (widthGame < 1098) {
-      return Math.round(widthGame - (widthGame * 77) / 100)
-    }
-    if (cardsArray.length > 8) {
-      return Math.round(widthGame - (widthGame * 84) / 100)
-    }
-    return Math.round(widthGame - (widthGame * 69) / 100)
-  }
-  const x = xResize()
+  const x = Math.round((widthGame - cardsArray.length * (CARD_WIDTH + 15)) / 2)
   const yBot = 25
   const yPlayer = Math.round(heightGame - CARD_HEIGHT - 45)
 
@@ -43,10 +39,13 @@ export const CardsGame = (
         newX = newX + CARD_WIDTH + 15
       })
 
-      ctx.clearRect(0, isPlayerCards ? yPlayer : yBot, widthGame, 200)
-      rects.forEach(item => {
-        Card(ctx, false, item.image, item.x, item.y, false)
-      })
+      const wait = debounce(() => {
+        ctx.clearRect(0, isPlayerCards ? yPlayer : yBot, widthGame, 200)
+        rects.forEach(item => {
+          Card(ctx, false, item.image, item.x, item.y, false)
+        })
+      }, 50)
+      wait()
 
       if (isPlayerCards) {
         if (canvas) {

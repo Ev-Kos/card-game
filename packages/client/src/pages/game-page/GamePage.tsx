@@ -1,7 +1,7 @@
 import styles from './GamePage.module.css'
 import Logo from '../../assets/Logo.svg'
 import ButtonGoBack from '../../assets/ButtonGoBack.svg'
-import { Game } from './game/Game'
+import { Game } from '../../features/game/Game'
 
 export const GamePage = () => {
   return (

@@ -1,6 +1,7 @@
-import { Card } from '../card/Card'
-import { CARD_HEIGHT, CARD_WIDTH, closedCard } from '../utils/constans'
-import { spritesLoaded, TCard } from '../utils/game-helpers'
+import { Card } from '../../../shared/card/Card'
+import { CARD_HEIGHT, CARD_WIDTH, closedCard } from '../../../utils/constans'
+import { spritesLoaded } from '../../../features/game/helpers'
+import { TCard } from '../../../utils/types'
 
 export const DeskCard = async (
   ctx: CanvasRenderingContext2D,
@@ -19,6 +20,7 @@ export const DeskCard = async (
   )
 
   const sprites = spritesLoaded(newDeckCards)
+
   if (!isLeft) {
     if (cardsArray.length !== 0) {
       Promise.all(sprites)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { debounce } from '../../pages/game-page/utils/game-helpers'
+import { debounce } from '../../features/game/helpers'
 
 export const useWindowSize = () => {
   const [size, setSize] = useState([window.innerWidth, window.innerHeight])

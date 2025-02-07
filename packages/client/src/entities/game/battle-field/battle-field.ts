@@ -1,6 +1,7 @@
-import { Card } from '../card/Card'
-import { CARD_HEIGHT, CARD_WIDTH } from '../utils/constans'
-import { spritesLoaded, TBattleCart } from '../utils/game-helpers'
+import { Card } from '../../../shared/card/Card'
+import { CARD_HEIGHT, CARD_WIDTH } from '../../../utils/constans'
+import { spritesLoaded } from '../../../features/game/helpers'
+import { TBattleCart } from '../../../utils/types'
 
 export const BattleField = (
   ctx: CanvasRenderingContext2D,
@@ -8,15 +9,12 @@ export const BattleField = (
   heightGame: number,
   cardsArray: TBattleCart[],
 ) => {
-  const xResize = () => {
-    if (widthGame < 1098) {
-      return Math.round(widthGame - (widthGame * 77) / 100)
-    }
-    return Math.round(widthGame - (widthGame * 69) / 100)
-  }
+  const cardsArrayLength = cardsArray.filter(
+    item => item.isPlayer === cardsArray[0].isPlayer,
+  ).length
 
-  const x = xResize()
-  const y = heightGame / 2 - CARD_HEIGHT
+  const x = Math.round((widthGame - cardsArrayLength * (CARD_WIDTH + 15)) / 2)
+  const y = Math.round(heightGame / 2 - CARD_HEIGHT)
 
   const images = cardsArray.map(item => item.image)
 
@@ -24,10 +22,10 @@ export const BattleField = (
 
   if (cardsArray.length === 0) {
     ctx.clearRect(
-      widthGame - (widthGame * 70) / 100,
+      widthGame - (widthGame - 300),
       y,
-      widthGame < 1098 ? 400 : 580,
-      200,
+      widthGame - 510,
+      CARD_HEIGHT + 50,
     )
   } else {
     Promise.all(sprites)
@@ -41,9 +39,9 @@ export const BattleField = (
 
         ctx.clearRect(
           x - 2,
-          y - CARD_HEIGHT,
-          cardsArray.length * CARD_WIDTH + 15,
-          CARD_HEIGHT * 2 + 50,
+          y,
+          cardsArray.length * (CARD_WIDTH + 15),
+          CARD_HEIGHT + 50,
         )
         arr.forEach(item => {
           if (arr[0].isPlayer === item.isPlayer) {
