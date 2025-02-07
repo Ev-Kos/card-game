@@ -1,0 +1,54 @@
+.forumPage {
+  margin: 0px 0 63px 0;
+}
+
+.forumPageTitle {
+  text-align: center;
+  color: var(--color-primary);
+  position: absolute;
+  bottom: 19px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.forumHeaderBlock {
+  position: relative;
+  height: 108px;
+}
+
+.forumHeaderBlockScrolling {
+  border-bottom: 2px solid var(--color-secondary);
+  box-shadow: 0 0px 15px -2px var(--color-secondary);
+  transition: all 0.3s ease;
+}
+
+.forumPageContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.forumPageButton {
+  margin-top: 12px;
+  height: 45px;
+}
+
+.forumPageList {
+  height: calc(100vh - 228px);
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  list-style-type: none;
+  /* max-height: 400px; */ /* Ограничение высоты для прокрутки */
+  overflow-y: auto; /* Добавление вертикальной прокрутки */
+  scrollbar-width: none; /* Скрывает скроллбар в Firefox */
+  position: relative;
+  z-index: 1;
+}
+
+.forumPageList::-webkit-scrollbar {
+  display: none;
+  scrollbar-width: none; /* Скрывает скроллбар в Firefox */
+}

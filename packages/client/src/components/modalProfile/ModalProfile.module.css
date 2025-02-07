@@ -1,0 +1,89 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.modalContent {
+  background: #f3f0ff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 600px;
+  position: relative;
+}
+
+.modalProfileClose {
+  background-color: #0000;
+  color: var(--color-contrast);
+  border: none;
+  cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  right: -40px;
+  top: -16px;
+  width: 30px;
+  transition: 0.1s all ease;
+}
+
+.modalProfileTitle {
+  font-weight: bold;
+  font-size: 24px;
+  color: var(--color-dark);
+  text-align: center;
+}
+
+.modalProfileFlex {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.modalProfileForm {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  margin-top: 23px;
+}
+
+.modalProfileLabel {
+  color: var(--color-background);
+  margin-right: 24px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.modalProfileInput {
+  width: 485px;
+  height: 25px;
+  border-radius: 15px;
+  border: 1px solid var(--color-background);
+  background-color: var(--color-background-light);
+}
+
+.modalProfileTextarea {
+  width: 485px;
+  height: 150px;
+  border-radius: 15px;
+  border: 1px solid var(--color-background);
+  background-color: var(--color-background-light);
+}
+
+input[type='text'],
+textarea {
+  /* width: 100%; */
+  padding: 10px;
+}
+
+textarea {
+  resize: none;
+}
+
+.modalProfileButtonCenter {
+  margin: 0 auto;
+}
