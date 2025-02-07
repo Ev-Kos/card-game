@@ -7,16 +7,16 @@ import styles from './ProfilePage.module.css'
 
 import Clubs from '../../assets/Сlubs.svg'
 import { AvatarProfile } from '../../components/avatarProfile'
+import { ArrowBackButton } from '../../components/arrowBackButton'
 
 export const ProfilePage = () => {
-
-	const [formData, setFormData] = useState<{
-    name: string;
-    second_name: string;
-    login: string;
-    email: string;
-    phone: string;
-    password: string;
+  const [formData, setFormData] = useState<{
+    name: string
+    second_name: string
+    login: string
+    email: string
+    phone: string
+    password: string
   }>({
     name: 'Lars',
     second_name: 'Fillmore',
@@ -24,61 +24,63 @@ export const ProfilePage = () => {
     email: 'brainslug@yandex.ru',
     phone: '+7 999  890 07 07',
     password: 'Dog_777',
-  });
+  })
 
-	const [isModalOpen, setIsModalOpen] = useState(false);
-  const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(Clubs);
-	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(Clubs)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData(prevData => ({
       ...prevData,
-      [name]: value
-    }));
-  };
+      [name]: value,
+    }))
+  }
 
-	const handleModalOpen = () => {
-    setIsModalOpen(true);
-  };
+  const handleModalOpen = () => {
+    setIsModalOpen(true)
+  }
 
   const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
-	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      setSelectedFile(e.target.files[0])
     }
-  };
+  }
 
-	const handleUpload = () => {
+  const handleUpload = () => {
     if (selectedFile) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = () => {
-        setAvatar(reader.result);
-        handleModalClose();
-      };
-      reader.readAsDataURL(selectedFile);
+        setAvatar(reader.result)
+        handleModalClose()
+      }
+      reader.readAsDataURL(selectedFile)
     }
-  };
+  }
 
   return (
-    <main className={ styles.profile }>
-      <div className={ styles.profileContent }>
+    <main className={styles.profile}>
+      <a href="#" className={styles.profileLink}>
+        <ArrowBackButton />
+      </a>
+      <div className={styles.profileContent}>
         <AvatarProfile avatar={avatar as string} onClick={handleModalOpen} />
 
-				<h1 className={ styles.profileTitle }>Профиль</h1>
-				
-				<ProfileForm formData={formData} handleChange={handleChange} />
-			</div>
-      <AvatarModal 
-				isOpen={isModalOpen} 
-				onClose={handleModalClose} 
-				onImageChange={handleImageChange} 
-				onUpload={handleUpload} 
-			/>
+        <h1 className={styles.profileTitle}>Профиль</h1>
+
+        <ProfileForm formData={formData} handleChange={handleChange} />
+      </div>
+      <AvatarModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onImageChange={handleImageChange}
+        onUpload={handleUpload}
+      />
     </main>
   )
 }
-

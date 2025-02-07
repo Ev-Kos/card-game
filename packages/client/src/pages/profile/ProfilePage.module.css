@@ -1,36 +1,38 @@
 .profile {
-	display: flex;
+  display: flex;
 }
 
 .profileContent {
-	position: absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-	z-index: 1;
+  z-index: 1;
   width: 450px;
   margin: 0 auto;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-
-
 .profileTitle {
-	margin-top: 43px;
-	font-size: 24px;
-	font-weight: bold;
-	color: var(--color-primary);
+  margin-top: 43px;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--color-primary);
 }
 
 .profileUserData {
-	width: 100%;
+  width: 100%;
 }
 
 .profileButtonCenter {
-	display: flex;
-	justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
-
+.profileLink {
+  position: relative;
+  left: 30px;
+  top: 40px;
+}
