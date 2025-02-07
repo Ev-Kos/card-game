@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
-import GamePage from './pages/game-page'
 
-// import BackgroundImage from './assets/BackgroundImage.svg'
-// import Logo from './assets/Logo.svg'
+import BackgroundImage from './assets/BackgroundImage.svg'
+import Logo from './assets/Logo.svg'
 
-// import styles from './styles.module.css'
+import styles from './styles.module.css'
 
 function App() {
   useEffect(() => {
@@ -19,11 +18,10 @@ function App() {
   }, [])
 
   return (
-    // <>
-    //   <img src={Logo} className={styles.logo} alt="Desc Masters" />
-    //   <img src={BackgroundImage} className={styles.backgrounImage} />
-    // </>
-    <GamePage />
+    <>
+      <img src={Logo} className={styles.logo} alt="Desc Masters" />
+      <img src={BackgroundImage} className={styles.backgrounImage} />
+    </>
   )
 }
 
