@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
 import { TBattleCart, TCard } from '../../utils/types'
-import { pathSprites } from '../../utils/constans'
 
 export const debounce = (callback: any, delay: number) => {
   let timeoutId: any = null
@@ -180,9 +179,9 @@ export const checkCard = (
   }
   return false
 }
-
+const pathSprites = 'deck/'
 export const trimStr = (str: string, trimValue = pathSprites) => {
-  const i = str.indexOf(trimValue)
+  const i = str.indexOf(pathSprites)
   return str.slice(i + trimValue.length)
 }
 

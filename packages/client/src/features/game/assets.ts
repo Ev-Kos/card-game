@@ -1,4 +1,4 @@
-import { SUITS } from '../../utils/constans'
+import { SUITS } from '../../shared/constans'
 
 export const initialDeskCard = [
   {

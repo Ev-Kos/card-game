@@ -1,5 +1,5 @@
 import { Card } from '../../../shared/card/Card'
-import { CARD_HEIGHT, CARD_WIDTH } from '../../../utils/constans'
+import { CARD_HEIGHT, CARD_WIDTH } from '../../../shared/constans'
 import { spritesLoaded } from '../../../features/game/helpers'
 import { TBattleCart } from '../../../utils/types'
 

@@ -1,5 +1,9 @@
 import { Card } from '../../../shared/card/Card'
-import { CARD_HEIGHT, CARD_WIDTH, closedCard } from '../../../utils/constans'
+import {
+  CARD_HEIGHT,
+  CARD_WIDTH,
+  closedCardImage,
+} from '../../../shared/constans'
 import { spritesLoaded } from '../../../features/game/helpers'
 import { TCard } from '../../../utils/types'
 
@@ -16,7 +20,7 @@ export const DeskCard = async (
   const xLeft = 50
 
   const newDeckCards = cardsArray.map((item, index) =>
-    index === 0 && !isLeft ? item.image : closedCard,
+    index === 0 && !isLeft ? item.image : closedCardImage,
   )
 
   const sprites = spritesLoaded(newDeckCards)

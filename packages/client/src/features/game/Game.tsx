@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from './Game.module.css'
 import { TBattleCart, TCard } from '../../utils/types'
-import { useWindowSize } from '../../utils/hooks/useWindowSize'
+import { useWindowSize } from '../../shared/hooks/useWindowSize'
 import imports from './index'
-import { BUTTON_TEXT, NOTICE_GAME } from '../../utils/constans'
+import { button_text, notice_game } from '../../shared/constans'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -37,9 +37,7 @@ export const Game = () => {
     deckCards.length === 0
 
   useEffect(() => {
-    setWidthGame(
-      Math.round(width - (width * imports.PADDING_GAME_PAGE * 2) / 100),
-    )
+    setWidthGame(Math.round(width - (width * 5 * 2) / 100))
     setHeightGame(Math.round(height - imports.LOGO_HEIGHT - 30))
   }, [width, height])
 
@@ -86,13 +84,13 @@ export const Game = () => {
         if (isFinite(minTrumpCardBot) && isFinite(minTrumpCartPlayer)) {
           if (minTrumpCardBot > minTrumpCartPlayer) {
             setMovePlayer(true)
-            setNoticeText(NOTICE_GAME.firstMovePlayer)
+            setNoticeText(notice_game.firstMovePlayer)
           } else {
             const t = imports.debounce(() => {
               setMoveBot(true)
             }, 1000)
             t()
-            setNoticeText(NOTICE_GAME.firstMoveBot)
+            setNoticeText(notice_game.firstMoveBot)
           }
         } else {
           if (isFinite(minTrumpCardBot)) {
@@ -100,10 +98,10 @@ export const Game = () => {
               setMoveBot(true)
             }, 1000)
             t()
-            setNoticeText(NOTICE_GAME.firstMoveBot)
+            setNoticeText(notice_game.firstMoveBot)
           } else {
             setMovePlayer(true)
-            setNoticeText(NOTICE_GAME.firstMovePlayer)
+            setNoticeText(notice_game.firstMovePlayer)
           }
         }
       }, 800)
@@ -121,7 +119,7 @@ export const Game = () => {
         setMoveBot(false)
         setMovePlayer(true)
         const t = imports.debounce(() => {
-          setButtonText(BUTTON_TEXT.ITake)
+          setButtonText(button_text.ITake)
         }, 800)
         t()
       } else {
@@ -133,7 +131,7 @@ export const Game = () => {
                 setBattleCards([...battleCards, card])
                 setBotCards(botCards.filter(item => item.id !== card.id))
                 const t = imports.debounce(() => {
-                  setButtonText(BUTTON_TEXT.Ok)
+                  setButtonText(button_text.Ok)
                 }, 1700)
                 t()
               }, 800)
@@ -143,7 +141,7 @@ export const Game = () => {
             }
           } else {
             const t = imports.debounce(() => {
-              setButtonText(BUTTON_TEXT.HeTake)
+              setButtonText(button_text.HeTake)
             }, 800)
             t()
             setMoveBot(false)
@@ -240,7 +238,7 @@ export const Game = () => {
               { ...selectedCard, isPlayer: true },
             ])
             setSelectedSrcCardToMove('')
-            if (buttonText === BUTTON_TEXT.HeTake) {
+            if (buttonText === button_text.HeTake) {
               setMoveBot(false)
               setMovePlayer(true)
             } else {
@@ -333,7 +331,7 @@ export const Game = () => {
       imports.deleteField(item, 'isPlayer'),
     )
     setBattleCards([])
-    if (buttonText === BUTTON_TEXT.HeTake) {
+    if (buttonText === button_text.HeTake) {
       setButtonText('')
       const waitDeckCards = imports.debounce(() => {
         const arr = [...botCards, ...newBattleCards] as TCard[]
@@ -355,7 +353,7 @@ export const Game = () => {
       }, 500)
       waitDeckCards()
     }
-    if (buttonText === BUTTON_TEXT.ITake) {
+    if (buttonText === button_text.ITake) {
       setButtonText('')
       setPlayer(false)
       const waitDeckCards = imports.debounce(() => {
@@ -378,7 +376,7 @@ export const Game = () => {
       }, 500)
       waitDeckCards()
     }
-    if (buttonText === BUTTON_TEXT.Ok) {
+    if (buttonText === button_text.Ok) {
       setButtonText('')
       setPlayer(false)
       const waitDeckCards = imports.debounce(() => {

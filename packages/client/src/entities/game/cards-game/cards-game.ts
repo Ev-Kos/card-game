@@ -1,7 +1,11 @@
 import { Dispatch, SetStateAction } from 'react'
 import { Card } from '../../../shared/card/Card'
 import { TCard, TRect } from '../../../utils/types'
-import { CARD_HEIGHT, CARD_WIDTH, closedCard } from '../../../utils/constans'
+import {
+  CARD_HEIGHT,
+  CARD_WIDTH,
+  closedCardImage,
+} from '../../../shared/constans'
 import {
   debounce,
   getRect,
@@ -24,7 +28,7 @@ export const CardsGame = (
   const canvas = document.querySelector('canvas')
 
   const newCardsArray = cardsArray.map(item =>
-    isPlayerCards ? item.image : closedCard,
+    isPlayerCards ? item.image : closedCardImage,
   )
 
   const sprites = spritesLoaded(newCardsArray)
