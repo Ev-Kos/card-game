@@ -1,0 +1,8 @@
+.profileUserData {
+  width: 100%;
+}
+
+.profileButtonCenter {
+  display: flex;
+  justify-content: center;
+}

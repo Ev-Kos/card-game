@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 
-import { ProfileForm } from '../../components/profileForm'
-import { AvatarModal } from '../../components/avatarModal'
+import { ProfileForm } from '../../entities/profile/profileForm'
+import { AvatarModal } from '../../entities/profile/avatarModal'
+import { AvatarProfile } from '../../entities/profile/avatarProfile'
+import { ArrowBackButton } from '../../shared/arrowBackButton'
 
-import styles from './ProfilePage.module.css'
+import styles from './styles.module.css'
 
 import Clubs from '../../assets/Сlubs.svg'
-import { AvatarProfile } from '../../components/avatarProfile'
-import { ArrowBackButton } from '../../components/arrowBackButton'
 
 export const ProfilePage = () => {
   const [formData, setFormData] = useState<{
@@ -66,7 +66,7 @@ export const ProfilePage = () => {
   return (
     <main className={styles.profile}>
       <a href="#" className={styles.profileLink}>
-        <ArrowBackButton />
+        <ArrowBackButton color={'var(--color-primary)'} />
       </a>
       <div className={styles.profileContent}>
         <AvatarProfile avatar={avatar as string} onClick={handleModalOpen} />

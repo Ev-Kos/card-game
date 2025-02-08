@@ -12,10 +12,10 @@
 }
 
 .modalContent {
-	background-color: var(--color-primary);
+  background-color: var(--color-primary);
   padding: 40px 30px;
   border-radius: 12px;
-	border: 2px solid var(--color-secondary);
+  border: 2px solid var(--color-secondary);
   width: 340px;
   position: absolute;
   top: 50%;
@@ -27,7 +27,7 @@
 }
 
 .closeButton {
-	background-color: #0000;
+  background-color: #0000;
   color: var(--color-contrast);
   border: none;
   cursor: pointer;
@@ -36,9 +36,9 @@
   right: -40px;
   top: -16px;
   width: 30px;
-  transition: .1s all ease;
+  transition: 0.1s all ease;
 }
 
 .modalInput {
-	margin: 20px 0;
+  margin: 20px 0;
 }

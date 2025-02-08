@@ -1,11 +1,12 @@
-const BASE_URL = 'https://ya-praktikum.tech/api/v2';
-
+import { BASE_URL } from './constants'
 interface ChangePasswordRequest {
-  oldPassword: string;
-  newPassword: string;
+  oldPassword: string
+  newPassword: string
 }
 
-export const changePassword = async (data: ChangePasswordRequest): Promise<void> => {
+export const changePassword = async (
+  data: ChangePasswordRequest,
+): Promise<void> => {
   try {
     const response = await fetch(`${BASE_URL}/user/password`, {
       method: 'PUT',
@@ -13,16 +14,16 @@ export const changePassword = async (data: ChangePasswordRequest): Promise<void>
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    });
+    })
 
     if (response.ok) {
-      console.log('Пароль успешно изменён.');
+      console.log('Пароль успешно изменён.')
     } else {
-      const errorData = await response.json();
-      const reason = errorData.reason || 'Неизвестная ошибка';
-      console.log(`Не удалось изменить пароль: ${reason}`);
+      const errorData = await response.json()
+      const reason = errorData.reason || 'Неизвестная ошибка'
+      console.log(`Не удалось изменить пароль: ${reason}`)
     }
   } catch (error) {
-    console.log('Произошла ошибка при изменении пароля');
+    console.log('Произошла ошибка при изменении пароля')
   }
-};
+}

@@ -1,0 +1,25 @@
+.profileField {
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 11px;
+  padding-left: 34px;
+}
+
+.profileField:nth-child(6) {
+  margin-bottom: 43px;
+}
+
+.profileFieldLeft {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.profileInput {
+  text-align: right;
+  background-color: var(--color-background);
+  font-weight: bold;
+  font-size: 16px;
+}
