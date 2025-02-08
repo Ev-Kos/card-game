@@ -1,0 +1,31 @@
+.button {
+  display: flex;
+  align-items: center;
+  background-color: unset;
+  padding: 8px 18px;
+  gap: 18px;
+
+  svg {
+    transform: rotate(0.25turn);
+
+    path {
+      fill: var(--color-contrast);
+    }
+  }
+
+  .text {
+    color: var(--color-primary);
+    font-size: 28px;
+    font-weight: 800;
+    padding-bottom: 4px;
+  }
+
+  &:hover {
+    p {
+      color: var(--color-link);
+    }
+    svg path {
+      fill: var(--color-link);
+    }
+  }
+}
