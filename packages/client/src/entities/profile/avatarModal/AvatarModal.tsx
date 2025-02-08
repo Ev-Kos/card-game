@@ -5,7 +5,7 @@ interface AvatarModalProps {
   isOpen: boolean
   onClose: () => void
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onUpload: () => void
+  onUpload: () => VoidFunction
 }
 
 export const AvatarModal: React.FC<AvatarModalProps> = ({
