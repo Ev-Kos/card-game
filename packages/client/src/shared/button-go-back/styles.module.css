@@ -1,0 +1,13 @@
+.button {
+  background-color: unset;
+  position: absolute;
+  top: 39px;
+  left: 29px;
+  z-index: 20;
+
+  &:hover {
+    svg path {
+      fill: var(--color-link);
+    }
+  }
+}

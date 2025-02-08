@@ -1,6 +1,7 @@
 import { type RouteObject } from 'react-router-dom'
 
 import { NotFoundErrorPage, ServerErrorPage } from '../pages'
+import RatingPage from '../pages/rating-page'
 
 const arrayRoutes: RouteObject[] = [
   { path: '/', element: <>LoginPage</> },
@@ -9,7 +10,7 @@ const arrayRoutes: RouteObject[] = [
   { path: '/forum', element: <>ForumPage</> },
   { path: '/forum/:id', element: <>ForumTopicPage</> },
   { path: '/game', element: <>PageGame</> },
-  { path: '/leaderboard', element: <>LeaderboardPage</> },
+  { path: '/leaderboard', element: <RatingPage /> },
   { path: '/profile', element: <>ProfilePage</> },
   { path: '/*', element: <NotFoundErrorPage /> },
   { path: '/error', element: <ServerErrorPage /> },
