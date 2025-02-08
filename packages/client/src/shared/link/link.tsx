@@ -4,13 +4,13 @@ import styles from './styles.module.css'
 
 export type TLinkProps = {
   label?: string
-} & React.LinkHTMLAttributes<HTMLInputElement>
+} & React.LinkHTMLAttributes<HTMLElement>
 
-export const Link = ({ label, href, children }: TLinkProps) => {
+export const Link = ({ label, children, ...props }: TLinkProps) => {
   return (
     <div className={styles.linkContainer}>
       {label && <p className={styles.label}>{label}</p>}
-      <a href={href} className={styles.link}>
+      <a className={styles.link} {...props}>
         {children}
       </a>
     </div>
