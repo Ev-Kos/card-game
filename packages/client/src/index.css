@@ -89,3 +89,7 @@ button {
   border: none;
   cursor: pointer;
 }
+
+ul {
+  list-style-type: none;
+}
