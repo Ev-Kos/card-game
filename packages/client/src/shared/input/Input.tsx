@@ -1,4 +1,4 @@
-interface InputProps {
+type TInputProps = {
   className: string
   type: string
   name: string
@@ -7,7 +7,7 @@ interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const Input: React.FC<InputProps> = ({
+export const Input: React.FC<TInputProps> = ({
   className,
   type,
   name,

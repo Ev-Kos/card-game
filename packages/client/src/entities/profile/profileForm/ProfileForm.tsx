@@ -43,7 +43,9 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
         />
       ))}
       <div className={styles.profileButtonCenter}>
-        <Button label="Редактировать" color="secondary" size="m" />
+        <Button color="secondary" size="m">
+          Редактировать
+        </Button>
       </div>
     </form>
   )

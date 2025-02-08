@@ -23,18 +23,18 @@ export const AvatarModal: React.FC<AvatarModalProps> = ({
           ×
         </button>
         <h2>Изменить аватар</h2>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={onImageChange}
-          className={styles.modalInput}
-        />
-        <Button
-          label="Загрузить"
-          color="secondary"
-          size="m"
-          onClick={onUpload}
-        />
+        <label className={styles.modalImgFile}>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onImageChange}
+            className={styles.modalInputFile}
+          />
+          <span>Выбрать файл на компьютере</span>
+        </label>
+        <Button color="secondary" size="m" onClick={onUpload}>
+          Загрузить
+        </Button>
       </div>
     </div>
   )

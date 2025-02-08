@@ -42,3 +42,38 @@
 .modalInput {
   margin: 20px 0;
 }
+
+.modalInputFile {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  display: block;
+  width: 0;
+  height: 0;
+}
+
+.modalImgFile {
+  position: relative;
+  display: flex;
+  margin: 40px 0 45px;
+}
+
+.modalImgFile span {
+  padding: 5px;
+  width: 135px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-secondary);
+  text-decoration: underline;
+  cursor: pointer;
+  transition: 0.1s all ease;
+}
+
+.modalImgFile:hover span {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  text-decoration: none;
+  border-radius: 8px;
+}
