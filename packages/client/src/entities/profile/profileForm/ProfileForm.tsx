@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import { FC } from 'react'
 
 import { ProfileField } from '../profileField'
 import { Button } from '../../../shared/button'
 
 import styles from './styles.module.css'
 
-interface ProfileFormProps {
+type TProfileFormProps = {
   formData: {
     name: string
     second_name: string
@@ -17,19 +17,19 @@ interface ProfileFormProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({
+const fields = [
+  { label: 'Имя', name: 'name', type: 'text' },
+  { label: 'Фамилия', name: 'second_name', type: 'text' },
+  { label: 'Никнейм', name: 'login', type: 'text' },
+  { label: 'Email', name: 'email', type: 'email' },
+  { label: 'Телефон', name: 'phone', type: 'tel' },
+  { label: 'Пароль', name: 'password', type: 'password' },
+] as const
+
+export const ProfileForm: FC<TProfileFormProps> = ({
   formData,
   handleChange,
 }) => {
-  const fields = [
-    { label: 'Имя', name: 'name', type: 'text' },
-    { label: 'Фамилия', name: 'second_name', type: 'text' },
-    { label: 'Никнейм', name: 'login', type: 'text' },
-    { label: 'Email', name: 'email', type: 'email' },
-    { label: 'Телефон', name: 'phone', type: 'tel' },
-    { label: 'Пароль', name: 'password', type: 'password' },
-  ] as const
-
   return (
     <form className={styles.profileUserData}>
       {fields.map((field, index) => (

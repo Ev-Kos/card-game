@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { Input } from '../../../shared/input'
 
 import styles from './styles.module.css'
 
-interface ProfileFieldProps {
+type TProfileFieldProps = {
   label: string
   name: string
   type: string
@@ -12,7 +12,7 @@ interface ProfileFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const ProfileField: React.FC<ProfileFieldProps> = ({
+export const ProfileField: FC<TProfileFieldProps> = ({
   label,
   name,
   type,

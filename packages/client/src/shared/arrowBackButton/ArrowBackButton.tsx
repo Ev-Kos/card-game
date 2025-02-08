@@ -1,10 +1,11 @@
+import { FC } from 'react'
 import styles from './styles.module.css'
 
 type TArrowBackButton = {
   color: string
 }
 
-export const ArrowBackButton: React.FC<TArrowBackButton> = ({ color }) => {
+export const ArrowBackButton: FC<TArrowBackButton> = ({ color }) => {
   return (
     <svg
       className={styles.arrowBackButton}

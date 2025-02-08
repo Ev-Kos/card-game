@@ -1,14 +1,13 @@
+import { FC } from 'react'
+
 import styles from './styles.module.css'
 
-interface AvatarProfileProps {
+type TAvatarProfileProps = {
   avatar: string
-  onClick: () => void
+  onClick: VoidFunction
 }
 
-export const AvatarProfile: React.FC<AvatarProfileProps> = ({
-  avatar,
-  onClick,
-}) => {
+export const AvatarProfile: FC<TAvatarProfileProps> = ({ avatar, onClick }) => {
   return (
     <div className={styles.profileAvatar} onClick={onClick}>
       <img src={avatar} alt="Аватар" />

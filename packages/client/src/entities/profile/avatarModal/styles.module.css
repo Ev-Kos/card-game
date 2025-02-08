@@ -27,7 +27,7 @@
 }
 
 .closeButton {
-  background-color: #0000;
+  background-color: var(--color-black-transparent);
   color: var(--color-contrast);
   border: none;
   cursor: pointer;
@@ -37,6 +37,10 @@
   top: -16px;
   width: 30px;
   transition: 0.1s all ease;
+}
+
+.closeButton:hover {
+  color: var(--color-primary);
 }
 
 .modalInput {
@@ -68,12 +72,12 @@
   color: var(--color-secondary);
   text-decoration: underline;
   cursor: pointer;
-  transition: 0.1s all ease;
+  border-radius: 8px;
+  transition: 0.1s background-color ease;
 }
 
 .modalImgFile:hover span {
   background-color: var(--color-secondary);
   color: var(--color-primary);
   text-decoration: none;
-  border-radius: 8px;
 }

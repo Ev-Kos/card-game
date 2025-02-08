@@ -1,14 +1,15 @@
+import { FC } from 'react'
 import { Button } from '../../../shared/button'
 import styles from './styles.module.css'
 
-interface AvatarModalProps {
+type TAvatarModalProps = {
   isOpen: boolean
-  onClose: () => void
+  onClose: VoidFunction
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onUpload: () => VoidFunction
+  onUpload: VoidFunction
 }
 
-export const AvatarModal: React.FC<AvatarModalProps> = ({
+export const AvatarModal: FC<TAvatarModalProps> = ({
   isOpen,
   onClose,
   onImageChange,
@@ -19,9 +20,9 @@ export const AvatarModal: React.FC<AvatarModalProps> = ({
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={onClose}>
+        <Button className={styles.closeButton} onClick={onClose}>
           ×
-        </button>
+        </Button>
         <h2>Изменить аватар</h2>
         <label className={styles.modalImgFile}>
           <input

@@ -1,27 +1,9 @@
-type TInputProps = {
+import { FC, InputHTMLAttributes } from 'react'
+
+type TInputProps = InputHTMLAttributes<HTMLInputElement> & {
   className: string
-  type: string
-  name: string
-  placeholder: string
-  value: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const Input: React.FC<TInputProps> = ({
-  className,
-  type,
-  name,
-  value,
-  onChange,
-}) => {
-  return (
-    <input
-      className={className}
-      name={name}
-      type={type}
-      value={value}
-      placeholder={`Введите ${name}`}
-      onChange={onChange}
-    />
-  )
+export const Input: FC<TInputProps> = ({ className, ...props }) => {
+  return <input className={className} {...props} />
 }
