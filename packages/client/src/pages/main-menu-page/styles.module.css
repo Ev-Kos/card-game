@@ -43,3 +43,32 @@
   right: 32px;
   bottom: 37px;
 }
+
+.buttonToProfile {
+  display: flex;
+  align-items: center;
+  background-color: unset;
+  padding: 8px 18px;
+  gap: 18px;
+
+  &:hover {
+    .buttonToProfileText {
+      color: var(--color-link);
+    }
+    .spadesIcon {
+      color: var(--color-link);
+    }
+  }
+}
+
+.spadesIcon {
+  transform: rotate(0.25turn);
+  color: var(--color-contrast);
+}
+
+.buttonToProfileText {
+  color: var(--color-primary);
+  font-size: 28px;
+  font-weight: 800;
+  padding-bottom: 4px;
+}

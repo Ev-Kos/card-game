@@ -1,13 +1,9 @@
-import { useNavigate } from 'react-router-dom'
-
-import { Button } from '../../shared/button'
-import { ButtonProfile } from '../../shared/button-profile'
+import { SpadesIcon } from '../../assets/SpadesIcon'
+import { ButtonLink } from '../../entities/button-link'
 
 import styles from './styles.module.css'
 
 export const MainMenuPage = () => {
-  const navigate = useNavigate()
-
   return (
     <div className={styles.pageContentContainer}>
       <h1 className={styles.title}>Дурак</h1>
@@ -30,28 +26,29 @@ export const MainMenuPage = () => {
         </p>
 
         <div className={styles.menuButtonsContainer}>
-          <Button size="xl" color="contrast" onClick={() => navigate('/game')}>
+          <ButtonLink size="xl" color="contrast" to="/game">
             Продолжить
-          </Button>
+          </ButtonLink>
 
-          <Button size="xl" color="contrast" onClick={() => navigate('/game')}>
+          <ButtonLink size="xl" color="contrast" to="/game">
             Новая игра
-          </Button>
+          </ButtonLink>
 
-          <Button size="xl" color="contrast" onClick={() => navigate('/forum')}>
+          <ButtonLink size="xl" color="contrast" to="/forum">
             Форумы
-          </Button>
+          </ButtonLink>
 
-          <Button
-            size="xl"
-            color="contrast"
-            onClick={() => navigate('/leaderboard')}>
+          <ButtonLink size="xl" color="contrast" to="/leaderboard">
             Статистика
-          </Button>
+          </ButtonLink>
         </div>
       </div>
+
       <div className={styles.buttonProfileContainer}>
-        <ButtonProfile />
+        <ButtonLink className={styles.buttonToProfile} to="/profile">
+          <p className={styles.buttonToProfileText}>Профиль</p>
+          <SpadesIcon className={styles.spadesIcon} width="33" height="30" />
+        </ButtonLink>
       </div>
     </div>
   )
