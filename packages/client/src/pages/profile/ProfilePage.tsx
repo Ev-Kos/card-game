@@ -29,6 +29,8 @@ export const ProfilePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(Clubs)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [fileName, setFileName] = useState<string | null>(null)
+  const [isUploaded, setIsUploaded] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -49,15 +51,24 @@ export const ProfilePage = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0])
+      setFileName(e.target.files[0].name)
     }
   }
 
   const handleUpload = () => {
+    const closeModal = () => {
+      handleModalClose()
+      setFileName('')
+      setIsUploaded(false)
+    }
+
     if (selectedFile) {
       const reader = new FileReader()
       reader.onload = () => {
         setAvatar(reader.result)
-        handleModalClose()
+        setIsUploaded(true)
+        setFileName('Файл загружен')
+        setTimeout(() => closeModal(), 2000)
       }
       reader.readAsDataURL(selectedFile)
     }
@@ -80,6 +91,8 @@ export const ProfilePage = () => {
         onClose={handleModalClose}
         onImageChange={handleImageChange}
         onUpload={handleUpload}
+        fileName={fileName}
+        isUploaded={isUploaded}
       />
     </main>
   )

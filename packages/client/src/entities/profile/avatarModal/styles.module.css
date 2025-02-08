@@ -62,7 +62,7 @@
   margin: 40px 0 45px;
 }
 
-.modalImgFile span {
+.modalSpan {
   padding: 5px;
   width: 135px;
   text-align: center;
@@ -80,4 +80,10 @@
   background-color: var(--color-secondary);
   color: var(--color-primary);
   text-decoration: none;
+}
+
+.modalUploadedMessage {
+  text-transform: none;
+  font-size: 25px;
+  color: var(--color-secondary);
 }

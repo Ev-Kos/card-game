@@ -7,6 +7,8 @@ type TAvatarModalProps = {
   onClose: VoidFunction
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onUpload: VoidFunction
+  fileName: string | null
+  isUploaded: boolean
 }
 
 export const AvatarModal: FC<TAvatarModalProps> = ({
@@ -14,16 +16,22 @@ export const AvatarModal: FC<TAvatarModalProps> = ({
   onClose,
   onImageChange,
   onUpload,
+  fileName,
+  isUploaded,
 }) => {
   if (!isOpen) return null
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <Button className={styles.closeButton} onClick={onClose}>
-          ×
-        </Button>
-        <h2>Изменить аватар</h2>
+        {!isUploaded && (
+          <>
+            <Button className={styles.closeButton} onClick={onClose}>
+              ×
+            </Button>
+            {fileName ? <h1>Аватар выбран</h1> : <h2>Изменить аватар</h2>}
+          </>
+        )}
         <label className={styles.modalImgFile}>
           <input
             type="file"
@@ -31,11 +39,20 @@ export const AvatarModal: FC<TAvatarModalProps> = ({
             onChange={onImageChange}
             className={styles.modalInputFile}
           />
-          <span>Выбрать файл на компьютере</span>
+          <span
+            className={
+              isUploaded ? styles.modalUploadedMessage : styles.modalSpan
+            }>
+            {fileName || 'Выбрать файл на компьютере'}
+          </span>
         </label>
-        <Button color="secondary" size="m" onClick={onUpload}>
-          Загрузить
-        </Button>
+        {!isUploaded && (
+          <>
+            <Button color="secondary" size="m" onClick={onUpload}>
+              Загрузить
+            </Button>
+          </>
+        )}
       </div>
     </div>
   )
