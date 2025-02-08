@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import { TBattleCart, TCard } from './types'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
-import imports from './index'
-import { button_text, notice_game } from './constans'
+import imports from './imports'
+import { button_text, notice_game } from './assets'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)

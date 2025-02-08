@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from 'react'
 import { Card } from '../../../shared/card/Card'
 import { TCard, TRect } from '../types'
-import { CARD_HEIGHT, CARD_WIDTH, closedCardImage } from '../constans'
-import { debounce, getRect, spritesLoaded } from '../helpers'
+import { closedCardImage } from '../assets'
+import imports from '../imports'
 
 export const CardsGame = (
   ctx: CanvasRenderingContext2D,
@@ -13,9 +13,11 @@ export const CardsGame = (
   setSelectedSrcCardToMove: Dispatch<SetStateAction<string>>,
   isMovePlayer: boolean,
 ) => {
-  const x = Math.round((widthGame - cardsArray.length * (CARD_WIDTH + 15)) / 2)
+  const x = Math.round(
+    (widthGame - cardsArray.length * (imports.CARD_WIDTH + 15)) / 2,
+  )
   const yBot = 25
-  const yPlayer = Math.round(heightGame - CARD_HEIGHT - 45)
+  const yPlayer = Math.round(heightGame - imports.CARD_HEIGHT - 45)
 
   const canvas = document.querySelector('canvas')
 
@@ -23,7 +25,7 @@ export const CardsGame = (
     isPlayerCards ? item.image : closedCardImage,
   )
 
-  const sprites = spritesLoaded(newCardsArray)
+  const sprites = imports.spritesLoaded(newCardsArray)
 
   Promise.all(sprites)
     .then(images => {
@@ -32,10 +34,10 @@ export const CardsGame = (
 
       images.forEach(item => {
         rects.push({ image: item, x: newX, y: isPlayerCards ? yPlayer : yBot })
-        newX = newX + CARD_WIDTH + 15
+        newX = newX + imports.CARD_WIDTH + 15
       })
 
-      const wait = debounce(() => {
+      const wait = imports.debounce(() => {
         ctx.clearRect(0, isPlayerCards ? yPlayer : yBot, widthGame, 200)
         rects.forEach(item => {
           Card(ctx, false, item.image, item.x, item.y, false)
@@ -46,14 +48,14 @@ export const CardsGame = (
       if (isPlayerCards) {
         if (canvas) {
           canvas.onmousemove = e => {
-            const rect = getRect(canvas, e)
-            ctx.clearRect(x - CARD_WIDTH, yPlayer - 25, widthGame, 200)
+            const rect = imports.getRect(canvas, e)
+            ctx.clearRect(x - imports.CARD_WIDTH, yPlayer - 25, widthGame, 200)
             rects.forEach(item => {
               if (
                 rect.xMouse >= item.x &&
-                rect.xMouse <= item.x + CARD_WIDTH &&
+                rect.xMouse <= item.x + imports.CARD_WIDTH &&
                 rect.yMouse >= item.y &&
-                rect.yMouse <= item.y + CARD_HEIGHT
+                rect.yMouse <= item.y + imports.CARD_HEIGHT
               ) {
                 Card(ctx, false, item.image, item.x, item.y - 20, false)
               } else {
@@ -63,13 +65,13 @@ export const CardsGame = (
           }
           if (isMovePlayer) {
             canvas.onclick = e => {
-              const rect = getRect(canvas, e)
+              const rect = imports.getRect(canvas, e)
               rects.forEach(item => {
                 if (
                   rect.xMouse >= item.x &&
-                  rect.xMouse <= item.x + CARD_WIDTH &&
+                  rect.xMouse <= item.x + imports.CARD_WIDTH &&
                   rect.yMouse >= item.y + 20 &&
-                  rect.yMouse <= item.y + 20 + CARD_HEIGHT
+                  rect.yMouse <= item.y + 20 + imports.CARD_HEIGHT
                 ) {
                   setSelectedSrcCardToMove(item.image.src)
                 }

@@ -1,7 +1,7 @@
 import { Card } from '../../../shared/card/Card'
-import { CARD_HEIGHT, CARD_WIDTH, closedCardImage } from '../constans'
-import { spritesLoaded } from '../helpers'
 import { TCard } from '../types'
+import imports from '../imports'
+import { closedCardImage } from '../assets'
 
 export const DeckCard = async (
   ctx: CanvasRenderingContext2D,
@@ -11,22 +11,24 @@ export const DeckCard = async (
   trumpCard: TCard,
   isLeft: boolean,
 ) => {
-  const x = Math.round(widthGame - CARD_WIDTH - CARD_WIDTH / 1.5)
-  const y = Math.round(heightGame / 2 - CARD_HEIGHT)
+  const x = Math.round(
+    widthGame - imports.CARD_WIDTH - imports.CARD_WIDTH / 1.5,
+  )
+  const y = Math.round(heightGame / 2 - imports.CARD_HEIGHT)
   const xLeft = 50
 
   const newDeckCards = cardsArray.map((item, index) =>
     index === 0 && !isLeft ? item.image : closedCardImage,
   )
 
-  const sprites = spritesLoaded(newDeckCards)
+  const sprites = imports.spritesLoaded(newDeckCards)
 
   if (!isLeft) {
     if (cardsArray.length !== 0) {
       Promise.all(sprites)
         .then(images => {
           let i = y
-          ctx.clearRect(x - CARD_WIDTH + 50, y - 50, 150, 500)
+          ctx.clearRect(x - imports.CARD_WIDTH + 50, y - 50, 150, 500)
           images.forEach((item, index) => {
             Card(
               ctx,
@@ -41,7 +43,7 @@ export const DeckCard = async (
         })
         .catch(err => console.error(err))
     } else {
-      ctx.clearRect(x - CARD_WIDTH - 15, y, 160, 150)
+      ctx.clearRect(x - imports.CARD_WIDTH - 15, y, 160, 150)
       const img = new Image()
       img.src = trumpCard.image
       await img.decode()

@@ -1,7 +1,7 @@
-import { Card } from '../../../shared/card/Card'
-import { CARD_HEIGHT, CARD_WIDTH } from '../constans'
 import { spritesLoaded } from '../helpers'
 import { TBattleCart } from '../types'
+import imports from '../imports'
+import { Card } from '../../../shared/card/Card'
 
 export const BattleField = (
   ctx: CanvasRenderingContext2D,
@@ -19,8 +19,10 @@ export const BattleField = (
     }
   })
 
-  const x = Math.round((widthGame - cardsArrayLength * (CARD_WIDTH + 15)) / 2)
-  const y = Math.round(heightGame / 2 - CARD_HEIGHT)
+  const x = Math.round(
+    (widthGame - cardsArrayLength * (imports.CARD_WIDTH + 15)) / 2,
+  )
+  const y = Math.round(heightGame / 2 - imports.CARD_HEIGHT)
 
   const sprites = spritesLoaded(images)
 
@@ -29,7 +31,7 @@ export const BattleField = (
       widthGame - (widthGame - 300),
       y,
       widthGame - 510,
-      CARD_HEIGHT + 50,
+      imports.CARD_HEIGHT + 50,
     )
   }
 
@@ -45,16 +47,16 @@ export const BattleField = (
       ctx.clearRect(
         x - 2,
         y,
-        cardsArrayLength * (CARD_WIDTH + 15),
-        CARD_HEIGHT + 50,
+        cardsArrayLength * (imports.CARD_WIDTH + 15),
+        imports.CARD_HEIGHT + 50,
       )
       arr.forEach(item => {
         if (arr[0].isPlayer === item.isPlayer) {
           Card(ctx, false, item.image, oddX, y, false)
-          oddX = oddX + CARD_WIDTH + 15
+          oddX = oddX + imports.CARD_WIDTH + 15
         } else {
           Card(ctx, false, item.image, evenX, y + 45, false)
-          evenX = evenX + CARD_WIDTH + 15
+          evenX = evenX + imports.CARD_WIDTH + 15
         }
       })
     })

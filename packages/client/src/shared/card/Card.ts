@@ -1,4 +1,4 @@
-import { CARD_HEIGHT, CARD_WIDTH } from '../../features/game/constans'
+import { CARD_HEIGHT, CARD_WIDTH } from '../../assets/assets'
 
 export const Card = (
   ctx: CanvasRenderingContext2D,
