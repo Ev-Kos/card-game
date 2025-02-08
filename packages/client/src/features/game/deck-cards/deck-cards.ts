@@ -1,11 +1,7 @@
 import { Card } from '../../../shared/card/Card'
-import {
-  CARD_HEIGHT,
-  CARD_WIDTH,
-  closedCardImage,
-} from '../../../shared/constans'
-import { spritesLoaded } from '../../../features/game/helpers'
-import { TCard } from '../../../utils/types'
+import { CARD_HEIGHT, CARD_WIDTH, closedCardImage } from '../constans'
+import { spritesLoaded } from '../helpers'
+import { TCard } from '../types'
 
 export const DeskCard = async (
   ctx: CanvasRenderingContext2D,

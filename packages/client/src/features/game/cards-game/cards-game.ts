@@ -1,16 +1,8 @@
 import { Dispatch, SetStateAction } from 'react'
 import { Card } from '../../../shared/card/Card'
-import { TCard, TRect } from '../../../utils/types'
-import {
-  CARD_HEIGHT,
-  CARD_WIDTH,
-  closedCardImage,
-} from '../../../shared/constans'
-import {
-  debounce,
-  getRect,
-  spritesLoaded,
-} from '../../../features/game/helpers'
+import { TCard, TRect } from '../types'
+import { CARD_HEIGHT, CARD_WIDTH, closedCardImage } from '../constans'
+import { debounce, getRect, spritesLoaded } from '../helpers'
 
 export const CardsGame = (
   ctx: CanvasRenderingContext2D,

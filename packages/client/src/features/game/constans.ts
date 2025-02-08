@@ -1,7 +1,7 @@
 export const LOGO_HEIGHT = 95
 export const CARD_WIDTH = 71
 export const CARD_HEIGHT = 99
-export const closedCardImage = '/sprites/card.png'
+export const closedCardImage = 'sprites/card.png'
 
 export const suits = {
   clubs: 'clubs',

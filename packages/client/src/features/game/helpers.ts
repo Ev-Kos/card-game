@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { TBattleCart, TCard } from '../../utils/types'
+import { TBattleCart, TCard } from './types'
 
 export const debounce = (callback: any, delay: number) => {
   let timeoutId: any = null
@@ -48,23 +48,30 @@ export const getRect = (canvas: HTMLCanvasElement, e: MouseEvent) => {
 
 export const findMinCard = (arr: TCard[], trumpCard: TCard): TBattleCart => {
   let cardsToMove: TBattleCart
-  const trumpCards = arr.filter(item => item.suit === trumpCard.suit)
-  const otherCards = arr.filter(item => item.suit !== trumpCard.suit)
-  if (otherCards.length !== 0) {
-    const minValue = otherCards.sort((a, b) => a.value - b.value)[0].value
-    cardsToMove = otherCards
-      .filter(item => item.value === minValue)
-      .map(el => {
-        return { ...el, isPlayer: false }
-      })[0]
-  } else {
-    const minValue = trumpCards.sort((a, b) => a.value - b.value)[0].value
-    cardsToMove = trumpCards
-      .filter(item => item.value === minValue)
-      .map(el => {
-        return { ...el, isPlayer: false }
-      })[0]
-  }
+  const trumpCards: TCard[] = []
+  const otherCards: TCard[] = []
+
+  arr.forEach(item => {
+    item.suit === trumpCard.suit ? trumpCards.push(item) : otherCards.push(item)
+  })
+
+  const minValue =
+    otherCards.length !== 0
+      ? otherCards.sort((a, b) => a.value - b.value)[0].value
+      : trumpCards.sort((a, b) => a.value - b.value)[0].value
+
+  otherCards.length !== 0
+    ? (cardsToMove = otherCards
+        .filter(item => item.value === minValue)
+        .map(el => {
+          return { ...el, isPlayer: false }
+        })[0])
+    : (cardsToMove = trumpCards
+        .filter(item => item.value === minValue)
+        .map(el => {
+          return { ...el, isPlayer: false }
+        })[0])
+
   return cardsToMove
 }
 
@@ -73,10 +80,10 @@ export const findCard = (
   arrBotCard: TCard[],
   trumpCard: TCard,
 ) => {
-  const card = arrBattle[arrBattle.length - 1]
+  const card = arrBattle.at(-1)
 
   const similarSuit = arrBotCard
-    .filter(item => item.suit === card.suit)
+    .filter(item => item.suit === card?.suit)
     .sort((a, b) => a.value - b.value)
     .map(el => {
       return { ...el, isPlayer: false }
@@ -89,23 +96,11 @@ export const findCard = (
       return { ...el, isPlayer: false }
     })
 
-  if (card.suit !== trumpCard.suit) {
-    if (similarSuit.length !== 0) {
-      const foundCard = similarSuit.find(item => item.value > card.value)
-      if (foundCard) {
-        return foundCard
-      } else {
-        return trumpCards[0]
-      }
-    }
-  } else {
-    if (trumpCards.length !== 0) {
-      const foundCard = trumpCards.find(item => item.value > card.value)
-      if (foundCard) {
-        return foundCard
-      }
-    }
+  if (card && card.suit !== trumpCard.suit) {
+    const foundCard = similarSuit.find(item => item.value > card.value)
+    foundCard ? foundCard : trumpCards[0]
   }
+  return trumpCards.find(item => item.value > Number(card?.value))
 }
 
 export const findCartToAdd = (
@@ -115,15 +110,18 @@ export const findCartToAdd = (
   deckCards: TCard[],
 ): TBattleCart[] => {
   const res: TBattleCart[] = []
-  const botBattleCards = arrBattle
-    .filter(item => !item.isPlayer)
-    .map(item => item.rang)
+  const botBattleCards: string[] = []
+  const playerBattleCards: string[] = []
+  arrBattle.forEach(item => {
+    !item.isPlayer
+      ? botBattleCards.push(item.rang)
+      : playerBattleCards.push(item.rang)
+  })
+
   const botCardNotTrump = arrBotCard.filter(
     item => item.suit !== trumpCard.suit,
   )
-  const playerBattleCards = arrBattle
-    .filter(item => item.isPlayer)
-    .map(item => item.rang)
+
   if (deckCards.length !== 0) {
     botCardNotTrump.forEach(item => {
       if (
@@ -143,7 +141,6 @@ export const findCartToAdd = (
       }
     })
   }
-
   return res
 }
 
