@@ -52,7 +52,7 @@ export const Game = () => {
 
   useEffect(() => {
     if (isStartGame) {
-      const arr = imports.shuffle(imports.initialDeskCard)
+      const arr = imports.shuffle(imports.initialDeckCard)
       setTrumpCard(arr[0])
       setDeckCards(arr)
       setFirstGetCards(true)
@@ -255,7 +255,7 @@ export const Game = () => {
     if (trumpCard) {
       if (ctx) {
         const wait = imports.debounce(() => {
-          imports.DeskCard(
+          imports.DeckCard(
             ctx,
             widthGame,
             heightGame,
@@ -272,7 +272,7 @@ export const Game = () => {
   useEffect(() => {
     if (ctx && trumpCard) {
       const wait = imports.debounce(() => {
-        imports.DeskCard(ctx, widthGame, heightGame, leftCards, trumpCard, true)
+        imports.DeckCard(ctx, widthGame, heightGame, leftCards, trumpCard, true)
       }, 1000)
 
       wait()

@@ -1,5 +1,5 @@
 import { LOGO_HEIGHT, CARD_WIDTH } from './constans'
-import { DeskCard } from './deck-cards/deck-cards'
+import { DeckCard } from './deck-cards/deck-cards'
 import {
   checkCard,
   checkCardToAdd,
@@ -16,13 +16,13 @@ import { NoticeGame } from '../../shared/notice-game/notice-game'
 import { BattleField } from './battle-field/battle-field'
 import { Button } from '../../shared/button'
 import { CardsGame } from './cards-game/cards-game'
-import { initialDeskCard } from './assets'
+import { initialDeckCard } from './assets'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
 
 const imports = {
   LOGO_HEIGHT,
   CARD_WIDTH,
-  DeskCard,
+  DeckCard,
   checkCard,
   checkCardToAdd,
   Button,
@@ -34,7 +34,7 @@ const imports = {
   newCards,
   shuffle,
   trimStr,
-  initialDeskCard,
+  initialDeckCard,
   NoticeGame,
   BattleField,
   useWindowSize,

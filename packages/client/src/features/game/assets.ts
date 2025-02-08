@@ -1,6 +1,6 @@
 import { suits } from './constans'
 
-export const initialDeskCard = [
+export const initialDeckCard = [
   {
     id: 1,
     suit: suits.clubs,

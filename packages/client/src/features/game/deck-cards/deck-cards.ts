@@ -3,7 +3,7 @@ import { CARD_HEIGHT, CARD_WIDTH, closedCardImage } from '../constans'
 import { spritesLoaded } from '../helpers'
 import { TCard } from '../types'
 
-export const DeskCard = async (
+export const DeckCard = async (
   ctx: CanvasRenderingContext2D,
   widthGame: number,
   heightGame: number,
