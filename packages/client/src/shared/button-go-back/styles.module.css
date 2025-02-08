@@ -4,10 +4,12 @@
   top: 39px;
   left: 29px;
   z-index: 20;
+}
+
+.arrowLeftIcon {
+  color: var(--color-primary);
 
   &:hover {
-    svg path {
-      fill: var(--color-link);
-    }
+    color: var(--color-link);
   }
 }

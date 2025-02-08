@@ -1,19 +1,23 @@
 import { useEffect } from 'react'
 
-import { addHeaderShadowWhileScroll } from '../../utils/addHeaderShadowWhileScroll'
+import { addHeaderShadowWhileScroll } from '../../shared/utils/addHeaderShadowWhileScroll'
 import { rateList } from './assets'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { RatingCard } from '../../entities/rating-card'
 
 import styles from './styles.module.css'
 
+const rateItemId = 'rateItem'
+const rateListId = 'rateList'
+const headerId = 'header'
+
 const changeHeaderStyle = () => {
-  addHeaderShadowWhileScroll('header', 'rateItem')
+  addHeaderShadowWhileScroll(headerId, rateItemId)
 }
 
 export const RatingPage = () => {
   useEffect(() => {
-    const targetBlock = document.getElementById('rateList')
+    const targetBlock = document.getElementById(rateListId)
 
     targetBlock?.addEventListener('scroll', changeHeaderStyle)
 
@@ -23,15 +27,16 @@ export const RatingPage = () => {
   return (
     <div className={styles.pageContentContainer}>
       <ButtonGoBack />
-      <div id="header" className={styles.headerContainer}>
+      <div id={headerId} className={styles.headerContainer}>
         <h1 className={styles.title}>Статистика</h1>
       </div>
 
-      <div id="rateList" className={styles.rateListContainer}>
+      <div id={rateListId} className={styles.rateListContainer}>
         {rateList.map((rateItem, idx) => (
           <RatingCard
+            cardId={rateItemId}
             key={idx}
-            cardId={idx}
+            cardIdx={idx}
             userName={rateItem.name}
             score={rateItem.score}
             avatarUrl={rateItem.avatarUrl}
