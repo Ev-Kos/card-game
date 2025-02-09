@@ -52,3 +52,10 @@
   display: none;
   scrollbar-width: none; /* Скрывает скроллбар в Firefox */
 }
+
+.forumLink {
+  position: absolute;
+  left: 30px;
+  top: 40px;
+  z-index: 1;
+}

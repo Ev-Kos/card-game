@@ -4,6 +4,8 @@ import styles from './ForumPage.module.css'
 import { ModalProfile } from '../../entities/forum/modalProfile'
 import { ForumItem } from '../../entities/forum/forumItem'
 import { Button } from '../../shared/button'
+import { Link } from 'react-router-dom'
+import { ArrowBackButton } from '../../shared/arrowBackButton'
 // import { Button } from '../../shared/button';
 
 export const ForumPage: React.FC = () => {
@@ -96,6 +98,9 @@ export const ForumPage: React.FC = () => {
 
   return (
     <main className={styles.forumPage}>
+      <Link className={styles.forumLink} to={'/#'}>
+        <ArrowBackButton color={'var(--color-primary)'} />
+      </Link>
       <div
         className={`${styles.forumHeaderBlock} ${
           isScrolling ? styles.forumHeaderBlockScrolling : ''

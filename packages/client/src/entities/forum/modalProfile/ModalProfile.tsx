@@ -1,6 +1,9 @@
 import React from 'react'
-import styles from './ModalProfile.module.css'
+
 import { Button } from '../../../shared/button'
+import { Input } from '../../../shared/input'
+
+import styles from './ModalProfile.module.css'
 
 interface ModalProps {
   isOpen: boolean
@@ -20,7 +23,7 @@ export const ModalProfile: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         <form className={styles.modalProfileForm}>
           <div className={styles.modalProfileFlex}>
             <label className={styles.modalProfileLabel}>Тема:</label>
-            <input className={styles.modalProfileInput} type="text" />
+            <Input className={styles.modalProfileInput} type="text" />
           </div>
           <div className={styles.modalProfileFlex}>
             <label className={styles.modalProfileLabel}>Описание:</label>
