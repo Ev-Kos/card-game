@@ -1,8 +1,12 @@
-import { ButtonClose } from '../button-close/button-close'
+import { ButtonClose } from '../../shared/button-close/button-close'
 import { rules } from './assets'
 import styles from './styles.module.css'
 
-export const RulesOfGame = () => {
+type TRulesOfGameProps = {
+  onClick: VoidFunction
+}
+
+export const RulesOfGame = ({ onClick }: TRulesOfGameProps) => {
   return (
     <div className={styles.container}>
       <p className={styles.name}>Правила</p>
@@ -14,7 +18,7 @@ export const RulesOfGame = () => {
             </li>
           ))}
         </ul>
-        <ButtonClose positionTop="-30px" positionRight="-40px" />
+        <ButtonClose onClick={onClick} />
       </div>
     </div>
   )

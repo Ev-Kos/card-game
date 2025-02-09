@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Button } from '../../shared/button'
 import styles from './styles.module.css'
-import { RulesOfGame } from '../../shared/rules-game/rules-game'
+import { RulesOfGame } from '../rules-game/rules-game'
 
 type TProps = {
-  onClickStart?: () => VoidFunction
+  onClickStart?: VoidFunction
 }
 
 export const BeforeGame = ({ onClickStart }: TProps) => {
@@ -12,7 +12,7 @@ export const BeforeGame = ({ onClickStart }: TProps) => {
   const [isShowTools, setShowTulse] = useState(false)
 
   const showRules = () => {
-    setShowRules(true)
+    setShowRules(!isShowRules)
   }
 
   return (
@@ -32,7 +32,7 @@ export const BeforeGame = ({ onClickStart }: TProps) => {
             </Button>
           </div>
         )}
-        {isShowRules && <RulesOfGame />}
+        {isShowRules && <RulesOfGame onClick={showRules} />}
       </div>
     </div>
   )

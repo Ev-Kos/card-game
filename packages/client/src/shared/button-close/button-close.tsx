@@ -1,16 +1,14 @@
 import styles from './styles.module.css'
 import classNames from 'classnames'
 
-type TButtonProps = {
+type TButtonCloseProps = {
   color?: 'secondary' | 'contrast'
-  positionTop: string
-  positionRight: string
 } & React.HTMLAttributes<HTMLButtonElement>
 
 export const ButtonClose = ({
   color = 'secondary',
   ...props
-}: TButtonProps) => {
+}: TButtonCloseProps) => {
   const className = classNames(styles.button, styles[`button-${color}`])
 
   return (
