@@ -1,3 +1,4 @@
+import { ButtonClose } from '../button-close/button-close'
 import { rules } from './assets'
 import styles from './styles.module.css'
 
@@ -13,6 +14,7 @@ export const RulesOfGame = () => {
             </li>
           ))}
         </ul>
+        <ButtonClose positionTop="-30px" positionRight="-40px" />
       </div>
     </div>
   )

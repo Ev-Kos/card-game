@@ -1,0 +1,16 @@
+.button,
+.button-secondary {
+  background-color: rgba(0, 0, 0, 0);
+  padding: 0;
+  position: absolute;
+  top: -30px;
+  right: -40px;
+}
+
+.button-secondary {
+  color: var(--color-secondary);
+}
+
+.button-contrast {
+  color: var(--color-contrast);
+}
