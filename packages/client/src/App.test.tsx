@@ -8,5 +8,4 @@ global.fetch = jest.fn(() =>
 
 test('Example test', async () => {
   render(<App />)
-  expect(true).toBe(true)
 })
