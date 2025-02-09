@@ -1,4 +1,5 @@
-import { BASE_URL } from './constants'
+const BASE_URL = process.env.REACT_APP_BASE_URL
+
 interface ChangePasswordRequest {
   oldPassword: string
   newPassword: string
@@ -16,14 +17,12 @@ export const changePassword = async (
       body: JSON.stringify(data),
     })
 
-    if (response.ok) {
-      console.log('Пароль успешно изменён.')
-    } else {
+    if (!response.ok) {
       const errorData = await response.json()
       const reason = errorData.reason || 'Неизвестная ошибка'
-      console.log(`Не удалось изменить пароль: ${reason}`)
+      console.error(`Не удалось изменить пароль: ${reason}`)
     }
   } catch (error) {
-    console.log('Произошла ошибка при изменении пароля')
+    console.error('Произошла ошибка при изменении пароля')
   }
 }

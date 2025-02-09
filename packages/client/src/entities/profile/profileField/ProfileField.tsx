@@ -12,13 +12,13 @@ type TProfileFieldProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const ProfileField: FC<TProfileFieldProps> = ({
+export const ProfileField = ({
   label,
   name,
   type,
   value,
   onChange,
-}) => {
+}: TProfileFieldProps) => {
   return (
     <div className={styles.profileField}>
       <div className={styles.profileFieldLeft}>{label}</div>

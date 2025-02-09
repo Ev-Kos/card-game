@@ -1,4 +1,5 @@
-import { BASE_URL } from './constants'
+const BASE_URL = process.env.REACT_APP_BASE_URL
+
 interface ApiResponse {
   reason?: string
 }
@@ -14,17 +15,16 @@ export const changeAvatar = async (file: File): Promise<ApiResponse> => {
     })
 
     if (response.ok) {
-      const data = await response.json()
-      console.log('Аватар успешно изменён:', data)
+      await response.json()
       return {}
     } else {
       const errorData = await response.json()
       const reason = errorData.reason || 'Неизвестная ошибка'
-      console.log(`Не удалось изменить аватар: ${reason}`)
+      console.error(`Не удалось изменить аватар: ${reason}`)
       return { reason }
     }
   } catch (error) {
-    console.log('Произошла ошибка при изменении аватара: Неизвестная ошибка')
+    console.error('Произошла ошибка при изменении аватара: Неизвестная ошибка')
     return { reason: 'Unexpected error' }
   }
 }
