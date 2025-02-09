@@ -67,158 +67,144 @@ export const Game = () => {
   }, [isFirstGetCards])
 
   useEffect(() => {
-    if (playerCards.length !== 0 && botCards.length !== 0 && isFirstGetCards) {
-      const length = playerCards.length + botCards.length
-      const wait = imports.debounce(() => {
-        setDeckCards(deckCards.slice(0, length * 2))
-        const minTrumpCardBot = Math.min(
-          ...botCards
-            .filter(item => item.suit === trumpCard?.suit)
-            .map(el => el.value),
-        )
-        const minTrumpCartPlayer = Math.min(
-          ...playerCards
-            .filter(item => item.suit === trumpCard?.suit)
-            .map(el => el.value),
-        )
-        if (isFinite(minTrumpCardBot) && isFinite(minTrumpCartPlayer)) {
-          if (minTrumpCardBot > minTrumpCartPlayer) {
-            setMovePlayer(true)
-            setNoticeText(notice_game.firstMovePlayer)
-          } else {
-            const t = imports.debounce(() => {
-              setMoveBot(true)
-            }, 1000)
-            t()
-            setNoticeText(notice_game.firstMoveBot)
-          }
+    if (!(playerCards.length !== 0 && botCards.length !== 0 && isFirstGetCards))
+      return
+    const length = playerCards.length + botCards.length
+    const wait = imports.debounce(() => {
+      setDeckCards(deckCards.slice(0, length * 2))
+      const minTrumpCardBot = Math.min(
+        ...botCards
+          .filter(item => item.suit === trumpCard?.suit)
+          .map(el => el.value),
+      )
+      const minTrumpCartPlayer = Math.min(
+        ...playerCards
+          .filter(item => item.suit === trumpCard?.suit)
+          .map(el => el.value),
+      )
+      if (isFinite(minTrumpCardBot) && isFinite(minTrumpCartPlayer)) {
+        if (minTrumpCardBot > minTrumpCartPlayer) {
+          setMovePlayer(true)
+          setNoticeText(notice_game.firstMovePlayer)
         } else {
-          if (isFinite(minTrumpCardBot)) {
-            const t = imports.debounce(() => {
-              setMoveBot(true)
-            }, 1000)
-            t()
-            setNoticeText(notice_game.firstMoveBot)
-          } else {
-            setMovePlayer(true)
-            setNoticeText(notice_game.firstMovePlayer)
-          }
+          const t = imports.debounce(() => {
+            setMoveBot(true)
+          }, 1000)
+          t()
+          setNoticeText(notice_game.firstMoveBot)
         }
-      }, 800)
-      wait()
-      setFirstGetCards(false)
-    }
+      } else {
+        if (isFinite(minTrumpCardBot)) {
+          const t = imports.debounce(() => {
+            setMoveBot(true)
+          }, 1000)
+          t()
+          setNoticeText(notice_game.firstMoveBot)
+        } else {
+          setMovePlayer(true)
+          setNoticeText(notice_game.firstMovePlayer)
+        }
+      }
+    }, 800)
+    wait()
+    setFirstGetCards(false)
   }, [playerCards, botCards, isFirstGetCards])
 
   useEffect(() => {
-    if (isMoveBot && trumpCard && !endGame) {
-      if (battleCards.length === 0) {
-        const cardToMove = imports.findMinCard(botCards, trumpCard)
-        setBattleCards([...battleCards, cardToMove])
-        setBotCards(botCards.filter(item => item.id !== cardToMove.id))
-        setMoveBot(false)
-        setMovePlayer(true)
-        const t = imports.debounce(() => {
-          setButtonText(button_text.ITake)
-        }, 800)
-        t()
-      } else {
-        if (battleCards.length !== 0 && battleCards[0].isPlayer === true) {
-          if (imports.findCard(battleCards, botCards, trumpCard)) {
-            const card = imports.findCard(battleCards, botCards, trumpCard)
-            if (card) {
-              const wait = imports.debounce(() => {
-                setBattleCards([...battleCards, card])
-                setBotCards(botCards.filter(item => item.id !== card.id))
-                const t = imports.debounce(() => {
-                  setButtonText(button_text.Ok)
-                }, 1700)
-                t()
-              }, 800)
-              wait()
-              setMoveBot(false)
-              setMovePlayer(true)
-            }
-          } else {
-            const t = imports.debounce(() => {
-              setButtonText(button_text.HeTake)
-            }, 800)
-            t()
-            setMoveBot(false)
-            setMovePlayer(true)
-          }
-        }
-        if (battleCards.length !== 0 && battleCards[0].isPlayer === false) {
-          const cardToAdd = imports.shuffle(
-            imports.findCartToAdd(botCards, battleCards, trumpCard, deckCards),
-          )[0]
-          if (cardToAdd) {
+    if (!(isMoveBot && trumpCard && !endGame)) return
+    if (battleCards.length === 0) {
+      const cardToMove = imports.findMinCard(botCards, trumpCard)
+      setBattleCards([...battleCards, cardToMove])
+      setBotCards(botCards.filter(item => item.id !== cardToMove.id))
+      setMoveBot(false)
+      setMovePlayer(true)
+      const t = imports.debounce(() => {
+        setButtonText(button_text.ITake)
+      }, 800)
+      t()
+    } else {
+      if (battleCards.length !== 0 && battleCards[0].isPlayer === true) {
+        if (imports.findCard(battleCards, botCards, trumpCard)) {
+          const card = imports.findCard(battleCards, botCards, trumpCard)
+          if (card) {
             const wait = imports.debounce(() => {
-              setBattleCards([...battleCards, cardToAdd])
-              setBotCards(botCards.filter(item => item.id !== cardToAdd.id))
+              setBattleCards([...battleCards, card])
+              setBotCards(botCards.filter(item => item.id !== card.id))
+              const t = imports.debounce(() => {
+                setButtonText(button_text.Ok)
+              }, 1700)
+              t()
             }, 800)
             wait()
             setMoveBot(false)
             setMovePlayer(true)
-          } else {
-            setButtonText('')
-            const waitDeckCards = imports.debounce(() => {
-              setBattleCards([])
-              setLeftCards([...leftCards, ...battleCards])
-              imports.newCards(
-                deckCards,
-                playerCards,
-                botCards,
-                battleCards,
-                setDeckCards,
-                setPlayerCards,
-                setBotCards,
-              )
-              const transferMove = imports.debounce(() => {
-                setMoveBot(false)
-                setMovePlayer(true)
-              }, 800)
-              transferMove()
-            }, 500)
-            waitDeckCards()
           }
+        } else {
+          const t = imports.debounce(() => {
+            setButtonText(button_text.HeTake)
+          }, 800)
+          t()
+          setMoveBot(false)
+          setMovePlayer(true)
+        }
+      }
+      if (battleCards.length !== 0 && battleCards[0].isPlayer === false) {
+        const cardToAdd = imports.shuffle(
+          imports.findCartToAdd(botCards, battleCards, trumpCard, deckCards),
+        )[0]
+        if (cardToAdd) {
+          const wait = imports.debounce(() => {
+            setBattleCards([...battleCards, cardToAdd])
+            setBotCards(botCards.filter(item => item.id !== cardToAdd.id))
+          }, 800)
+          wait()
+          setMoveBot(false)
+          setMovePlayer(true)
+        } else {
+          setButtonText('')
+          const waitDeckCards = imports.debounce(() => {
+            setBattleCards([])
+            setLeftCards([...leftCards, ...battleCards])
+            imports.newCards(
+              deckCards,
+              playerCards,
+              botCards,
+              battleCards,
+              setDeckCards,
+              setPlayerCards,
+              setBotCards,
+            )
+            const transferMove = imports.debounce(() => {
+              setMoveBot(false)
+              setMovePlayer(true)
+            }, 800)
+            transferMove()
+          }, 500)
+          waitDeckCards()
         }
       }
     }
   }, [isMoveBot, endGame])
 
   useEffect(() => {
-    if (isMovePlayer && selectedSrcCardToMove.length !== 0 && !endGame) {
-      const wait = imports.debounce(() => {
-        setPlayer(true)
-      }, 2000)
-      wait()
-      const selectedCard = playerCards.find(
-        item =>
-          imports.trimStr(item.image) ===
-          imports.trimStr(selectedSrcCardToMove),
-      )
-      if (selectedCard && trumpCard) {
-        if (battleCards.length !== 0 && battleCards[0].isPlayer === false) {
-          const checkResult = imports.checkCard(
-            battleCards,
-            selectedCard,
-            trumpCard,
-          )
-          if (checkResult) {
-            setPlayerCards(
-              playerCards.filter(item => item.id !== selectedCard.id),
-            )
-            setBattleCards([
-              ...battleCards,
-              { ...selectedCard, isPlayer: true },
-            ])
-            setSelectedSrcCardToMove('')
-            setMoveBot(true)
-            setMovePlayer(false)
-          }
-        }
-        if (battleCards.length === 0) {
+    if (!(isMovePlayer && selectedSrcCardToMove.length !== 0 && !endGame))
+      return
+    const wait = imports.debounce(() => {
+      setPlayer(true)
+    }, 2000)
+    wait()
+    const selectedCard = playerCards.find(
+      item =>
+        imports.trimStr(item.image) === imports.trimStr(selectedSrcCardToMove),
+    )
+    if (selectedCard && trumpCard) {
+      if (battleCards.length !== 0 && battleCards[0].isPlayer === false) {
+        const checkResult = imports.checkCard(
+          battleCards,
+          selectedCard,
+          trumpCard,
+        )
+        if (checkResult) {
           setPlayerCards(
             playerCards.filter(item => item.id !== selectedCard.id),
           )
@@ -227,24 +213,28 @@ export const Game = () => {
           setMoveBot(true)
           setMovePlayer(false)
         }
-        if (battleCards.length !== 0 && battleCards[0].isPlayer === true) {
-          const checkCard = imports.checkCardToAdd(selectedCard, battleCards)
-          if (checkCard) {
-            setPlayerCards(
-              playerCards.filter(item => item.id !== selectedCard.id),
-            )
-            setBattleCards([
-              ...battleCards,
-              { ...selectedCard, isPlayer: true },
-            ])
-            setSelectedSrcCardToMove('')
-            if (buttonText === button_text.HeTake) {
-              setMoveBot(false)
-              setMovePlayer(true)
-            } else {
-              setMoveBot(true)
-              setMovePlayer(false)
-            }
+      }
+      if (battleCards.length === 0) {
+        setPlayerCards(playerCards.filter(item => item.id !== selectedCard.id))
+        setBattleCards([...battleCards, { ...selectedCard, isPlayer: true }])
+        setSelectedSrcCardToMove('')
+        setMoveBot(true)
+        setMovePlayer(false)
+      }
+      if (battleCards.length !== 0 && battleCards[0].isPlayer === true) {
+        const checkCard = imports.checkCardToAdd(selectedCard, battleCards)
+        if (checkCard) {
+          setPlayerCards(
+            playerCards.filter(item => item.id !== selectedCard.id),
+          )
+          setBattleCards([...battleCards, { ...selectedCard, isPlayer: true }])
+          setSelectedSrcCardToMove('')
+          if (buttonText === button_text.HeTake) {
+            setMoveBot(false)
+            setMovePlayer(true)
+          } else {
+            setMoveBot(true)
+            setMovePlayer(false)
           }
         }
       }
@@ -252,20 +242,18 @@ export const Game = () => {
   }, [isMovePlayer, selectedSrcCardToMove, endGame])
 
   useEffect(() => {
-    if (trumpCard) {
-      if (ctx) {
-        const wait = imports.debounce(() => {
-          imports.DeckCard(
-            ctx,
-            widthGame,
-            heightGame,
-            deckCards,
-            trumpCard,
-            false,
-          )
-        }, 100)
-        wait()
-      }
+    if (trumpCard && ctx) {
+      const wait = imports.debounce(() => {
+        imports.DeckCard(
+          ctx,
+          widthGame,
+          heightGame,
+          deckCards,
+          trumpCard,
+          false,
+        )
+      }, 100)
+      wait()
     }
   }, [deckCards, widthGame, height])
 
@@ -274,7 +262,6 @@ export const Game = () => {
       const wait = imports.debounce(() => {
         imports.DeckCard(ctx, widthGame, heightGame, leftCards, trumpCard, true)
       }, 1000)
-
       wait()
     }
   }, [widthGame, heightGame, leftCards])

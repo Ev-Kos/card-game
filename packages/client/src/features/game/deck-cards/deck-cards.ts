@@ -61,7 +61,7 @@ export const DeckCard = async (
             i = i + 3
           })
         })
-        .catch(err => console.error(err))
+        .catch(err => console.error(`DeckCards. ${err}`))
     }
   }
 }

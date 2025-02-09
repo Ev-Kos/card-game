@@ -45,41 +45,39 @@ export const CardsGame = (
       }, 50)
       wait()
 
-      if (isPlayerCards) {
-        if (canvas) {
-          canvas.onmousemove = e => {
+      if (isPlayerCards && canvas) {
+        canvas.onmousemove = e => {
+          const rect = imports.getRect(canvas, e)
+          ctx.clearRect(x - imports.CARD_WIDTH, yPlayer - 25, widthGame, 200)
+          rects.forEach(item => {
+            if (
+              rect.xMouse >= item.x &&
+              rect.xMouse <= item.x + imports.CARD_WIDTH &&
+              rect.yMouse >= item.y &&
+              rect.yMouse <= item.y + imports.CARD_HEIGHT
+            ) {
+              Card(ctx, false, item.image, item.x, item.y - 20, false)
+            } else {
+              Card(ctx, false, item.image, item.x, item.y, false)
+            }
+          })
+        }
+        if (isMovePlayer) {
+          canvas.onclick = e => {
             const rect = imports.getRect(canvas, e)
-            ctx.clearRect(x - imports.CARD_WIDTH, yPlayer - 25, widthGame, 200)
             rects.forEach(item => {
               if (
                 rect.xMouse >= item.x &&
                 rect.xMouse <= item.x + imports.CARD_WIDTH &&
-                rect.yMouse >= item.y &&
-                rect.yMouse <= item.y + imports.CARD_HEIGHT
+                rect.yMouse >= item.y + 20 &&
+                rect.yMouse <= item.y + 20 + imports.CARD_HEIGHT
               ) {
-                Card(ctx, false, item.image, item.x, item.y - 20, false)
-              } else {
-                Card(ctx, false, item.image, item.x, item.y, false)
+                setSelectedSrcCardToMove(item.image.src)
               }
             })
-          }
-          if (isMovePlayer) {
-            canvas.onclick = e => {
-              const rect = imports.getRect(canvas, e)
-              rects.forEach(item => {
-                if (
-                  rect.xMouse >= item.x &&
-                  rect.xMouse <= item.x + imports.CARD_WIDTH &&
-                  rect.yMouse >= item.y + 20 &&
-                  rect.yMouse <= item.y + 20 + imports.CARD_HEIGHT
-                ) {
-                  setSelectedSrcCardToMove(item.image.src)
-                }
-              })
-            }
           }
         }
       }
     })
-    .catch(err => console.log(err))
+    .catch(err => console.error(`CardGame. ${err}`))
 }

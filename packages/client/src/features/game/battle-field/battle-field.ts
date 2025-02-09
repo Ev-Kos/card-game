@@ -60,5 +60,5 @@ export const BattleField = (
         }
       })
     })
-    .catch(err => console.error(err))
+    .catch(err => console.error(`BattleField. ${err}`))
 }

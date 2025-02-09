@@ -98,9 +98,10 @@ export const findCard = (
 
   if (card && card.suit !== trumpCard.suit) {
     const foundCard = similarSuit.find(item => item.value > card.value)
-    foundCard ? foundCard : trumpCards[0]
+    return foundCard ? foundCard : trumpCards[0]
+  } else {
+    return trumpCards.find(item => item.value > Number(card?.value))
   }
-  return trumpCards.find(item => item.value > Number(card?.value))
 }
 
 export const findCartToAdd = (
