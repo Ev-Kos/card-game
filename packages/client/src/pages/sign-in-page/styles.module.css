@@ -2,9 +2,9 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 42px;
-  margin-top: 176px;
 }
 
 .title {
