@@ -17,7 +17,7 @@ export const CardsGame = (
     (widthGame - cardsArray.length * (imports.CARD_WIDTH + 15)) / 2,
   )
   const yBot = 25
-  const yPlayer = Math.round(heightGame - imports.CARD_HEIGHT - 45)
+  const yPlayer = Math.round(heightGame - imports.CARD_HEIGHT - 60)
 
   const canvas = document.querySelector('canvas')
 
