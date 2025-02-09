@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './ModalProfile.module.css'
-import { Button } from '../../shared/button'
+import { Button } from '../../../shared/button'
 
 interface ModalProps {
   isOpen: boolean

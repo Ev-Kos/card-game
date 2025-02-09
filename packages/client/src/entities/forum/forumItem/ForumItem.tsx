@@ -1,7 +1,7 @@
 import React from 'react'
 
 import styles from './ForumItem.module.css'
-import { Button } from '../../shared/button'
+import { Button } from '../../../shared/button'
 
 interface ForumItemProps {
   title: string

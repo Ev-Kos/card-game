@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
 import styles from './ForumPage.module.css'
-import { ModalProfile } from '../../components/modalProfile'
-import { ForumItem } from '../../components/forumItem'
+import { ModalProfile } from '../../entities/forum/modalProfile'
+import { ForumItem } from '../../entities/forum/forumItem'
 import { Button } from '../../shared/button'
 // import { Button } from '../../shared/button';
 
