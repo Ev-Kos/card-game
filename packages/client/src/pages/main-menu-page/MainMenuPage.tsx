@@ -1,5 +1,5 @@
 import { SpadesIcon } from '../../assets/SpadesIcon'
-import { ButtonLink } from '../../entities/button-link'
+import { ButtonLink } from '../../shared/button'
 
 import styles from './styles.module.css'
 

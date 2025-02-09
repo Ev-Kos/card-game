@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 
-import { Button } from '../../shared/button/button'
+import { Button } from '..'
 
-import type { TButtonProps } from '../../shared/button/button'
+import type { TButtonProps } from '../button/button'
 
 type TButtonLinkProps = {
   to: string
