@@ -1,0 +1,15 @@
+.button {
+  background-color: unset;
+  position: absolute;
+  top: 39px;
+  left: 29px;
+  z-index: 20;
+}
+
+.arrowLeftIcon {
+  color: var(--color-primary);
+
+  &:hover {
+    color: var(--color-link);
+  }
+}
