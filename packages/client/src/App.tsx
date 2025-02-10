@@ -8,6 +8,8 @@ import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 
 import styles from './styles.module.css'
+import RatingPage from './pages/rating-page'
+import SignInPage from './pages/sign-in-page'
 
 function App() {
   useEffect(() => {
@@ -24,13 +26,13 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<>LoginPage</>} />
+        <Route path="/" element={<SignInPage />} />
         <Route path="/main" element={<MainMenuPage />} />
         <Route path="/registration" element={<>RegistrationPage</>} />
         <Route path="/forum" element={<>ForumPage</>} />
         <Route path="/forum/:id" element={<>ForumTopicPage</>} />
         <Route path="/game" element={<>PageGame</>} />
-        <Route path="/leaderboard" element={<>LeaderboardPage</>} />
+        <Route path="/leaderboard" element={<RatingPage />} />
         <Route path="/profile" element={<>ProfilePage</>} />
         <Route path="/*" element={<NotFoundErrorPage />} />
         <Route path="/error" element={<ServerErrorPage />} />
