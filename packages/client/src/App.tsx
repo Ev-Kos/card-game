@@ -4,12 +4,12 @@ import { useEffect } from 'react'
 import ServerErrorPage from './pages/server-error-page'
 import NotFoundErrorPage from './pages/not-found-error-page'
 import MainMenuPage from './pages/main-menu-page'
+import RatingPage from './pages/rating-page'
+import SignInPage from './pages/sign-in-page'
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 
 import styles from './styles.module.css'
-import RatingPage from './pages/rating-page'
-import SignInPage from './pages/sign-in-page'
 
 function App() {
   useEffect(() => {
