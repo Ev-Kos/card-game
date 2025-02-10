@@ -8,6 +8,7 @@ import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 
 import styles from './styles.module.css'
+import GamePage from './pages/game-page'
 
 function App() {
   useEffect(() => {
@@ -29,7 +30,7 @@ function App() {
         <Route path="/registration" element={<>RegistrationPage</>} />
         <Route path="/forum" element={<>ForumPage</>} />
         <Route path="/forum/:id" element={<>ForumTopicPage</>} />
-        <Route path="/game" element={<>PageGame</>} />
+        <Route path="/game" element={<GamePage />} />
         <Route path="/leaderboard" element={<>LeaderboardPage</>} />
         <Route path="/profile" element={<>ProfilePage</>} />
         <Route path="/*" element={<NotFoundErrorPage />} />
