@@ -1,12 +1,20 @@
 import { ChangeEvent, useState } from 'react'
 import { InputRange } from '../../shared/input-range/input-range'
 import styles from './styles.module.css'
+import { InputCheck } from '../../shared/input-check/input-check'
+
+type TColors = {
+  color: string
+  isCheck: boolean
+}
 
 type TToolesGame = {
   onChangeMusic: (e: ChangeEvent<HTMLInputElement>) => void
   onChangeEffects: (e: ChangeEvent<HTMLInputElement>) => void
   valueSoundMusic: number
   valueSoundEffects: number
+  onChangeTableColor: (index: number, e: ChangeEvent<HTMLInputElement>) => void
+  colorsArray: TColors[]
 }
 
 export const ToolesGame = ({
@@ -14,6 +22,8 @@ export const ToolesGame = ({
   valueSoundMusic,
   onChangeEffects,
   valueSoundEffects,
+  onChangeTableColor,
+  colorsArray,
 }: TToolesGame) => {
   return (
     <div className={styles.container}>
@@ -30,6 +40,26 @@ export const ToolesGame = ({
             onChange={onChangeEffects}
             valueSound={valueSoundEffects}
           />
+        </div>
+      </div>
+      <div className={styles.toolsWrap}>
+        <p className={styles.toolsName}>Цвета</p>
+        <div className={styles.tool}>
+          <p className={styles.toolName}>Стол</p>
+          <div className={styles.inputsCheck}>
+            {colorsArray.map((item, index) => (
+              <InputCheck
+                color={item.color}
+                isCheck={item.isCheck}
+                checked={item.isCheck}
+                onChange={e => onChangeTableColor(index, e)}
+                key={index}
+              />
+            ))}
+          </div>
+        </div>
+        <div className={styles.tool}>
+          <p className={styles.toolName}></p>
         </div>
       </div>
     </div>

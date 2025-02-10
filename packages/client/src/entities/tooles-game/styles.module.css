@@ -43,3 +43,8 @@
   font-weight: 600;
   color: var(--color-primary);
 }
+
+.inputsCheck {
+  display: flex;
+  gap: 12px;
+}

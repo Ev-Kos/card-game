@@ -3,6 +3,7 @@ import { Button } from '../../shared/button'
 import styles from './styles.module.css'
 import { RulesOfGame } from '../rules-game/rules-game'
 import { ToolesGame } from '../tooles-game/tooles-game'
+import { colors } from './assets'
 
 type TProps = {
   onClickStart?: VoidFunction
@@ -31,6 +32,33 @@ export const BeforeGame = ({ onClickStart }: TProps) => {
     setShowTools(!isShowTools)
   }
 
+  const arr = colors.map((item, index) =>
+    index === 0
+      ? { color: item.color, isCheck: true }
+      : { color: item.color, isCheck: false },
+  )
+
+  const [inputColors, setInputColors] = useState(
+    colors.map((item, index) =>
+      index === 0
+        ? { color: item.color, isCheck: true }
+        : { color: item.color, isCheck: false },
+    ),
+  )
+
+  const onChangeTableColor = (
+    index: number,
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setInputColors([
+      ...inputColors.map((item, ind) =>
+        ind === index
+          ? { ...item, isCheck: true }
+          : { ...item, isCheck: false },
+      ),
+    ])
+  }
+
   return (
     <div style={{ height: '100vh' }}>
       <div style={{ height: '95px' }}></div>
@@ -57,6 +85,8 @@ export const BeforeGame = ({ onClickStart }: TProps) => {
             valueSoundMusic={valueSoundMusic}
             onChangeEffects={onChangeEffects}
             valueSoundEffects={valueSoundEffects}
+            onChangeTableColor={onChangeTableColor}
+            colorsArray={inputColors}
           />
         )}
       </div>
