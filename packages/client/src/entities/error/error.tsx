@@ -22,7 +22,9 @@ export const Error = ({ description, text, children }: TErrorProps) => {
         </div>
       </div>
 
-      <Button size="l" color="contrast" label="Играть дальше" />
+      <Button size="l" color="contrast">
+        Играть дальше
+      </Button>
     </div>
   )
 }
