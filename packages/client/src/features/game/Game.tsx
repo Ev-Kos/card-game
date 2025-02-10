@@ -4,6 +4,7 @@ import { TBattleCart, TCard } from './types'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
 import imports from './imports'
 import { button_text, notice_game } from './assets'
+import { BeforeGame } from '../../entities/before-game/before-game'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -32,6 +33,8 @@ export const Game = () => {
   const [buttonText, setButtonText] = useState('')
   const [isPlayer, setPlayer] = useState<boolean | undefined>(undefined)
 
+  const [backgroundBoard, setBackgroudBoard] = useState('#b38ff1')
+
   const endGame =
     (playerCards.length === 0 || botCards.length === 0) &&
     deckCards.length === 0
@@ -41,12 +44,13 @@ export const Game = () => {
     setHeightGame(Math.round(height - imports.LOGO_HEIGHT - 30))
   }, [width, height])
 
+  const onClickStart = () => {
+    setStartGame(true)
+  }
+
   useEffect(() => {
     if (ctx) {
       ctx.clearRect(0, 0, widthGame, widthGame)
-    }
-    if (!trumpCard) {
-      setStartGame(true)
     }
   }, [widthGame, heightGame])
 
@@ -425,33 +429,45 @@ export const Game = () => {
   )
 
   return (
-    <div className={styles.game}>
-      <canvas
-        width={widthGame}
-        height={heightGame}
-        ref={canvasRef}
-        id="canvas"
-      />
-      {isNoticeText.length !== 0 && !endGame && (
-        <imports.NoticeGame text={isNoticeText} />
+    <>
+      {!isStartGame && (
+        <BeforeGame
+          onClickStart={onClickStart}
+          setBackgroudBoard={setBackgroudBoard}
+        />
       )}
-      {isPlayer &&
-        isNoticeText.length === 0 &&
-        battleCards.length === 0 &&
-        !endGame && (
-          <imports.NoticeGame
-            className={styles.noticeToPlayer}
-            text="Ваш ход"
-            position={position}
+      {isStartGame && (
+        <div
+          className={styles.gameBoard}
+          style={{ background: backgroundBoard }}>
+          <canvas
+            width={widthGame}
+            height={heightGame}
+            ref={canvasRef}
+            id="canvas"
           />
-        )}
-      <div className={styles.button}>
-        {buttonText.length !== 0 && (
-          <imports.Button onClick={clickButton}>
-            <p className={styles.buttonText}>{buttonText}</p>
-          </imports.Button>
-        )}
-      </div>
-    </div>
+          {isNoticeText.length !== 0 && !endGame && (
+            <imports.NoticeGame text={isNoticeText} />
+          )}
+          {isPlayer &&
+            isNoticeText.length === 0 &&
+            battleCards.length === 0 &&
+            !endGame && (
+              <imports.NoticeGame
+                className={styles.noticeToPlayer}
+                text="Ваш ход"
+                position={position}
+              />
+            )}
+          <div className={styles.button}>
+            {buttonText.length !== 0 && (
+              <imports.Button onClick={clickButton}>
+                <p className={styles.buttonText}>{buttonText}</p>
+              </imports.Button>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   )
 }

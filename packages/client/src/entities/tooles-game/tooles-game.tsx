@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from 'react'
 import { InputRange } from '../../shared/input-range/input-range'
 import styles from './styles.module.css'
 import { InputCheck } from '../../shared/input-check/input-check'
+import { Button } from '../../shared/button'
 
 type TColors = {
   color: string
@@ -15,6 +16,7 @@ type TToolesGame = {
   valueSoundEffects: number
   onChangeTableColor: (index: number, e: ChangeEvent<HTMLInputElement>) => void
   colorsArray: TColors[]
+  onClickSaveButton: VoidFunction
 }
 
 export const ToolesGame = ({
@@ -24,6 +26,7 @@ export const ToolesGame = ({
   valueSoundEffects,
   onChangeTableColor,
   colorsArray,
+  onClickSaveButton,
 }: TToolesGame) => {
   return (
     <div className={styles.container}>
@@ -59,9 +62,12 @@ export const ToolesGame = ({
           </div>
         </div>
         <div className={styles.tool}>
-          <p className={styles.toolName}></p>
+          <p className={styles.toolName}>Рубашка</p>
         </div>
       </div>
+      <Button size="s" onClick={onClickSaveButton}>
+        Ок
+      </Button>
     </div>
   )
 }

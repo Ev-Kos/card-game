@@ -1,12 +1,11 @@
-.game {
+.gameBoard {
   display: flex;
   box-sizing: border-box;
-  background-color: var(--color-background-light);
   justify-content: center;
   align-items: center;
   position: relative;
   margin: 95px 5% 3% 5%;
-  height: 100%;
+  width: 100%;
   border-radius: 10px;
   z-index: 1;
 }
