@@ -1,13 +1,14 @@
-import { BrowserRouter as Router } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
 
-import AppRouter from './router/AppRouter'
-
+import ServerErrorPage from './pages/server-error-page'
+import NotFoundErrorPage from './pages/not-found-error-page'
+import MainMenuPage from './pages/main-menu-page'
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 
 import styles from './styles.module.css'
-import { BeforeGame } from './entities/before-game/before-game'
+import GamePage from './pages/game-page'
 
 function App() {
   useEffect(() => {
@@ -20,14 +21,24 @@ function App() {
 
     fetchServerData()
   }, [])
+
   return (
     <>
-      {/* <Router>
-        <AppRouter />
-      </Router> */}
+      <Routes>
+        <Route path="/" element={<>LoginPage</>} />
+        <Route path="/main" element={<MainMenuPage />} />
+        <Route path="/registration" element={<>RegistrationPage</>} />
+        <Route path="/forum" element={<>ForumPage</>} />
+        <Route path="/forum/:id" element={<>ForumTopicPage</>} />
+        <Route path="/game" element={<GamePage />} />
+        <Route path="/leaderboard" element={<>LeaderboardPage</>} />
+        <Route path="/profile" element={<>ProfilePage</>} />
+        <Route path="/*" element={<NotFoundErrorPage />} />
+        <Route path="/error" element={<ServerErrorPage />} />
+      </Routes>
+
       <img src={Logo} className={styles.logo} alt="Desc Masters" />
-      <img src={BackgroundImage} className={styles.backgrounImage} />
-      <BeforeGame />
+      <img src={BackgroundImage} className={styles.backgroundImage} />
     </>
   )
 }

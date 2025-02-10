@@ -1,0 +1,18 @@
+.noticeGame {
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--color-primary);
+  opacity: 0;
+  animation: animation 1.5s forwards;
+}
+
+@keyframes animation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
