@@ -4,6 +4,8 @@ import { useEffect } from 'react'
 import ServerErrorPage from './pages/server-error-page'
 import NotFoundErrorPage from './pages/not-found-error-page'
 import MainMenuPage from './pages/main-menu-page'
+import SignInPage from './pages/sign-in-page'
+import SignUpPage from './pages/sign-up-page'
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 
@@ -24,9 +26,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<>LoginPage</>} />
+        <Route path="/" element={<SignInPage />} />
         <Route path="/main" element={<MainMenuPage />} />
-        <Route path="/registration" element={<>RegistrationPage</>} />
+        <Route path="/registration" element={<SignUpPage />} />
         <Route path="/forum" element={<>ForumPage</>} />
         <Route path="/forum/:id" element={<>ForumTopicPage</>} />
         <Route path="/game" element={<>PageGame</>} />
