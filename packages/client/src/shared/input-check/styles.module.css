@@ -8,6 +8,10 @@
   align-items: center;
   position: relative;
   box-sizing: border-box;
+
+  &:hover {
+    scale: 1.5;
+  }
 }
 
 .input {
@@ -19,4 +23,16 @@
   cursor: pointer;
   position: absolute;
   top: 0;
+}
+
+.image {
+  width: 71px;
+  height: 99px;
+  opacity: 0;
+  position: absolute;
+  top: 40px;
+}
+
+.inputLabel:hover img {
+  opacity: 1;
 }

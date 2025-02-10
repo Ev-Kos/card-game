@@ -9,14 +9,19 @@ import { Button } from '../../shared/button'
 import styles from './styles.module.css'
 import { RulesOfGame } from '../rules-game/rules-game'
 import { ToolesGame } from '../tooles-game/tooles-game'
-import { colors } from './assets'
+import { cards, colors } from './assets'
 
 type TProps = {
   onClickStart: VoidFunction
   setBackgroudBoard: Dispatch<SetStateAction<string>>
+  setShirtCard: Dispatch<SetStateAction<string>>
 }
 
-export const BeforeGame = ({ onClickStart, setBackgroudBoard }: TProps) => {
+export const BeforeGame = ({
+  onClickStart,
+  setBackgroudBoard,
+  setShirtCard,
+}: TProps) => {
   const [isShowRules, setShowRules] = useState(false)
   const [isShowTools, setShowTools] = useState(false)
 
@@ -24,6 +29,22 @@ export const BeforeGame = ({ onClickStart, setBackgroudBoard }: TProps) => {
   const [valueSoundEffects, setValueSoundEffects] = useState(100)
 
   const [isSaveTools, setSaveTools] = useState(false)
+
+  const [inputColors, setInputColors] = useState(
+    colors.map((item, index) =>
+      index === 0
+        ? { color: item.color, isCheck: true }
+        : { color: item.color, isCheck: false },
+    ),
+  )
+
+  const [inputShirtCards, setShirtCards] = useState(
+    cards.map((item, index) =>
+      index === 0
+        ? { image: item.image, isCheck: true }
+        : { image: item.image, isCheck: false },
+    ),
+  )
 
   const onChangeMusic = (e: ChangeEvent<HTMLInputElement>) => {
     setValueSoundMusic(Number(e.target.value))
@@ -41,14 +62,6 @@ export const BeforeGame = ({ onClickStart, setBackgroudBoard }: TProps) => {
     setShowTools(!isShowTools)
   }
 
-  const [inputColors, setInputColors] = useState(
-    colors.map((item, index) =>
-      index === 0
-        ? { color: item.color, isCheck: true }
-        : { color: item.color, isCheck: false },
-    ),
-  )
-
   const onClickSaveButton = () => {
     setSaveTools(true)
     setShowTools(false)
@@ -57,8 +70,12 @@ export const BeforeGame = ({ onClickStart, setBackgroudBoard }: TProps) => {
   useEffect(() => {
     if (isSaveTools) {
       const selectedColor = inputColors.find(item => item.isCheck === true)
+      const selectedShirt = inputShirtCards.find(item => item.isCheck === true)
       if (selectedColor) {
         setBackgroudBoard(selectedColor.color)
+      }
+      if (selectedShirt) {
+        setShirtCard(selectedShirt.image)
       }
       setSaveTools(false)
     }
@@ -70,6 +87,19 @@ export const BeforeGame = ({ onClickStart, setBackgroudBoard }: TProps) => {
   ) => {
     setInputColors([
       ...inputColors.map((item, ind) =>
+        ind === index
+          ? { ...item, isCheck: true }
+          : { ...item, isCheck: false },
+      ),
+    ])
+  }
+
+  const onChangeShirtCard = (
+    index: number,
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setShirtCards([
+      ...inputShirtCards.map((item, ind) =>
         ind === index
           ? { ...item, isCheck: true }
           : { ...item, isCheck: false },
@@ -104,6 +134,8 @@ export const BeforeGame = ({ onClickStart, setBackgroudBoard }: TProps) => {
           onChangeTableColor={onChangeTableColor}
           colorsArray={inputColors}
           onClickSaveButton={onClickSaveButton}
+          onChangeShirtCard={onChangeShirtCard}
+          shirtCardArray={inputShirtCards}
         />
       )}
     </div>

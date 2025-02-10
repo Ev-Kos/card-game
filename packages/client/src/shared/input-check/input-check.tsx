@@ -2,14 +2,27 @@ import { CheckIcon } from './CheckIcon'
 import styles from './styles.module.css'
 
 type TInputCheckProps = {
-  color: string
+  color?: string
+  image?: string
   isCheck: boolean
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export const InputCheck = ({ color, isCheck, ...props }: TInputCheckProps) => {
+export const InputCheck = ({
+  color,
+  isCheck,
+  image,
+  ...props
+}: TInputCheckProps) => {
   return (
-    <label className={styles.inputLabel} style={{ background: color }}>
+    <label
+      className={styles.inputLabel}
+      style={
+        color
+          ? { backgroundColor: color }
+          : { backgroundImage: `url(${image})`, backgroundPosition: '50%' }
+      }>
       {isCheck && <CheckIcon />}
+      {image && <img className={styles.image} src={image}></img>}
       <input type="checkbox" className={styles.input} {...props} />
     </label>
   )

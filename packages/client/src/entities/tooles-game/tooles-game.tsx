@@ -9,14 +9,21 @@ type TColors = {
   isCheck: boolean
 }
 
+type TShirtCard = {
+  image: string
+  isCheck: boolean
+}
+
 type TToolesGame = {
   onChangeMusic: (e: ChangeEvent<HTMLInputElement>) => void
   onChangeEffects: (e: ChangeEvent<HTMLInputElement>) => void
   valueSoundMusic: number
   valueSoundEffects: number
   onChangeTableColor: (index: number, e: ChangeEvent<HTMLInputElement>) => void
+  onChangeShirtCard: (index: number, e: ChangeEvent<HTMLInputElement>) => void
   colorsArray: TColors[]
   onClickSaveButton: VoidFunction
+  shirtCardArray: TShirtCard[]
 }
 
 export const ToolesGame = ({
@@ -25,8 +32,10 @@ export const ToolesGame = ({
   onChangeEffects,
   valueSoundEffects,
   onChangeTableColor,
+  onChangeShirtCard,
   colorsArray,
   onClickSaveButton,
+  shirtCardArray,
 }: TToolesGame) => {
   return (
     <div className={styles.container}>
@@ -57,12 +66,25 @@ export const ToolesGame = ({
                 checked={item.isCheck}
                 onChange={e => onChangeTableColor(index, e)}
                 key={index}
+                name={`color-${index}`}
               />
             ))}
           </div>
         </div>
         <div className={styles.tool}>
           <p className={styles.toolName}>Рубашка</p>
+          <div className={styles.inputsCheck}>
+            {shirtCardArray.map((item, index) => (
+              <InputCheck
+                isCheck={item.isCheck}
+                checked={item.isCheck}
+                onChange={e => onChangeShirtCard(index, e)}
+                key={index}
+                image={item.image}
+                name={`shirt-${index}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
       <Button size="s" onClick={onClickSaveButton}>
