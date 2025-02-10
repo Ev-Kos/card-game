@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import styles from './styles.module.css'
 
-type TButtonProps = {
+export type TButtonProps = {
   /**
    * Размер кнопки
    * @default 's'

@@ -4,8 +4,9 @@
   right: 0;
 }
 
-.backgrounImage {
+.backgroundImage {
   position: absolute;
   bottom: -180px;
   left: -205px;
+  z-index: -1;
 }
