@@ -1,18 +1,20 @@
-import type React from 'react'
+import { NavLink } from 'react-router-dom'
+
+import type { NavLinkProps } from 'react-router-dom'
 
 import styles from './styles.module.css'
 
 export type TLinkProps = {
   label?: string
-} & React.LinkHTMLAttributes<HTMLElement>
+} & NavLinkProps
 
 export const Link = ({ label, children, ...props }: TLinkProps) => {
   return (
     <div className={styles.linkContainer}>
       {label && <p className={styles.label}>{label}</p>}
-      <a className={styles.link} {...props}>
+      <NavLink className={styles.link} {...props}>
         {children}
-      </a>
+      </NavLink>
     </div>
   )
 }
