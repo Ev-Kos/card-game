@@ -11,10 +11,10 @@ export const SignInPage = () => {
       <Form {...signInFormData} />
 
       <div className={styles.linksContainer}>
-        <Link href="/registration" label="Нет аккаунта?">
+        <Link to="/registration" label="Нет аккаунта?">
           Зарегистрироваться
         </Link>
-        <Link href="/" label="Забыли пароль?">
+        <Link to="/" label="Забыли пароль?">
           Восстановить пароль
         </Link>
       </div>

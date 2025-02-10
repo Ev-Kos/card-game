@@ -1,0 +1,42 @@
+.game {
+  display: flex;
+  box-sizing: border-box;
+  background-color: var(--color-background-light);
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: 95px 5% 3% 5%;
+  height: 100%;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+}
+
+.button {
+  position: absolute;
+  top: 70%;
+  right: 20%;
+}
+
+.buttonText {
+  padding: 0;
+  margin: 0;
+  font-weight: 600;
+  font-size: 13;
+  color: var(--color-primary);
+}
+
+.noticeToPlayer {
+  position: absolute;
+  bottom: 20%;
+  left: 31%;
+}
+
+.noticeToBot {
+  position: absolute;
+  top: 20%;
+}
