@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { Button } from '../../shared/button'
 import styles from './styles.module.css'
 import { RulesOfGame } from '../rules-game/rules-game'
@@ -12,6 +12,17 @@ export const BeforeGame = ({ onClickStart }: TProps) => {
   const [isShowRules, setShowRules] = useState(false)
   const [isShowTools, setShowTools] = useState(false)
 
+  const [valueSoundMusic, setValueSoundMusic] = useState(100)
+  const [valueSoundEffects, setValueSoundEffects] = useState(100)
+
+  const onChangeMusic = (e: ChangeEvent<HTMLInputElement>) => {
+    setValueSoundMusic(Number(e.target.value))
+  }
+
+  const onChangeEffects = (e: ChangeEvent<HTMLInputElement>) => {
+    setValueSoundEffects(Number(e.target.value))
+  }
+
   const showRules = () => {
     setShowRules(!isShowRules)
   }
@@ -19,7 +30,7 @@ export const BeforeGame = ({ onClickStart }: TProps) => {
   const showTools = () => {
     setShowTools(!isShowTools)
   }
-  console.log(isShowTools)
+
   return (
     <div style={{ height: '100vh' }}>
       <div style={{ height: '95px' }}></div>
@@ -40,7 +51,14 @@ export const BeforeGame = ({ onClickStart }: TProps) => {
           </div>
         )}
         {isShowRules && <RulesOfGame onClick={showRules} />}
-        {isShowTools && <ToolesGame />}
+        {isShowTools && (
+          <ToolesGame
+            onChangeMusic={onChangeMusic}
+            valueSoundMusic={valueSoundMusic}
+            onChangeEffects={onChangeEffects}
+            valueSoundEffects={valueSoundEffects}
+          />
+        )}
       </div>
     </div>
   )

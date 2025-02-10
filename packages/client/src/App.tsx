@@ -22,9 +22,9 @@ function App() {
   }, [])
   return (
     <>
-      <Router>
+      {/* <Router>
         <AppRouter />
-      </Router>
+      </Router> */}
       <img src={Logo} className={styles.logo} alt="Desc Masters" />
       <img src={BackgroundImage} className={styles.backgrounImage} />
       <BeforeGame />
