@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import ServerErrorPage from './pages/server-error-page'
 import NotFoundErrorPage from './pages/not-found-error-page'
 import MainMenuPage from './pages/main-menu-page'
+import RatingPage from './pages/rating-page'
 import SignInPage from './pages/sign-in-page'
 import SignUpPage from './pages/sign-up-page'
 import BackgroundImage from './assets/BackgroundImage.svg'
@@ -33,7 +34,7 @@ function App() {
         <Route path="/forum" element={<>ForumPage</>} />
         <Route path="/forum/:id" element={<>ForumTopicPage</>} />
         <Route path="/game" element={<GamePage />} />
-        <Route path="/leaderboard" element={<>LeaderboardPage</>} />
+        <Route path="/leaderboard" element={<RatingPage />} />
         <Route path="/profile" element={<>ProfilePage</>} />
         <Route path="/*" element={<NotFoundErrorPage />} />
         <Route path="/error" element={<ServerErrorPage />} />
