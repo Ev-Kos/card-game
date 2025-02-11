@@ -1,4 +1,4 @@
-import { Controller, FormProvider, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { fieldError } from './assets'
@@ -60,46 +60,44 @@ export const Form = ({ formFieldsData, buttonLabel, onSubmit }: TFormProps) => {
 
   return (
     <div className={styles.formContainer}>
-      <FormProvider {...methods}>
-        <form className={styles.form}>
-          {formFieldsData.map(input => {
-            const name = input.name || ''
+      <form className={styles.form}>
+        {formFieldsData.map(input => {
+          const name = input.name || ''
 
-            return (
-              <Controller
-                key={input.title}
-                control={control}
-                name={name}
-                rules={{
-                  required: 'заполните данные',
-                  pattern: fieldError[name].pattern,
-                }}
-                render={({ formState: { errors } }) => {
-                  const errorMessage =
-                    errors[name]?.type === 'pattern'
-                      ? fieldError[name].message
-                      : errors[name]?.message
+          return (
+            <Controller
+              key={input.title}
+              control={control}
+              name={name}
+              rules={{
+                required: 'заполните данные',
+                pattern: fieldError[name].pattern,
+              }}
+              render={({ formState: { errors } }) => {
+                const errorMessage =
+                  errors[name]?.type === 'pattern'
+                    ? fieldError[name].message
+                    : errors[name]?.message
 
-                  return (
-                    <div className={styles.inputContainer}>
-                      <Input
-                        isError={!!errorMessage}
-                        onBlur={handleSetInputValue}
-                        onFocus={handleSetInputValue}
-                        {...input}
-                      />
-                      <InputError error={errorMessage} />
-                    </div>
-                  )
-                }}
-              />
-            )
-          })}
-        </form>
-        <Button size="s" color="primary" onClick={handleSubmit}>
-          {buttonLabel}
-        </Button>
-      </FormProvider>
+                return (
+                  <div className={styles.inputContainer}>
+                    <Input
+                      isError={!!errorMessage}
+                      onBlur={handleSetInputValue}
+                      onFocus={handleSetInputValue}
+                      {...input}
+                    />
+                    <InputError error={errorMessage} />
+                  </div>
+                )
+              }}
+            />
+          )
+        })}
+      </form>
+      <Button size="s" color="primary" onClick={handleSubmit}>
+        {buttonLabel}
+      </Button>
     </div>
   )
 }
