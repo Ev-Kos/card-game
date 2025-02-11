@@ -1,0 +1,34 @@
+.pageContentContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.formScrollWrapper {
+  max-height: calc(100vh - 94px);
+  display: inherit;
+  flex-direction: inherit;
+  align-items: inherit;
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.linksContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 12px;
+}
