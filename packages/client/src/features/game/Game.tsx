@@ -3,7 +3,8 @@ import styles from './styles.module.css'
 import { TBattleCart, TCard } from './types'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
 import imports from './imports'
-import { button_text, notice_game } from './assets'
+import { button_text, cards, colors, notice_game } from './assets'
+import { BeforeGame } from './before-game/before-game'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -32,6 +33,9 @@ export const Game = () => {
   const [buttonText, setButtonText] = useState('')
   const [isPlayer, setPlayer] = useState<boolean | undefined>(undefined)
 
+  const [backgroundBoard, setBackgroudBoard] = useState(colors[0].color)
+  const [shirtCard, setShirtCard] = useState(cards[0].image)
+
   const endGame =
     (playerCards.length === 0 || botCards.length === 0) &&
     deckCards.length === 0
@@ -41,12 +45,13 @@ export const Game = () => {
     setHeightGame(Math.round(height - imports.LOGO_HEIGHT - 30))
   }, [width, height])
 
+  const onClickStart = () => {
+    setStartGame(true)
+  }
+
   useEffect(() => {
     if (ctx) {
       ctx.clearRect(0, 0, widthGame, widthGame)
-    }
-    if (!trumpCard) {
-      setStartGame(true)
     }
   }, [widthGame, heightGame])
 
@@ -251,6 +256,7 @@ export const Game = () => {
           deckCards,
           trumpCard,
           false,
+          shirtCard,
         )
       }, 100)
       wait()
@@ -260,7 +266,15 @@ export const Game = () => {
   useEffect(() => {
     if (ctx && trumpCard) {
       const wait = imports.debounce(() => {
-        imports.DeckCard(ctx, widthGame, heightGame, leftCards, trumpCard, true)
+        imports.DeckCard(
+          ctx,
+          widthGame,
+          heightGame,
+          leftCards,
+          trumpCard,
+          true,
+          shirtCard,
+        )
       }, 1000)
       wait()
     }
@@ -277,6 +291,7 @@ export const Game = () => {
           botCards,
           setSelectedSrcCardToMove,
           isMovePlayer,
+          shirtCard,
         )
       }, 600)
       wait()
@@ -294,6 +309,7 @@ export const Game = () => {
           playerCards,
           setSelectedSrcCardToMove,
           isMovePlayer,
+          shirtCard,
         )
       }, 600)
       wait()
@@ -426,32 +442,45 @@ export const Game = () => {
 
   return (
     <div className={styles.game}>
-      <canvas
-        width={widthGame}
-        height={heightGame}
-        ref={canvasRef}
-        id="canvas"
-      />
-      {isNoticeText.length !== 0 && !endGame && (
-        <imports.NoticeGame text={isNoticeText} />
+      {!isStartGame && (
+        <BeforeGame
+          onClickStart={onClickStart}
+          setBackgroudBoard={setBackgroudBoard}
+          setShirtCard={setShirtCard}
+        />
       )}
-      {isPlayer &&
-        isNoticeText.length === 0 &&
-        battleCards.length === 0 &&
-        !endGame && (
-          <imports.NoticeGame
-            className={styles.noticeToPlayer}
-            text="Ваш ход"
-            position={position}
+      {isStartGame && (
+        <div
+          className={styles.gameBoard}
+          style={{ background: backgroundBoard }}>
+          <canvas
+            width={widthGame}
+            height={heightGame}
+            ref={canvasRef}
+            id="canvas"
           />
-        )}
-      <div className={styles.button}>
-        {buttonText.length !== 0 && (
-          <imports.Button onClick={clickButton}>
-            <p className={styles.buttonText}>{buttonText}</p>
-          </imports.Button>
-        )}
-      </div>
+          {isNoticeText.length !== 0 && !endGame && (
+            <imports.NoticeGame text={isNoticeText} />
+          )}
+          {isPlayer &&
+            isNoticeText.length === 0 &&
+            battleCards.length === 0 &&
+            !endGame && (
+              <imports.NoticeGame
+                className={styles.noticeToPlayer}
+                text="Ваш ход"
+                position={position}
+              />
+            )}
+          <div className={styles.button}>
+            {buttonText.length !== 0 && (
+              <imports.Button onClick={clickButton}>
+                <p className={styles.buttonText}>{buttonText}</p>
+              </imports.Button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
