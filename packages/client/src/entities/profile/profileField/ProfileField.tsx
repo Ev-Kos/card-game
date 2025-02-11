@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { Input } from '../../../shared/input'
+import { Input } from '../../../shared/input/input'
 
 import styles from './styles.module.css'
 
