@@ -1,0 +1,21 @@
+.endGame,
+.endGameButtons {
+  display: flex;
+  flex-direction: column;
+}
+
+.endGame {
+  gap: 70px;
+  align-items: center;
+}
+
+.endGameText {
+  color: var(--color-primary);
+  font-size: 64px;
+  font-weight: 600;
+}
+
+.endGameButtons {
+  gap: 50px;
+  align-items: center;
+}
