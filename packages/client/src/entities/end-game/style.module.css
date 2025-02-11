@@ -7,6 +7,8 @@
 .endGame {
   gap: 70px;
   align-items: center;
+  opacity: 0;
+  animation: animation 1.3s forwards;
 }
 
 .endGameText {
@@ -18,4 +20,13 @@
 .endGameButtons {
   gap: 50px;
   align-items: center;
+}
+
+@keyframes animation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

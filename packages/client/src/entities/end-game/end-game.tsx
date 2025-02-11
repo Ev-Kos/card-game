@@ -1,21 +1,27 @@
 import { routes } from '../../assets/assets'
-import { ButtonLink } from '../../shared/button'
+import { Button, ButtonLink } from '../../shared/button'
 import styles from './style.module.css'
 
 type TEndGameProps = {
   isPlayerWin: boolean
+  isNobodyWin: boolean
+  onClick: VoidFunction
 }
 
-export const EndGame = ({ isPlayerWin }: TEndGameProps) => {
+export const EndGame = ({
+  isPlayerWin,
+  isNobodyWin,
+  onClick,
+}: TEndGameProps) => {
   return (
     <div className={styles.endGame}>
       <p className={styles.endGameText}>
-        {isPlayerWin ? 'Победа!' : 'Вы проиграли'}
+        {isNobodyWin ? 'Ничья' : isPlayerWin ? 'Победа!' : 'Вы проиграли'}
       </p>
       <div className={styles.endGameButtons}>
-        <ButtonLink size="xl" color="contrast" to={routes.game}>
+        <Button size="xl" color="contrast" onClick={onClick}>
           Новая игра
-        </ButtonLink>
+        </Button>
         <ButtonLink size="xl" color="contrast" to={routes.main}>
           Главное меню
         </ButtonLink>
