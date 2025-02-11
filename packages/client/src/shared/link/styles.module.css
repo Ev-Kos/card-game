@@ -1,0 +1,14 @@
+.linkContainer {
+  display: flex;
+  gap: 16px;
+}
+
+.link {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--color-primary);
+}

@@ -30,9 +30,3 @@
   display: flex;
   justify-content: center;
 }
-
-.profileLink {
-  position: relative;
-  left: 30px;
-  top: 40px;
-}

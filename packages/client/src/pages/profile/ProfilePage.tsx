@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom'
 import { ProfileForm } from '../../entities/profile/profileForm'
 import { AvatarModal } from '../../entities/profile/avatarModal'
 import { AvatarProfile } from '../../entities/profile/avatarProfile'
-import { ArrowBackButton } from '../../shared/arrowBackButton'
 import Clubs from '../../assets/Сlubs.svg'
 
 import styles from './styles.module.css'
+import { ButtonGoBack } from '../../shared/button-go-back'
 
 export const ProfilePage = () => {
   const [formData, setFormData] = useState<{
@@ -77,7 +77,7 @@ export const ProfilePage = () => {
   return (
     <main className={styles.profile}>
       <Link className={styles.profileLink} to={'/#'}>
-        <ArrowBackButton color={'var(--color-primary)'} />
+        <ButtonGoBack />
       </Link>
       <div className={styles.profileContent}>
         <AvatarProfile avatar={avatar as string} onClick={handleModalOpen} />
