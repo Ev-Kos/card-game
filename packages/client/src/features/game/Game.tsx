@@ -3,9 +3,8 @@ import styles from './styles.module.css'
 import { TBattleCart, TCard } from './types'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
 import imports from './imports'
-import { button_text, closedCardImage, notice_game } from './assets'
-import { BeforeGame } from '../../entities/before-game/before-game'
-import { colors } from '../../entities/before-game/assets'
+import { button_text, cards, colors, notice_game } from './assets'
+import { BeforeGame } from './before-game/before-game'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -35,7 +34,7 @@ export const Game = () => {
   const [isPlayer, setPlayer] = useState<boolean | undefined>(undefined)
 
   const [backgroundBoard, setBackgroudBoard] = useState(colors[0].color)
-  const [shirtCard, setShirtCard] = useState(closedCardImage)
+  const [shirtCard, setShirtCard] = useState(cards[0].image)
 
   const endGame =
     (playerCards.length === 0 || botCards.length === 0) &&
@@ -442,7 +441,7 @@ export const Game = () => {
   )
 
   return (
-    <div className={styles.container}>
+    <div className={styles.game}>
       {!isStartGame && (
         <BeforeGame
           onClickStart={onClickStart}

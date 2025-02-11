@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import { SoundIcon } from './soundIcon'
+
 import styles from './styles.module.css'
+import { SoundIcon } from '../../assets/SoundIcon'
+import { SoundOffIcon } from '../../assets/SoundOffIcon'
 
 type TInputRangeProps = {
   valueSound?: number
@@ -17,7 +19,7 @@ export const InputRange = ({ valueSound, ...props }: TInputRangeProps) => {
 
   return (
     <div className={styles.container}>
-      <SoundIcon />
+      {valueSound !== 0 ? <SoundIcon /> : <SoundOffIcon />}
       <input
         type="range"
         className={styles.input}

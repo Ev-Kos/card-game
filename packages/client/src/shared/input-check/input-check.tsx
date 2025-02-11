@@ -1,4 +1,4 @@
-import { CheckIcon } from './CheckIcon'
+import { CheckIcon } from '../../assets/CheckIcon'
 import styles from './styles.module.css'
 
 type TInputCheckProps = {

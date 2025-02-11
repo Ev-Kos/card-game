@@ -1,15 +1,9 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
-import { Button } from '../../shared/button'
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { Button } from '../../../shared/button'
 import styles from './styles.module.css'
-import { RulesOfGame } from '../rules-game/rules-game'
-import { ToolesGame } from '../tooles-game/tooles-game'
-import { cards, colors } from './assets'
+import { RulesOfGame } from '../../../entities/rules-game/rules-game'
+import { ToolesGame } from '../../../entities/tooles-game/tooles-game'
+import { cards, colors } from '../assets'
 
 type TProps = {
   onClickStart: VoidFunction
@@ -27,8 +21,6 @@ export const BeforeGame = ({
 
   const [valueSoundMusic, setValueSoundMusic] = useState(100)
   const [valueSoundEffects, setValueSoundEffects] = useState(100)
-
-  const [isSaveTools, setSaveTools] = useState(false)
 
   const [inputColors, setInputColors] = useState(
     colors.map((item, index) =>
@@ -63,23 +55,16 @@ export const BeforeGame = ({
   }
 
   const onClickSaveButton = () => {
-    setSaveTools(true)
     setShowTools(false)
-  }
-
-  useEffect(() => {
-    if (isSaveTools) {
-      const selectedColor = inputColors.find(item => item.isCheck === true)
-      const selectedShirt = inputShirtCards.find(item => item.isCheck === true)
-      if (selectedColor) {
-        setBackgroudBoard(selectedColor.color)
-      }
-      if (selectedShirt) {
-        setShirtCard(selectedShirt.image)
-      }
-      setSaveTools(false)
+    const selectedColor = inputColors.find(item => item.isCheck === true)
+    const selectedShirt = inputShirtCards.find(item => item.isCheck === true)
+    if (selectedColor) {
+      setBackgroudBoard(selectedColor.color)
     }
-  }, [isSaveTools])
+    if (selectedShirt) {
+      setShirtCard(selectedShirt.image)
+    }
+  }
 
   const onChangeTableColor = (
     index: number,

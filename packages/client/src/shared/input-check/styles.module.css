@@ -8,6 +8,7 @@
   align-items: center;
   position: relative;
   box-sizing: border-box;
+  color: var(--color-secondary);
 
   &:hover {
     scale: 1.5;
