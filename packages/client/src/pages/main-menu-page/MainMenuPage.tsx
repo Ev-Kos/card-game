@@ -1,9 +1,12 @@
-import { SpadesIcon } from '../../assets/SpadesIcon'
+import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { ButtonLink } from '../../shared/button'
+import { SpadesIcon } from '../../assets/SpadesIcon'
 
 import styles from './styles.module.css'
 
 export const MainMenuPage = () => {
+  useGetUserData()
+
   return (
     <div className={styles.pageContentContainer}>
       <h1 className={styles.title}>Дурак</h1>
