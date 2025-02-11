@@ -10,4 +10,5 @@ export const routes = {
   game: '/game',
   leaderboard: '/leaderboard',
   profile: '/profile',
+  error: '/error',
 }
