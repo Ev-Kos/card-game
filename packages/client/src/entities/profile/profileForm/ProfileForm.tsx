@@ -15,6 +15,7 @@ type TProfileFormProps = {
     password: string
   }
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onEditPassword: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 
 const fields = [
@@ -29,6 +30,7 @@ const fields = [
 export const ProfileForm: FC<TProfileFormProps> = ({
   formData,
   handleChange,
+  onEditPassword,
 }) => {
   return (
     <form className={styles.profileUserData}>
@@ -42,8 +44,17 @@ export const ProfileForm: FC<TProfileFormProps> = ({
           onChange={handleChange}
         />
       ))}
+      <div
+        className={styles.profileButtonInvisible}
+        onClick={onEditPassword}></div>
       <div className={styles.profileButtonCenter}>
-        <Button color="secondary" size="m">
+        <Button
+          color="secondary"
+          size="m"
+          onClick={e => {
+            e.preventDefault()
+            alert('редактирование данных')
+          }}>
           Редактировать
         </Button>
       </div>

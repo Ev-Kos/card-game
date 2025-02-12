@@ -1,14 +1,9 @@
-import type React from 'react'
+import { FC, InputHTMLAttributes } from 'react'
 
-import styles from './styles.module.css'
+type TInputProps = InputHTMLAttributes<HTMLInputElement> & {
+  className: string
+}
 
-export type TInputProps = React.InputHTMLAttributes<HTMLInputElement>
-
-export const Input = ({ title, ...props }: TInputProps) => {
-  return (
-    <div className={styles.inputContainer}>
-      {title && <p className={styles.inputLabel}>{title}</p>}
-      <input type="text" className={styles.input} {...props} />
-    </div>
-  )
+export const Input: FC<TInputProps> = ({ className, ...props }) => {
+  return <input className={className} {...props} />
 }

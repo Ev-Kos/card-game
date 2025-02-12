@@ -8,6 +8,8 @@ import Clubs from '../../assets/Сlubs.svg'
 
 import styles from './styles.module.css'
 import { ButtonGoBack } from '../../shared/button-go-back'
+import { PasswordModal } from '../../entities/profile/passwordModal'
+import { changePassword } from '../../shared/api/changePassword'
 
 export const ProfilePage = () => {
   const [formData, setFormData] = useState<{
@@ -31,6 +33,7 @@ export const ProfilePage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState<string | null>(null)
   const [isUploaded, setIsUploaded] = useState(false)
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -74,9 +77,31 @@ export const ProfilePage = () => {
     }
   }
 
+  const handlePasswordModalOpen = (e: { preventDefault: () => void }) => {
+    e.preventDefault()
+    setIsPasswordModalOpen(true)
+  }
+
+  const handlePasswordModalClose = () => {
+    setIsPasswordModalOpen(false)
+  }
+
+  const handleSavePassword = async (
+    oldPassword: string,
+    newPassword: string,
+  ) => {
+    console.log('Старый пароль:', oldPassword)
+    console.log('Новый пароль:', newPassword)
+    try {
+      await changePassword({ oldPassword, newPassword })
+    } catch (error) {
+      console.error('Ошибка при сохранении пароля:', error)
+    }
+  }
+
   return (
     <main className={styles.profile}>
-      <Link className={styles.profileLink} to={'/#'}>
+      <Link className={styles.profileLink} to={'/main'}>
         <ButtonGoBack />
       </Link>
       <div className={styles.profileContent}>
@@ -84,7 +109,11 @@ export const ProfilePage = () => {
 
         <h1 className={styles.profileTitle}>Профиль</h1>
 
-        <ProfileForm formData={formData} handleChange={handleChange} />
+        <ProfileForm
+          formData={formData}
+          handleChange={handleChange}
+          onEditPassword={handlePasswordModalOpen}
+        />
       </div>
       <AvatarModal
         isOpen={isModalOpen}
@@ -93,6 +122,12 @@ export const ProfilePage = () => {
         onUpload={handleUpload}
         fileName={fileName}
         isUploaded={isUploaded}
+      />
+
+      <PasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={handlePasswordModalClose}
+        onSave={handleSavePassword}
       />
     </main>
   )

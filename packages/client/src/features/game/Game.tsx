@@ -3,7 +3,10 @@ import styles from './styles.module.css'
 import { TBattleCart, TCard } from './types'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
 import imports from './imports'
-import { button_text, notice_game } from './assets'
+import { button_text, cards, colors, notice_game } from './assets'
+import { BeforeGame } from './before-game/before-game'
+import { EndGame } from '../../entities/end-game/end-game'
+import { findCard } from './helpers'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -32,21 +35,62 @@ export const Game = () => {
   const [buttonText, setButtonText] = useState('')
   const [isPlayer, setPlayer] = useState<boolean | undefined>(undefined)
 
+  const [backgroundBoard, setBackgroudBoard] = useState(colors[0].color)
+  const [shirtCard, setShirtCard] = useState(cards[0].image)
+
+  const [isShowGameResult, setShowGameResult] = useState(false)
+  const [isPlayerWin, setPlayerWin] = useState(false)
+  const [isNobodyWin, setNobodyWin] = useState(false)
+
   const endGame =
     (playerCards.length === 0 || botCards.length === 0) &&
     deckCards.length === 0
+
+  useEffect(() => {
+    if (deckCards.length !== 0) return
+    if (botCards.length === 0 && playerCards.length === 1 && trumpCard) {
+      const card = findCard(battleCards, playerCards, trumpCard)
+      if (card) {
+        setNobodyWin(true)
+      }
+    }
+    if (playerCards.length === 0 && botCards.length === 1 && trumpCard) {
+      const card = findCard(battleCards, botCards, trumpCard)
+      if (card) {
+        setNobodyWin(true)
+      }
+    }
+    if (botCards.length === 0 && playerCards.length > 1) {
+      setPlayerWin(false)
+    }
+    if (playerCards.length === 0 && botCards.length > 1) {
+      setPlayerWin(true)
+    }
+  }, [botCards, playerCards, deckCards])
 
   useEffect(() => {
     setWidthGame(Math.round(width - (width * 5 * 2) / 100))
     setHeightGame(Math.round(height - imports.LOGO_HEIGHT - 30))
   }, [width, height])
 
+  const onClickStart = () => {
+    setStartGame(true)
+    setBotCards([])
+    setPlayerCards([])
+    setLeftCards([])
+    setBattleCards([])
+    setTrumpCard(null)
+    setMoveBot(false)
+    setMovePlayer(false)
+  }
+
+  const onClickNewGame = () => {
+    setShowGameResult(false)
+  }
+
   useEffect(() => {
     if (ctx) {
       ctx.clearRect(0, 0, widthGame, widthGame)
-    }
-    if (!trumpCard) {
-      setStartGame(true)
     }
   }, [widthGame, heightGame])
 
@@ -251,6 +295,7 @@ export const Game = () => {
           deckCards,
           trumpCard,
           false,
+          shirtCard,
         )
       }, 100)
       wait()
@@ -260,7 +305,15 @@ export const Game = () => {
   useEffect(() => {
     if (ctx && trumpCard) {
       const wait = imports.debounce(() => {
-        imports.DeckCard(ctx, widthGame, heightGame, leftCards, trumpCard, true)
+        imports.DeckCard(
+          ctx,
+          widthGame,
+          heightGame,
+          leftCards,
+          trumpCard,
+          true,
+          shirtCard,
+        )
       }, 1000)
       wait()
     }
@@ -277,6 +330,7 @@ export const Game = () => {
           botCards,
           setSelectedSrcCardToMove,
           isMovePlayer,
+          shirtCard,
         )
       }, 600)
       wait()
@@ -294,6 +348,7 @@ export const Game = () => {
           playerCards,
           setSelectedSrcCardToMove,
           isMovePlayer,
+          shirtCard,
         )
       }, 600)
       wait()
@@ -390,32 +445,12 @@ export const Game = () => {
 
   useEffect(() => {
     if (endGame && trumpCard) {
-      setButtonText('')
       setPlayer(false)
-      setStartGame(false)
-
       const wait = imports.debounce(() => {
-        if (ctx) {
-          ctx.clearRect(0, 0, widthGame, heightGame)
-          const wait = imports.debounce(() => {
-            setBotCards([])
-            setPlayerCards([])
-            setLeftCards([])
-            setBattleCards([])
-            setTrumpCard(null)
-            setMoveBot(false)
-            setMovePlayer(false)
-            if (ctx) {
-              ctx.clearRect(0, 0, widthGame, heightGame)
-            }
-            const t = imports.debounce(() => {
-              setStartGame(true)
-            }, 800)
-            t()
-          }, 1600)
-          wait()
-        }
-      }, 1600)
+        setStartGame(false)
+        setShowGameResult(true)
+        setButtonText('')
+      }, 1800)
       wait()
     }
   }, [playerCards, botCards])
@@ -426,32 +461,52 @@ export const Game = () => {
 
   return (
     <div className={styles.game}>
-      <canvas
-        width={widthGame}
-        height={heightGame}
-        ref={canvasRef}
-        id="canvas"
-      />
-      {isNoticeText.length !== 0 && !endGame && (
-        <imports.NoticeGame text={isNoticeText} />
+      {!isStartGame && !isShowGameResult && (
+        <BeforeGame
+          onClickStart={onClickStart}
+          setBackgroudBoard={setBackgroudBoard}
+          setShirtCard={setShirtCard}
+        />
       )}
-      {isPlayer &&
-        isNoticeText.length === 0 &&
-        battleCards.length === 0 &&
-        !endGame && (
-          <imports.NoticeGame
-            className={styles.noticeToPlayer}
-            text="Ваш ход"
-            position={position}
+      {isStartGame && (
+        <div
+          className={styles.gameBoard}
+          style={{ background: backgroundBoard }}>
+          <canvas
+            width={widthGame}
+            height={heightGame}
+            ref={canvasRef}
+            id="canvas"
           />
-        )}
-      <div className={styles.button}>
-        {buttonText.length !== 0 && (
-          <imports.Button onClick={clickButton}>
-            <p className={styles.buttonText}>{buttonText}</p>
-          </imports.Button>
-        )}
-      </div>
+          {isNoticeText.length !== 0 && !endGame && (
+            <imports.NoticeGame text={isNoticeText} />
+          )}
+          {isPlayer &&
+            isNoticeText.length === 0 &&
+            battleCards.length === 0 &&
+            !endGame && (
+              <imports.NoticeGame
+                className={styles.noticeToPlayer}
+                text="Ваш ход"
+                position={position}
+              />
+            )}
+          <div className={styles.button}>
+            {buttonText.length !== 0 && (
+              <imports.Button onClick={clickButton}>
+                <p className={styles.buttonText}>{buttonText}</p>
+              </imports.Button>
+            )}
+          </div>
+        </div>
+      )}
+      {isShowGameResult && (
+        <EndGame
+          isNobodyWin={isNobodyWin}
+          isPlayerWin={isPlayerWin}
+          onClick={onClickNewGame}
+        />
+      )}
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { routes } from '../../assets/assets'
 import { SpadesIcon } from '../../assets/SpadesIcon'
 import { ButtonLink } from '../../shared/button'
 
@@ -26,26 +27,26 @@ export const MainMenuPage = () => {
         </p>
 
         <div className={styles.menuButtonsContainer}>
-          <ButtonLink size="xl" color="contrast" to="/game">
+          <ButtonLink size="xl" color="contrast" to={routes.game}>
             Продолжить
           </ButtonLink>
 
-          <ButtonLink size="xl" color="contrast" to="/game">
+          <ButtonLink size="xl" color="contrast" to={routes.game}>
             Новая игра
           </ButtonLink>
 
-          <ButtonLink size="xl" color="contrast" to="/forum">
+          <ButtonLink size="xl" color="contrast" to={routes.forum}>
             Форумы
           </ButtonLink>
 
-          <ButtonLink size="xl" color="contrast" to="/leaderboard">
+          <ButtonLink size="xl" color="contrast" to={routes.leaderboard}>
             Статистика
           </ButtonLink>
         </div>
       </div>
 
       <div className={styles.buttonProfileContainer}>
-        <ButtonLink className={styles.buttonToProfile} to="/profile">
+        <ButtonLink className={styles.buttonToProfile} to={routes.profile}>
           <p className={styles.buttonToProfileText}>Профиль</p>
           <SpadesIcon className={styles.spadesIcon} width="33" height="30" />
         </ButtonLink>

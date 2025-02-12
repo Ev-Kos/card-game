@@ -13,6 +13,7 @@ import Logo from './assets/Logo.svg'
 
 import styles from './styles.module.css'
 import GamePage from './pages/game-page'
+import { routes } from './assets/assets'
 
 function App() {
   useEffect(() => {
@@ -29,16 +30,16 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<SignInPage />} />
-        <Route path="/main" element={<MainMenuPage />} />
-        <Route path="/registration" element={<SignUpPage />} />
-        <Route path="/forum" element={<>ForumPage</>} />
-        <Route path="/forum/:id" element={<>ForumTopicPage</>} />
-        <Route path="/game" element={<GamePage />} />
-        <Route path="/leaderboard" element={<RatingPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path={routes.login} element={<SignInPage />} />
+        <Route path={routes.main} element={<MainMenuPage />} />
+        <Route path={routes.registration} element={<SignUpPage />} />
+        <Route path={routes.forum} element={<>ForumPage</>} />
+        <Route path={routes.forumId} element={<>ForumTopicPage</>} />
+        <Route path={routes.game} element={<GamePage />} />
+        <Route path={routes.leaderboard} element={<RatingPage />} />
+        <Route path={routes.profile} element={<ProfilePage />} />
         <Route path="/*" element={<NotFoundErrorPage />} />
-        <Route path="/error" element={<ServerErrorPage />} />
+        <Route path={routes.error} element={<ServerErrorPage />} />
       </Routes>
 
       <img src={Logo} className={styles.logo} alt="Desc Masters" />

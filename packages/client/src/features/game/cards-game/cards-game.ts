@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 import { Card } from '../../../shared/card/Card'
 import { TCard, TRect } from '../types'
-import { closedCardImage } from '../assets'
 import imports from '../imports'
 
 export const CardsGame = (
@@ -12,6 +11,7 @@ export const CardsGame = (
   cardsArray: TCard[],
   setSelectedSrcCardToMove: Dispatch<SetStateAction<string>>,
   isMovePlayer: boolean,
+  shirtCard: string,
 ) => {
   const x = Math.round(
     (widthGame - cardsArray.length * (imports.CARD_WIDTH + 15)) / 2,
@@ -22,7 +22,7 @@ export const CardsGame = (
   const canvas = document.querySelector('canvas')
 
   const newCardsArray = cardsArray.map(item =>
-    isPlayerCards ? item.image : closedCardImage,
+    isPlayerCards ? item.image : shirtCard,
   )
 
   const sprites = imports.spritesLoaded(newCardsArray)

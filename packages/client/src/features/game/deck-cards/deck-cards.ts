@@ -1,7 +1,6 @@
 import { Card } from '../../../shared/card/Card'
 import { TCard } from '../types'
 import imports from '../imports'
-import { closedCardImage } from '../assets'
 
 export const DeckCard = async (
   ctx: CanvasRenderingContext2D,
@@ -10,6 +9,7 @@ export const DeckCard = async (
   cardsArray: TCard[],
   trumpCard: TCard,
   isLeft: boolean,
+  shirtCard: string,
 ) => {
   const x = Math.round(
     widthGame - imports.CARD_WIDTH - imports.CARD_WIDTH / 1.5,
@@ -18,7 +18,7 @@ export const DeckCard = async (
   const xLeft = 50
 
   const newDeckCards = cardsArray.map((item, index) =>
-    index === 0 && !isLeft ? item.image : closedCardImage,
+    index === 0 && !isLeft ? item.image : shirtCard,
   )
 
   const sprites = imports.spritesLoaded(newDeckCards)
