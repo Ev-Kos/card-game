@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 import { addHeaderShadowWhileScroll } from '../../shared/utils/addHeaderShadowWhileScroll'
 import { rateList } from './assets'
+import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { RatingCard } from '../../entities/rating-card'
 
@@ -16,9 +17,10 @@ const changeHeaderStyle = () => {
 }
 
 export const RatingPage = () => {
+  useGetUserData()
+
   useEffect(() => {
     const targetBlock = document.getElementById(rateListId)
-
     targetBlock?.addEventListener('scroll', changeHeaderStyle)
 
     return () => targetBlock?.removeEventListener('scroll', changeHeaderStyle)
