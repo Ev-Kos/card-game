@@ -13,7 +13,7 @@ export const InputRange = ({ valueSound, ...props }: TInputRangeProps) => {
 
   useEffect(() => {
     setBackground(
-      `linear-gradient(to right, #350f68 ${valueSound}%,#b38ff1 ${valueSound}% `,
+      `linear-gradient(to right, #350f68 ${Number(valueSound) * 100}%,#b38ff1 ${Number(valueSound) * 100}% `,
     )
   }, [valueSound])
 
@@ -25,11 +25,12 @@ export const InputRange = ({ valueSound, ...props }: TInputRangeProps) => {
         className={styles.input}
         {...props}
         min={0}
-        max={100}
+        max={1}
+        step={0.1}
         value={valueSound}
         style={{ background: background }}
       />
-      <p className={styles.valueSound}>{`${valueSound}%`}</p>
+      <p className={styles.valueSound}>{`${Number(valueSound) * 100}%`}</p>
     </div>
   )
 }
