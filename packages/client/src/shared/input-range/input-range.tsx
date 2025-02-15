@@ -6,14 +6,19 @@ import { SoundOffIcon } from '../../assets/SoundOffIcon'
 
 type TInputRangeProps = {
   valueSound?: number
+  colorTrack?: string
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export const InputRange = ({ valueSound, ...props }: TInputRangeProps) => {
+export const InputRange = ({
+  valueSound,
+  colorTrack = '#b38ff1',
+  ...props
+}: TInputRangeProps) => {
   const [background, setBackground] = useState('')
 
   useEffect(() => {
     setBackground(
-      `linear-gradient(to right, #350f68 ${Number(valueSound) * 100}%,#b38ff1 ${Number(valueSound) * 100}% `,
+      `linear-gradient(to right, #350f68 ${Number(valueSound) * 100}%,${colorTrack} ${Number(valueSound) * 100}% `,
     )
   }, [valueSound])
 

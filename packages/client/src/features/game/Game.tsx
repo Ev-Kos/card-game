@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import { TBattleCart, TCard } from './types'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
@@ -8,6 +8,7 @@ import { BeforeGame } from './before-game/before-game'
 import { EndGame } from '../../entities/end-game/end-game'
 import { findCard } from './helpers'
 import { useMusic } from '../../shared/hooks/useMusic'
+import { InputRange } from '../../shared/input-range/input-range'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -55,8 +56,16 @@ export const Game = () => {
     conditional: isStartGame,
     volume: valueSoundMusic,
   })
-  //useMusic({src:'music/defeatSound.mp3', conditional: isShowGameResult && !isPlayerWin})
-  //useMusic({src:'music/winSound.mp3', conditional: isShowGameResult && isPlayerWin})
+  useMusic({
+    src: 'music/defeatSound.mp3',
+    conditional: isShowGameResult && !isPlayerWin,
+    volume: valueSoundEffects,
+  })
+  useMusic({
+    src: 'music/winSound.mp3',
+    conditional: isShowGameResult && isPlayerWin,
+    volume: valueSoundEffects,
+  })
   useMusic({
     src: 'music/getCards.mp3',
     conditional: isGetCards,
@@ -67,7 +76,7 @@ export const Game = () => {
     conditional: isPutCards,
     volume: valueSoundEffects,
   })
-  console.log(valueSoundMusic)
+
   const endGame =
     (playerCards.length === 0 || botCards.length === 0) &&
     deckCards.length === 0
@@ -497,6 +506,11 @@ export const Game = () => {
     (widthGame - playerCards.length * (imports.CARD_WIDTH + 15)) / 2,
   )
 
+  const onChangeInputSound = (e: ChangeEvent<HTMLInputElement>) => {
+    setValueSoundMusic(Number(e.target.value))
+    setValueSoundEffects(Number(e.target.value))
+  }
+
   return (
     <div className={styles.game}>
       {!isStartGame && !isShowGameResult && (
@@ -514,6 +528,13 @@ export const Game = () => {
         <div
           className={styles.gameBoard}
           style={{ background: backgroundBoard }}>
+          <div className={styles.inputSound}>
+            <InputRange
+              valueSound={valueSoundMusic}
+              onChange={onChangeInputSound}
+              colorTrack="#3a3a3a"
+            />
+          </div>
           <canvas
             width={widthGame}
             height={heightGame}

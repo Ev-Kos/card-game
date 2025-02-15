@@ -43,7 +43,6 @@ export const BeforeGame = ({
     ),
   )
 
-  console.log(valueSoundMusic)
   const onChangeMusic = (e: ChangeEvent<HTMLInputElement>) => {
     setValueSoundMusic(Number(e.target.value))
   }
