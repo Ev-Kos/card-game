@@ -471,7 +471,8 @@ export const Game = () => {
       {isStartGame && (
         <div
           className={styles.gameBoard}
-          style={{ background: backgroundBoard }}>
+          style={{ background: backgroundBoard }}
+          data-testid="game">
           <canvas
             width={widthGame}
             height={heightGame}

@@ -8,7 +8,7 @@ type TRulesOfGameProps = {
 
 export const RulesOfGame = ({ onClick }: TRulesOfGameProps) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-testid="rules">
       <p className={styles.name}>Правила</p>
       <div className={styles.rulesContainer}>
         <ul className={styles.rules}>
@@ -18,7 +18,7 @@ export const RulesOfGame = ({ onClick }: TRulesOfGameProps) => {
             </li>
           ))}
         </ul>
-        <ButtonClose onClick={onClick} />
+        <ButtonClose onClick={onClick} data-testid="button-close-rules" />
       </div>
     </div>
   )

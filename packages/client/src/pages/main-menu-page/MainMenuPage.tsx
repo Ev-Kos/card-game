@@ -34,7 +34,11 @@ export const MainMenuPage = () => {
             Продолжить
           </ButtonLink>
 
-          <ButtonLink size="xl" color="contrast" to={routes.game}>
+          <ButtonLink
+            size="xl"
+            color="contrast"
+            to={routes.game}
+            data-testid="button-new-game">
             Новая игра
           </ButtonLink>
 
