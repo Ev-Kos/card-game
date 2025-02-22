@@ -1,22 +1,20 @@
 .profile {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 .profileContent {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 0;
-  width: 450px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 20px;
+  width: 40%;
 }
 
 .profileTitle {
-  margin-top: 43px;
   font-size: 24px;
   font-weight: bold;
   color: var(--color-primary);

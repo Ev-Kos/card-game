@@ -1,21 +1,26 @@
 .profileField {
-  margin-top: 22px;
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #eaeaea;
   padding-bottom: 11px;
-  padding-left: 34px;
+  padding: 10px;
+  align-items: center;
 }
 
-.profileFieldLeft {
+.fieldName {
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
   color: var(--color-primary);
+  width: 180px;
 }
 
-.profileInput {
-  text-align: right;
-  background-color: var(--color-background);
-  font-weight: bold;
-  font-size: 16px;
+.inputWrap {
+  width: 100%;
+}
+
+.fieldValue {
+  text-align: end;
+  color: var(--color-secondary);
+  font-weight: 600;
+  padding: 12px 14px;
 }

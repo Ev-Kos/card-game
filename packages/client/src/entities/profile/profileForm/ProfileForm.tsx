@@ -1,36 +1,26 @@
 import { FC } from 'react'
-
 import { ProfileField } from '../profileField'
 import { Button } from '../../../shared/button'
-
 import styles from './styles.module.css'
+import { TUserData } from '../../../shared/hooks/api/getUserData'
 
 type TProfileFormProps = {
-  formData: {
-    name: string
-    second_name: string
-    login: string
-    email: string
-    phone: string
-    password: string
-  }
+  formData: TUserData
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onEditPassword: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 
 const fields = [
-  { label: 'Имя', name: 'name', type: 'text' },
+  { label: 'Имя', name: 'first_name', type: 'text' },
   { label: 'Фамилия', name: 'second_name', type: 'text' },
-  { label: 'Никнейм', name: 'login', type: 'text' },
+  { label: 'Имя в игре', name: 'display_name', type: 'text' },
+  { label: 'Логин', name: 'login', type: 'text' },
   { label: 'Email', name: 'email', type: 'email' },
   { label: 'Телефон', name: 'phone', type: 'tel' },
-  { label: 'Пароль', name: 'password', type: 'password' },
 ] as const
 
 export const ProfileForm: FC<TProfileFormProps> = ({
   formData,
   handleChange,
-  onEditPassword,
 }) => {
   return (
     <form className={styles.profileUserData}>
@@ -40,13 +30,11 @@ export const ProfileForm: FC<TProfileFormProps> = ({
           label={field.label}
           name={field.name}
           type={field.type}
-          value={formData[field.name]}
+          value={formData[field.name] ? String(formData[field.name]) : ''}
           onChange={handleChange}
+          isChange={false}
         />
       ))}
-      <div
-        className={styles.profileButtonInvisible}
-        onClick={onEditPassword}></div>
       <div className={styles.profileButtonCenter}>
         <Button
           color="secondary"

@@ -1,7 +1,4 @@
-import React, { FC } from 'react'
-
 import { Input } from '../../../shared/input/input'
-
 import styles from './styles.module.css'
 
 type TProfileFieldProps = {
@@ -9,6 +6,7 @@ type TProfileFieldProps = {
   name: string
   type: string
   value: string
+  isChange: boolean
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -17,20 +15,25 @@ export const ProfileField = ({
   name,
   type,
   value,
+  isChange,
   onChange,
 }: TProfileFieldProps) => {
   return (
     <div className={styles.profileField}>
-      <div className={styles.profileFieldLeft}>{label}</div>
-      <div className={styles.profileFieldRight}>
-        <Input
-          className={styles.profileInput}
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={name}
-        />
+      <p className={styles.fieldName}>{label}</p>
+      <div className={styles.inputWrap}>
+        {isChange ? (
+          <Input
+            type={type}
+            name={name}
+            value={value}
+            placeholder={name}
+            isProfile={true}
+            onChange={onChange}
+          />
+        ) : (
+          <p className={styles.fieldValue}>{value}</p>
+        )}
       </div>
     </div>
   )
