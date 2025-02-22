@@ -3,6 +3,7 @@ import MainMenuPage from '../../../pages/main-menu-page'
 import { BrowserRouter } from 'react-router-dom'
 import { BeforeGame } from './before-game'
 import '@testing-library/jest-dom'
+import { SetStateAction } from 'react'
 
 describe('Тестирование начального экрана игры', () => {
   it('При нажатии в меню кнопки "Новая игра" компонент "BeforeGame" появляется', () => {
@@ -28,6 +29,10 @@ describe('Тестирование начального экрана игры', 
           onClickStart={jest.fn()}
           setBackgroudBoard={jest.fn()}
           setShirtCard={jest.fn()}
+          setValueSoundMusic={jest.fn()}
+          setValueSoundEffects={jest.fn()}
+          valueSoundMusic={0}
+          valueSoundEffects={0}
         />
       </BrowserRouter>,
     )
@@ -48,6 +53,10 @@ describe('Тестирование начального экрана игры', 
           onClickStart={jest.fn()}
           setBackgroudBoard={jest.fn()}
           setShirtCard={jest.fn()}
+          setValueSoundMusic={jest.fn()}
+          setValueSoundEffects={jest.fn()}
+          valueSoundMusic={0}
+          valueSoundEffects={0}
         />
       </BrowserRouter>,
     )
@@ -68,6 +77,10 @@ describe('Тестирование начального экрана игры', 
           onClickStart={jest.fn()}
           setBackgroudBoard={jest.fn()}
           setShirtCard={jest.fn()}
+          setValueSoundMusic={jest.fn()}
+          setValueSoundEffects={jest.fn()}
+          valueSoundMusic={0}
+          valueSoundEffects={0}
         />
       </BrowserRouter>,
     )
