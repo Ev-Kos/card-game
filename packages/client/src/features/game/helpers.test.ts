@@ -1,73 +1,30 @@
-import { initialDeckCard, suits } from './assets'
+import { renderHook, waitFor } from '@testing-library/react'
 import {
+  cardsForTests,
+  initialDeckCard,
+  suits,
+  trumpCardForTests,
+} from './assets'
+import {
+  checkCard,
   checkCardToAdd,
   findCard,
   findCartToAdd,
   findMinCard,
+  newCards,
   shuffle,
 } from './helpers'
+import { useState } from 'react'
+import { act } from 'react-dom/test-utils'
 
-const cards = [
-  {
-    id: 28,
-    suit: suits.spades,
-    rang: '8',
-    value: 8,
-    image: 'sprites/deck/8-spades.png',
-  },
-  {
-    id: 2,
-    suit: suits.hearts,
-    rang: '8',
-    value: 8,
-    image: 'sprites/deck/8-hearts.png',
-  },
-  {
-    id: 3,
-    suit: suits.spades,
-    rang: 'J',
-    value: 11,
-    image: 'sprites/deck/J-spades.png',
-  },
-  {
-    id: 4,
-    suit: suits.hearts,
-    rang: 'Q',
-    value: 12,
-    image: 'sprites/deck/Q-hearts.png',
-  },
-  {
-    id: 5,
-    suit: suits.spades,
-    rang: 'K',
-    value: 13,
-    image: 'sprites/deck/K-spades.png',
-  },
-  {
-    id: 29,
-    suit: suits.clubs,
-    rang: '7',
-    value: 7,
-    image: 'sprites/deck/7-clubs.png',
-  },
-]
-
-const trumpCard = {
-  id: 36,
-  suit: suits.spades,
-  rang: '6',
-  value: 6,
-  image: 'sprites/deck/6-spades.png',
-}
-
-describe('Тестирование функций игры', () => {
+describe('Тестирование функций игрового движка', () => {
   it('Функция перемешивания карт (shuffle)', () => {
     const shuffleArr = shuffle(initialDeckCard)
     expect(shuffleArr).not.toEqual(initialDeckCard)
   })
 
   it('Функция поиска минимальной карты для хода компьютера (findMinCard)', () => {
-    const card = findMinCard(cards, trumpCard)
+    const card = findMinCard(cardsForTests, trumpCardForTests)
     expect(card.rang).toBe('7')
     expect(card.suit).toBe(suits.clubs)
   })
@@ -83,7 +40,7 @@ describe('Тестирование функций игры', () => {
         isPlayer: true,
       },
     ]
-    const card = findCard(battleCard, cards, trumpCard)
+    const card = findCard(battleCard, cardsForTests, trumpCardForTests)
     expect(card?.rang).toBe('8')
     expect(card?.suit).toBe(suits.hearts)
   })
@@ -99,7 +56,7 @@ describe('Тестирование функций игры', () => {
         isPlayer: true,
       },
     ]
-    const card = findCard(battleCard, cards, trumpCard)
+    const card = findCard(battleCard, cardsForTests, trumpCardForTests)
     expect(card).toBeUndefined
   })
 
@@ -114,7 +71,7 @@ describe('Тестирование функций игры', () => {
         isPlayer: true,
       },
     ]
-    const card = findCartToAdd(cards, battleCard, trumpCard, 5)
+    const card = findCartToAdd(cardsForTests, battleCard, trumpCardForTests, 5)
     expect(card[0].rang).toBe('8')
     expect(card[0].suit).toBe(suits.hearts)
   })
@@ -130,7 +87,7 @@ describe('Тестирование функций игры', () => {
         isPlayer: true,
       },
     ]
-    const card = findCartToAdd(cards, battleCard, trumpCard, 0)
+    const card = findCartToAdd(cardsForTests, battleCard, trumpCardForTests, 0)
     expect(card[0].rang).toBe('K')
     expect(card[0].suit).toBe(suits.spades)
   })
@@ -146,7 +103,7 @@ describe('Тестирование функций игры', () => {
         isPlayer: true,
       },
     ]
-    const card = findCartToAdd(cards, battleCard, trumpCard, 5)
+    const card = findCartToAdd(cardsForTests, battleCard, trumpCardForTests, 5)
     expect(card).toHaveLength(0)
   })
 
@@ -182,5 +139,143 @@ describe('Тестирование функций игры', () => {
     const resFalse = checkCardToAdd(selectCardFalse, battleCard)
     expect(resTrue).toBeTruthy
     expect(resFalse).toBeFalsy
+  })
+
+  it('Функция проверяет может ли игрок отбиться выбранной картой (checkCard)', () => {
+    const battleCard = [
+      {
+        id: 26,
+        suit: suits.diamonds,
+        rang: '8',
+        value: 8,
+        image: 'sprites/deck/8-diamonds.png',
+        isPlayer: true,
+      },
+    ]
+
+    const selectCardTrue = {
+      id: 28,
+      suit: suits.spades,
+      rang: '8',
+      value: 8,
+      image: 'sprites/deck/8-spades.png',
+    }
+
+    const selectCardFalse = {
+      id: 4,
+      suit: suits.hearts,
+      rang: 'Q',
+      value: 12,
+      image: 'sprites/deck/Q-hearts.png',
+    }
+
+    const resTrue = checkCard(battleCard, selectCardTrue, trumpCardForTests)
+    const resFalse = checkCard(battleCard, selectCardFalse, trumpCardForTests)
+    expect(resTrue).toBeTruthy
+    expect(resFalse).toBeFalsy
+  })
+
+  it('Функция удаляет карты из колоды после хода, если добавляет карты компьютеру или игроку (newCards)', () => {
+    const { result } = renderHook(() => useState(initialDeckCard.slice(0, 20)))
+    const [deckCards, setDeckCards] = result.current
+
+    const battleCard = [
+      {
+        id: 26,
+        suit: suits.diamonds,
+        rang: '8',
+        value: 8,
+        image: 'sprites/deck/8-diamonds.png',
+        isPlayer: true,
+      },
+    ]
+
+    const setPlayerCards = jest.fn()
+    const setBotCards = jest.fn()
+
+    act(() =>
+      newCards(
+        deckCards,
+        cardsForTests.slice(0, 5),
+        cardsForTests.slice(0, 5),
+        battleCard,
+        setDeckCards,
+        setPlayerCards,
+        setBotCards,
+      ),
+    )
+    expect(result.current[0]).toHaveLength(18)
+  })
+
+  it('Функция добавляет карты игроку после хода, если их меньше 6 (newCards)', () => {
+    const { result } = renderHook(() => useState(cardsForTests.slice(0, 5)))
+    const [playerCards, setPlayerCards] = result.current
+
+    const battleCard = [
+      {
+        id: 26,
+        suit: suits.diamonds,
+        rang: '8',
+        value: 8,
+        image: 'sprites/deck/8-diamonds.png',
+        isPlayer: true,
+      },
+    ]
+
+    const deckCards = initialDeckCard.slice(0, 20)
+    const setDeckCards = jest.fn()
+    const setBotCards = jest.fn()
+
+    act(() =>
+      newCards(
+        deckCards,
+        playerCards,
+        cardsForTests.slice(0, 5),
+        battleCard,
+        setDeckCards,
+        setPlayerCards,
+        setBotCards,
+      ),
+    )
+
+    waitFor(() => {
+      expect(result.current[0]).toHaveLength(6)
+    })
+  })
+
+  it('Функция добавляет карты компьютеру после хода, если их меньше 6 (newCards)', () => {
+    const { result } = renderHook(() => useState(cardsForTests.slice(0, 5)))
+    const [botCards, setBotCards] = result.current
+
+    const battleCard = [
+      {
+        id: 26,
+        suit: suits.diamonds,
+        rang: '8',
+        value: 8,
+        image: 'sprites/deck/8-diamonds.png',
+        isPlayer: true,
+      },
+    ]
+
+    const deckCards = initialDeckCard.slice(0, 20)
+    const setDeckCards = jest.fn()
+    const setPlayerCards = jest.fn()
+
+    act(() =>
+      newCards(
+        deckCards,
+        cardsForTests.slice(0, 5),
+        botCards,
+        battleCard,
+        setDeckCards,
+        setPlayerCards,
+        setBotCards,
+      ),
+    )
+
+    waitFor(() => {
+      expect(result.current[0]).toHaveLength(6)
+    })
   })
 })
