@@ -1,7 +1,10 @@
-import type { TFormProps } from '../../entities/form/form'
+import type { TFormProps } from '../../features/form/form'
 
-export const signUpFormData: Pick<TFormProps, 'formData' | 'buttonLabel'> = {
-  formData: [
+export const signUpFormData: Pick<
+  TFormProps,
+  'formFieldsData' | 'buttonLabel'
+> = {
+  formFieldsData: [
     {
       title: 'Имя',
       placeholder: 'введите имя',

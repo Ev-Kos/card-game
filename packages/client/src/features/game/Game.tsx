@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import { TBattleCart, TCard } from './types'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
@@ -7,6 +7,8 @@ import { button_text, cards, colors, notice_game } from './assets'
 import { BeforeGame } from './before-game/before-game'
 import { EndGame } from '../../entities/end-game/end-game'
 import { findCard } from './helpers'
+import { useMusic } from '../../shared/hooks/useMusic'
+import { InputRange } from '../../shared/input-range/input-range'
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -41,6 +43,39 @@ export const Game = () => {
   const [isShowGameResult, setShowGameResult] = useState(false)
   const [isPlayerWin, setPlayerWin] = useState(false)
   const [isNobodyWin, setNobodyWin] = useState(false)
+
+  const [isGetCards, setGetCards] = useState(false)
+  const [isPutCards, setPutCards] = useState(false)
+
+  const [valueSoundMusic, setValueSoundMusic] = useState(1)
+  const [valueSoundEffects, setValueSoundEffects] = useState(1)
+
+  useMusic({
+    loop: true,
+    src: 'music/soundtrack.mp3',
+    conditional: isStartGame,
+    volume: valueSoundMusic,
+  })
+  useMusic({
+    src: 'music/defeatSound.mp3',
+    conditional: isShowGameResult && !isPlayerWin,
+    volume: valueSoundEffects,
+  })
+  useMusic({
+    src: 'music/winSound.mp3',
+    conditional: isShowGameResult && isPlayerWin,
+    volume: valueSoundEffects,
+  })
+  useMusic({
+    src: 'music/getCards.mp3',
+    conditional: isGetCards,
+    volume: valueSoundEffects,
+  })
+  useMusic({
+    src: 'music/putCard.mp3',
+    conditional: isPutCards,
+    volume: valueSoundEffects,
+  })
 
   const endGame =
     (playerCards.length === 0 || botCards.length === 0) &&
@@ -82,6 +117,7 @@ export const Game = () => {
     setTrumpCard(null)
     setMoveBot(false)
     setMovePlayer(false)
+    setPlayer(false)
   }
 
   const onClickNewGame = () => {
@@ -149,13 +185,15 @@ export const Game = () => {
           setNoticeText(notice_game.firstMovePlayer)
         }
       }
-    }, 800)
+      setGetCards(true)
+    }, 1000)
     wait()
     setFirstGetCards(false)
   }, [playerCards, botCards, isFirstGetCards])
 
   useEffect(() => {
     if (!(isMoveBot && trumpCard && !endGame)) return
+    setGetCards(false)
     if (battleCards.length === 0) {
       const cardToMove = imports.findMinCard(botCards, trumpCard)
       setBattleCards([...battleCards, cardToMove])
@@ -178,7 +216,7 @@ export const Game = () => {
                 setButtonText(button_text.Ok)
               }, 1700)
               t()
-            }, 800)
+            }, 2000)
             wait()
             setMoveBot(false)
             setMovePlayer(true)
@@ -221,6 +259,7 @@ export const Game = () => {
             const transferMove = imports.debounce(() => {
               setMoveBot(false)
               setMovePlayer(true)
+              setGetCards(true)
             }, 800)
             transferMove()
           }, 500)
@@ -233,6 +272,7 @@ export const Game = () => {
   useEffect(() => {
     if (!(isMovePlayer && selectedSrcCardToMove.length !== 0 && !endGame))
       return
+    setGetCards(false)
     const wait = imports.debounce(() => {
       setPlayer(true)
     }, 2000)
@@ -332,7 +372,8 @@ export const Game = () => {
           isMovePlayer,
           shirtCard,
         )
-      }, 600)
+        setGetCards(false)
+      }, 700)
       wait()
     }
   }, [botCards, widthGame, heightGame])
@@ -350,19 +391,23 @@ export const Game = () => {
           isMovePlayer,
           shirtCard,
         )
-      }, 600)
+      }, 700)
       wait()
     }
   }, [widthGame, heightGame, playerCards, isMovePlayer])
 
   useEffect(() => {
     if (ctx) {
+      setPutCards(false)
       const wait = imports.debounce(() => {
         const t = imports.debounce(() => {
           imports.BattleField(ctx, widthGame, heightGame, battleCards)
         }, 300)
         t()
         setNoticeText('')
+        if (battleCards.length !== 0) {
+          setPutCards(true)
+        }
       }, 600)
       wait()
     }
@@ -390,6 +435,7 @@ export const Game = () => {
         const transferMove = imports.debounce(() => {
           setMoveBot(false)
           setMovePlayer(true)
+          setGetCards(true)
         }, 800)
         transferMove()
       }, 500)
@@ -413,6 +459,7 @@ export const Game = () => {
         const transferMove = imports.debounce(() => {
           setMoveBot(true)
           setMovePlayer(false)
+          setGetCards(true)
         }, 800)
         transferMove()
       }, 500)
@@ -436,6 +483,7 @@ export const Game = () => {
         const transferMove = imports.debounce(() => {
           setMoveBot(true)
           setMovePlayer(false)
+          setGetCards(true)
         }, 800)
         transferMove()
       }, 500)
@@ -445,7 +493,6 @@ export const Game = () => {
 
   useEffect(() => {
     if (endGame && trumpCard) {
-      setPlayer(false)
       const wait = imports.debounce(() => {
         setStartGame(false)
         setShowGameResult(true)
@@ -459,6 +506,11 @@ export const Game = () => {
     (widthGame - playerCards.length * (imports.CARD_WIDTH + 15)) / 2,
   )
 
+  const onChangeInputSound = (e: ChangeEvent<HTMLInputElement>) => {
+    setValueSoundMusic(Number(e.target.value))
+    setValueSoundEffects(Number(e.target.value))
+  }
+
   return (
     <div className={styles.game}>
       {!isStartGame && !isShowGameResult && (
@@ -466,12 +518,23 @@ export const Game = () => {
           onClickStart={onClickStart}
           setBackgroudBoard={setBackgroudBoard}
           setShirtCard={setShirtCard}
+          setValueSoundMusic={setValueSoundMusic}
+          valueSoundMusic={valueSoundMusic}
+          setValueSoundEffects={setValueSoundEffects}
+          valueSoundEffects={valueSoundEffects}
         />
       )}
       {isStartGame && (
         <div
           className={styles.gameBoard}
           style={{ background: backgroundBoard }}>
+          <div className={styles.inputSound}>
+            <InputRange
+              valueSound={valueSoundMusic}
+              onChange={onChangeInputSound}
+              colorTrack="#3a3a3a"
+            />
+          </div>
           <canvas
             width={widthGame}
             height={heightGame}
