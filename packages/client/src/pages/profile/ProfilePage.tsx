@@ -1,33 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ProfileForm } from '../../entities/profile/profileForm'
 import { AvatarModal } from '../../entities/profile/avatarModal'
-import { AvatarProfile } from '../../entities/profile/avatarProfile'
 import Clubs from '../../assets/Сlubs.svg'
 
 import styles from './styles.module.css'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { PasswordModal } from '../../entities/profile/passwordModal'
-import { changePassword } from '../../shared/api/changePassword'
+import { TUserData } from '../../shared/hooks/api/getUserData'
+import { user } from './mock-user-data'
+import { Avatar } from '../../shared/avatar'
+import { getImage } from '../../shared/utils/getImage'
 
 export const ProfilePage = () => {
-  const [formData, setFormData] = useState<{
-    name: string
-    second_name: string
-    login: string
-    email: string
-    phone: string
-    password: string
-  }>({
-    name: 'Lars',
-    second_name: 'Fillmore',
-    login: 'Cat_Banan',
-    email: 'brainslug@yandex.ru',
-    phone: '+7 999  890 07 07',
-    password: 'Dog_777',
-  })
-
+  const [userData, setUserData] = useState<TUserData>()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(Clubs)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -35,12 +22,18 @@ export const ProfilePage = () => {
   const [isUploaded, setIsUploaded] = useState(false)
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
 
+  useEffect(() => {
+    if (user) {
+      setUserData(user)
+    }
+  }, [user])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value,
-    }))
+    // const { name, value } = e.target
+    // setFormData(prevData => ({
+    //   ...prevData,
+    //   [name]: value,
+    // }))
   }
 
   const handleModalOpen = () => {
@@ -90,13 +83,13 @@ export const ProfilePage = () => {
     oldPassword: string,
     newPassword: string,
   ) => {
-    console.log('Старый пароль:', oldPassword)
-    console.log('Новый пароль:', newPassword)
-    try {
-      await changePassword({ oldPassword, newPassword })
-    } catch (error) {
-      console.error('Ошибка при сохранении пароля:', error)
-    }
+    // console.log('Старый пароль:', oldPassword)
+    // console.log('Новый пароль:', newPassword)
+    // try {
+    //   await changePassword({ oldPassword, newPassword })
+    // } catch (error) {
+    //   console.error('Ошибка при сохранении пароля:', error)
+    // }
   }
 
   return (
@@ -105,15 +98,19 @@ export const ProfilePage = () => {
         <ButtonGoBack />
       </Link>
       <div className={styles.profileContent}>
-        <AvatarProfile avatar={avatar as string} onClick={handleModalOpen} />
-
+        <Avatar
+          size="l"
+          isProfile={true}
+          onClick={handleModalOpen}
+          url={getImage(String(userData?.avatar))}
+        />
         <h1 className={styles.profileTitle}>Профиль</h1>
 
-        <ProfileForm
+        {/* <ProfileForm
           formData={formData}
           handleChange={handleChange}
           onEditPassword={handlePasswordModalOpen}
-        />
+        /> */}
       </div>
       <AvatarModal
         isOpen={isModalOpen}
@@ -124,11 +121,11 @@ export const ProfilePage = () => {
         isUploaded={isUploaded}
       />
 
-      <PasswordModal
+      {/* <PasswordModal
         isOpen={isPasswordModalOpen}
         onClose={handlePasswordModalClose}
         onSave={handleSavePassword}
-      />
+      /> */}
     </main>
   )
 }

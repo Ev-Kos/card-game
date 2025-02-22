@@ -3,13 +3,13 @@ import axiosInstance from './axiosInstance'
 
 import type { AxiosError } from 'axios'
 
-type TUserData = {
-  id: string
+export type TUserData = {
+  id: number
   first_name: string
   second_name: string
-  display_name: string
+  display_name: string | null
   login: string
-  avatar: string
+  avatar: string | null
   email: string
   phone: string
 }
