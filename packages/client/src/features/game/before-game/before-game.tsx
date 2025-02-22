@@ -9,18 +9,23 @@ type TProps = {
   onClickStart: VoidFunction
   setBackgroudBoard: Dispatch<SetStateAction<string>>
   setShirtCard: Dispatch<SetStateAction<string>>
+  setValueSoundMusic: Dispatch<SetStateAction<number>>
+  setValueSoundEffects: Dispatch<SetStateAction<number>>
+  valueSoundMusic: number
+  valueSoundEffects: number
 }
 
 export const BeforeGame = ({
   onClickStart,
   setBackgroudBoard,
   setShirtCard,
+  setValueSoundMusic,
+  setValueSoundEffects,
+  valueSoundMusic,
+  valueSoundEffects,
 }: TProps) => {
   const [isShowRules, setShowRules] = useState(false)
   const [isShowTools, setShowTools] = useState(false)
-
-  const [valueSoundMusic, setValueSoundMusic] = useState(100)
-  const [valueSoundEffects, setValueSoundEffects] = useState(100)
 
   const [inputColors, setInputColors] = useState(
     colors.map((item, index) =>
