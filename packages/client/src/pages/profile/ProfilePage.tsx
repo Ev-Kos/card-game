@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ProfileForm } from '../../entities/profile/profileForm'
-import { AvatarModal } from '../../entities/profile/avatarModal'
-import Clubs from '../../assets/Сlubs.svg'
 
 import styles from './styles.module.css'
 import { ButtonGoBack } from '../../shared/button-go-back'
@@ -12,11 +10,15 @@ import { TUserData } from '../../shared/hooks/api/getUserData'
 import { user } from './mock-user-data'
 import { Avatar } from '../../shared/avatar'
 import { getImage } from '../../shared/utils/getImage'
+import { Modal } from '../../entities/modal/modal'
+import { InputUpload } from '../../shared/input-upload/input-upload'
+import { Button } from '../../shared/button'
 
 export const ProfilePage = () => {
   const [userData, setUserData] = useState<TUserData>()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(Clubs)
+  const [file, setFile] = useState<File | null>(null)
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState<string | null>(null)
   const [isUploaded, setIsUploaded] = useState(false)
@@ -42,6 +44,7 @@ export const ProfilePage = () => {
 
   const handleModalClose = () => {
     setIsModalOpen(false)
+    setFile(null)
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +64,7 @@ export const ProfilePage = () => {
     if (selectedFile) {
       const reader = new FileReader()
       reader.onload = () => {
-        setAvatar(reader.result)
+        //setAvatar(reader.result)
         setIsUploaded(true)
         setFileName('Файл загружен')
         setTimeout(() => closeModal(), 2000)
@@ -112,14 +115,15 @@ export const ProfilePage = () => {
           onEditPassword={handlePasswordModalOpen}
         /> */}
       </div>
-      <AvatarModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        onImageChange={handleImageChange}
-        onUpload={handleUpload}
-        fileName={fileName}
-        isUploaded={isUploaded}
-      />
+
+      {isModalOpen && (
+        <Modal closeModal={handleModalClose} title="Загрузите файл">
+          <InputUpload setFile={setFile} />
+          <Button color="secondary" size="m" disabled={file ? false : true}>
+            Загрузить
+          </Button>
+        </Modal>
+      )}
 
       {/* <PasswordModal
         isOpen={isPasswordModalOpen}

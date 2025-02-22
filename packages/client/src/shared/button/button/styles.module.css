@@ -9,6 +9,12 @@
       0 4px 4px rgba(0, 0, 0, 0.15),
       inset 0 -5px 7px rgba(0, 0, 0, 0.23);
   }
+
+  &:disabled {
+    opacity: 0.5;
+    box-shadow: none;
+    cursor: auto;
+  }
 }
 
 .button-s {
@@ -58,6 +64,10 @@
   &:hover {
     color: var(--color-background-light);
   }
+
+  &:disabled {
+    color: var(--color-primary);
+  }
 }
 
 .button-secondary,
@@ -72,6 +82,9 @@
   &:hover {
     color: var(--color-secondary);
   }
+  &:disabled {
+    color: var(--color-primary);
+  }
 }
 
 .button-contrast {
@@ -80,5 +93,8 @@
 
   &:hover {
     color: var(--color-primary);
+  }
+  &:disabled {
+    color: var(--color-secondary);
   }
 }
