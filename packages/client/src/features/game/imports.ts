@@ -20,6 +20,7 @@ import { CardsGame } from './cards-game/cards-game'
 import { initialDeckCard, LOGO_HEIGHT } from './assets'
 import { useWindowSize } from '../../shared/hooks/useWindowSize'
 import { CARD_HEIGHT, CARD_WIDTH } from '../../assets/assets'
+import { cards } from './assets'
 
 const imports = {
   LOGO_HEIGHT,
@@ -44,6 +45,7 @@ const imports = {
   CardsGame,
   spritesLoaded,
   getRect,
+  cards,
 }
 
 export default imports
