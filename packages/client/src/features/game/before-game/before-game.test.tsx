@@ -1,65 +1,54 @@
-import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import { screen, waitFor, fireEvent } from '@testing-library/react'
 import MainMenuPage from '../../../pages/main-menu-page'
-import { BrowserRouter } from 'react-router-dom'
 import { BeforeGame } from './before-game'
 import '@testing-library/jest-dom'
-import { SetStateAction } from 'react'
+import { renderWithRouter } from '../../../shared/utils/renderWithRouter'
 
 describe('Тестирование начального экрана игры', () => {
   it('При нажатии в меню кнопки "Новая игра" компонент "BeforeGame" появляется', () => {
-    render(
-      <BrowserRouter>
-        <MainMenuPage />
-      </BrowserRouter>,
-    )
+    renderWithRouter(<MainMenuPage />, { route: '/main' })
     const button = screen.getByTestId('button-new-game')
     fireEvent.click(button)
-    waitFor(
-      () => {
-        expect(screen.getByTestId('before-game')).toBeInTheDocument()
-      },
-      { timeout: 500 },
-    )
+    waitFor(() => {
+      expect(screen.getByTestId('before-game')).toBeInTheDocument()
+    })
   })
 
   it('При нажатии кнопки "Начать игру" появляется компонент "Game"', () => {
-    render(
-      <BrowserRouter>
-        <BeforeGame
-          onClickStart={jest.fn()}
-          setBackgroudBoard={jest.fn()}
-          setShirtCard={jest.fn()}
-          setValueSoundMusic={jest.fn()}
-          setValueSoundEffects={jest.fn()}
-          valueSoundMusic={0}
-          valueSoundEffects={0}
-        />
-      </BrowserRouter>,
+    renderWithRouter(
+      <BeforeGame
+        onClickStart={jest.fn()}
+        setBackgroudBoard={jest.fn()}
+        setShirtCard={jest.fn()}
+        setValueSoundMusic={jest.fn()}
+        setValueSoundEffects={jest.fn()}
+        valueSoundMusic={0}
+        valueSoundEffects={0}
+      />,
+      { route: '/game' },
     )
+
     const button = screen.getByTestId('button-start-game')
     fireEvent.click(button)
-    waitFor(
-      () => {
-        expect(screen.getByTestId('game')).toBeInTheDocument()
-      },
-      { timeout: 500 },
-    )
+    waitFor(() => {
+      expect(screen.getByTestId('game')).toBeInTheDocument()
+    })
   })
 
   it('По клику на кнопку "Правила" открывается компонент "RulesOfGame" и закрывается по клику на крестик', () => {
-    render(
-      <BrowserRouter>
-        <BeforeGame
-          onClickStart={jest.fn()}
-          setBackgroudBoard={jest.fn()}
-          setShirtCard={jest.fn()}
-          setValueSoundMusic={jest.fn()}
-          setValueSoundEffects={jest.fn()}
-          valueSoundMusic={0}
-          valueSoundEffects={0}
-        />
-      </BrowserRouter>,
+    renderWithRouter(
+      <BeforeGame
+        onClickStart={jest.fn()}
+        setBackgroudBoard={jest.fn()}
+        setShirtCard={jest.fn()}
+        setValueSoundMusic={jest.fn()}
+        setValueSoundEffects={jest.fn()}
+        valueSoundMusic={0}
+        valueSoundEffects={0}
+      />,
+      { route: '/game' },
     )
+
     const button = screen.getByTestId('button-rules')
     fireEvent.click(button)
     waitFor(() => {
@@ -71,18 +60,17 @@ describe('Тестирование начального экрана игры', 
   })
 
   it('По клику на кнопку "Настройки" открывается компонент "ToolesGame" и закрывается по клику на кнопку "Ок"', () => {
-    render(
-      <BrowserRouter>
-        <BeforeGame
-          onClickStart={jest.fn()}
-          setBackgroudBoard={jest.fn()}
-          setShirtCard={jest.fn()}
-          setValueSoundMusic={jest.fn()}
-          setValueSoundEffects={jest.fn()}
-          valueSoundMusic={0}
-          valueSoundEffects={0}
-        />
-      </BrowserRouter>,
+    renderWithRouter(
+      <BeforeGame
+        onClickStart={jest.fn()}
+        setBackgroudBoard={jest.fn()}
+        setShirtCard={jest.fn()}
+        setValueSoundMusic={jest.fn()}
+        setValueSoundEffects={jest.fn()}
+        valueSoundMusic={0}
+        valueSoundEffects={0}
+      />,
+      { route: '/game' },
     )
     const button = screen.getByTestId('button-tools')
     fireEvent.click(button)
