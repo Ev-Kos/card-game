@@ -10,7 +10,7 @@ import { InputUpload } from '../../shared/input-upload/input-upload'
 import { Button } from '../../shared/button'
 import { changeUserAvatar } from '../../shared/hooks/api/changeUserAvatar'
 import { user } from './assets'
-import { routes } from '../../assets/assets'
+import { changeUserProfile } from '../../shared/hooks/api/changeUserProfile'
 
 type TNewData = {
   [key: string]: unknown
@@ -21,7 +21,7 @@ export const ProfilePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [file, setFile] = useState<File | null>(null)
 
-  const [newUserData, setNewUserData] = useState<TNewData>({})
+  const [newUserData, setNewUserData] = useState<Partial<TUserData>>({})
   const [isChangeInfo, setChangeInfo] = useState(false)
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const ProfilePage = () => {
     }
   }
 
-  const getProperty = (obj: TNewData, key: any) => {
+  const getProperty = (obj: TNewData, key: string) => {
     return obj[key]
   }
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,13 +61,13 @@ export const ProfilePage = () => {
 
     if (prop !== value) {
       setNewUserData(prevState => ({
-        ...(prevState as TUserData),
+        ...prevState,
         [name]: value,
       }))
     }
     if (prop === value) {
       const t = Object.fromEntries(
-        Object.entries(newUserData as TNewData).filter(([k]) => k !== name),
+        Object.entries(newUserData).filter(([k]) => k !== name),
       )
       setNewUserData(t)
     }
@@ -76,8 +76,8 @@ export const ProfilePage = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setChangeInfo(!isChangeInfo)
-    if (Object.keys(newUserData as TNewData).length !== 0) {
-      console.log('отправляем на сервер NewUserData')
+    if (Object.keys(newUserData).length !== 0) {
+      changeUserProfile(newUserData)
     }
   }
 
