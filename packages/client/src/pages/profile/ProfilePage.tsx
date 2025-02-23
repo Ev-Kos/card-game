@@ -11,16 +11,18 @@ import { Button } from '../../shared/button'
 import { changeUserAvatar } from '../../shared/hooks/api/changeUserAvatar'
 import { user } from './assets'
 import { changeUserProfile } from '../../shared/hooks/api/changeUserProfile'
-import { Input } from '../../shared/input'
 import { ProfileField } from '../../entities/profile-field'
 import { changeUserPassword } from '../../shared/hooks/api/changePassword'
 import { logout } from '../../shared/hooks/api/logout'
+import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 
 type TNewData = {
   [key: string]: unknown
 }
 
 export const ProfilePage = () => {
+  useGetUserData()
+
   const [userData, setUserData] = useState<TUserData | null>(null)
   const [isChangeAvatarModalOpen, setChangeAvatarModalOpen] = useState(false)
   const [isChangePasswordModalOpen, setChangePasswordModalOpen] =
