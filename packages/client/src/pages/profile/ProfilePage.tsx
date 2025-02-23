@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import { ProfileForm } from '../../entities/profile/profileForm'
+import { ProfileForm } from '../../features/profile-form'
 import styles from './styles.module.css'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { TUserData } from '../../shared/hooks/api/getUserData'
@@ -11,6 +11,10 @@ import { Button } from '../../shared/button'
 import { changeUserAvatar } from '../../shared/hooks/api/changeUserAvatar'
 import { user } from './assets'
 import { changeUserProfile } from '../../shared/hooks/api/changeUserProfile'
+import { Input } from '../../shared/input'
+import { ProfileField } from '../../entities/profile-field'
+import { changeUserPassword } from '../../shared/hooks/api/changePassword'
+import { logout } from '../../shared/hooks/api/logout'
 
 type TNewData = {
   [key: string]: unknown
@@ -18,11 +22,14 @@ type TNewData = {
 
 export const ProfilePage = () => {
   const [userData, setUserData] = useState<TUserData | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isChangeAvatarModalOpen, setChangeAvatarModalOpen] = useState(false)
+  const [isChangePasswordModalOpen, setChangePasswordModalOpen] =
+    useState(false)
   const [file, setFile] = useState<File | null>(null)
-
   const [newUserData, setNewUserData] = useState<Partial<TUserData>>({})
   const [isChangeInfo, setChangeInfo] = useState(false)
+  const [oldPassworValue, setOldPasswor] = useState('')
+  const [newPassworValue, setNewPasswor] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -30,26 +37,35 @@ export const ProfilePage = () => {
     }
   }, [user])
 
-  const handleModalOpen = () => {
-    setIsModalOpen(true)
+  const onClickChangeAvatarModalOpen = () => {
+    setChangeAvatarModalOpen(true)
   }
 
   const handleModalClose = () => {
-    setIsModalOpen(false)
+    setChangeAvatarModalOpen(false)
     setFile(null)
+    setChangePasswordModalOpen(false)
   }
 
-  const changeAvatar = () => {
-    if (file) {
-      changeUserAvatar(file)
+  const changeAvatar = async () => {
+    if (!file) return
+    try {
+      const res = (await changeUserAvatar(file)) as TUserData
+      setUserData(prevState => ({
+        ...(prevState as TUserData),
+        avatar: res.avatar,
+      }))
       setFile(null)
-      setIsModalOpen(false)
+      setChangeAvatarModalOpen(false)
+    } catch (error) {
+      console.error('Ошибка обновления аватара:', error)
     }
   }
 
   const getProperty = (obj: TNewData, key: string) => {
     return obj[key]
   }
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setUserData(prevState => ({
@@ -73,11 +89,47 @@ export const ProfilePage = () => {
     }
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onClickChangeData = () => {
+    setChangeInfo(true)
+  }
+
+  const onClickChangePassword = () => {
+    setChangePasswordModalOpen(true)
+  }
+
+  const onChangeOldPassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setOldPasswor(e.target.value)
+  }
+  const onChangeNewPassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewPasswor(e.target.value)
+  }
+
+  const changePassword = async () => {
+    try {
+      await changeUserPassword({
+        oldPassword: oldPassworValue,
+        newPassword: newPassworValue,
+      })
+      setChangePasswordModalOpen(false)
+    } catch (error) {
+      console.error('Ошибка смены пароля:', error)
+    }
+  }
+
+  const logoutUser = () => {
+    logout()
+  }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setChangeInfo(!isChangeInfo)
+    setChangeInfo(false)
     if (Object.keys(newUserData).length !== 0) {
-      changeUserProfile(newUserData)
+      try {
+        const res = (await changeUserProfile(newUserData)) as TUserData
+        setUserData(res)
+      } catch (error) {
+        console.error('Ошибка обновления профиля:', error)
+      }
     }
   }
 
@@ -88,8 +140,8 @@ export const ProfilePage = () => {
         <Avatar
           size="l"
           isProfile={true}
-          onClick={handleModalOpen}
-          url={getImage(String(userData?.avatar))}
+          onClick={onClickChangeAvatarModalOpen}
+          url={userData?.avatar ? getImage(userData.avatar) : undefined}
         />
         <h1 className={styles.profileTitle}>Профиль</h1>
         {userData && (
@@ -100,9 +152,27 @@ export const ProfilePage = () => {
             isChange={isChangeInfo}
           />
         )}
+        {!isChangeInfo && (
+          <div className={styles.buttons}>
+            <div className={styles.buttonsChange}>
+              <Button color="secondary" size="l" onClick={onClickChangeData}>
+                Изменить данные
+              </Button>
+              <Button
+                color="secondary"
+                size="l"
+                onClick={onClickChangePassword}>
+                Изменить пароль
+              </Button>
+            </div>
+            <Button color="contrast" onClick={logoutUser}>
+              Выйти из аккаунта
+            </Button>
+          </div>
+        )}
       </div>
 
-      {isModalOpen && (
+      {isChangeAvatarModalOpen && (
         <Modal closeModal={handleModalClose} title="Загрузите файл">
           <InputUpload setFile={setFile} />
           <Button
@@ -115,11 +185,35 @@ export const ProfilePage = () => {
         </Modal>
       )}
 
-      {/* <PasswordModal
-        isOpen={isPasswordModalOpen}
-        onClose={handlePasswordModalClose}
-        onSave={handleSavePassword}
-      /> */}
+      {isChangePasswordModalOpen && (
+        <Modal closeModal={handleModalClose} title="Изменение пароля">
+          <div>
+            <ProfileField
+              label="Старый пароль"
+              name="oldPassword"
+              isChange={true}
+              onChange={onChangeOldPassword}
+            />
+            <ProfileField
+              label="Новый пароль"
+              name="newPassword"
+              isChange={true}
+              onChange={onChangeNewPassword}
+            />
+          </div>
+          <Button
+            color="secondary"
+            size="m"
+            disabled={
+              oldPassworValue.length === 0 && newPassworValue.length === 0
+                ? true
+                : false
+            }
+            onClick={changePassword}>
+            Сохранить
+          </Button>
+        </Modal>
+      )}
     </main>
   )
 }

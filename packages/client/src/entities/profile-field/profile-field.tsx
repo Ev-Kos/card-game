@@ -1,13 +1,13 @@
-import { Input } from '../../../shared/input'
+import { Input } from '../../shared/input'
 import styles from './styles.module.css'
 
 type TProfileFieldProps = {
   label: string
   name: string
-  type: string
-  value: string
-  isChange: boolean
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  type?: string
+  value?: string
+  isChange?: boolean
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const ProfileField = ({

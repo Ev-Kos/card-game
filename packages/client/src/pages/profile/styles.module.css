@@ -20,11 +20,17 @@
   color: var(--color-primary);
 }
 
-.profileUserData {
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 50px;
+  margin-top: 25px;
   width: 100%;
 }
 
-.profileButtonCenter {
+.buttonsChange {
   display: flex;
-  justify-content: center;
+  gap: 50px;
+  align-self: center;
 }

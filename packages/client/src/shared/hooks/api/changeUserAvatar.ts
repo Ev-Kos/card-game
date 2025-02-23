@@ -12,7 +12,7 @@ export const changeUserAvatar = async (file: File) => {
       getEndPoint('user', 'profile', 'avatar'),
       data,
     )
-    return result
+    return result.data
   } catch (e) {
     return e as AxiosError
   }

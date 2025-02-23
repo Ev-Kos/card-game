@@ -9,7 +9,7 @@ export const changeUserProfile = async (data: Partial<TUserData>) => {
       getEndPoint('user', 'profile'),
       data,
     )
-    return result
+    return result.data
   } catch (e) {
     return e as AxiosError
   }
