@@ -1,4 +1,4 @@
-import { Input } from '../../../shared/input/input'
+import { Input } from '../../../shared/input'
 import styles from './styles.module.css'
 
 type TProfileFieldProps = {
@@ -19,7 +19,7 @@ export const ProfileField = ({
   onChange,
 }: TProfileFieldProps) => {
   return (
-    <div className={styles.profileField}>
+    <div className={isChange ? styles.profileField : styles.profileFieldBorder}>
       <p className={styles.fieldName}>{label}</p>
       <div className={styles.inputWrap}>
         {isChange ? (
@@ -27,12 +27,13 @@ export const ProfileField = ({
             type={type}
             name={name}
             value={value}
-            placeholder={name}
             isProfile={true}
             onChange={onChange}
           />
         ) : (
-          <p className={styles.fieldValue}>{value}</p>
+          <p className={value ? styles.fieldValue : styles.fieldValueEmpty}>
+            {value}
+          </p>
         )}
       </div>
     </div>

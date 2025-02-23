@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { ProfileForm } from '../../entities/profile/profileForm'
 import styles from './styles.module.css'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { TUserData } from '../../shared/hooks/api/getUserData'
-import { user } from './mock-user-data'
 import { Avatar } from '../../shared/avatar'
 import { getImage } from '../../shared/utils/getImage'
 import { Modal } from '../../entities/modal/modal'
 import { InputUpload } from '../../shared/input-upload/input-upload'
 import { Button } from '../../shared/button'
 import { changeUserAvatar } from '../../shared/hooks/api/changeUserAvatar'
+import { user } from './assets'
+import { routes } from '../../assets/assets'
+
+type TNewData = {
+  [key: string]: unknown
+}
 
 export const ProfilePage = () => {
-  const [userData, setUserData] = useState<TUserData>()
+  const [userData, setUserData] = useState<TUserData | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [file, setFile] = useState<File | null>(null)
+
+  const [newUserData, setNewUserData] = useState<TNewData>({})
+  const [isChangeInfo, setChangeInfo] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -40,11 +47,43 @@ export const ProfilePage = () => {
     }
   }
 
+  const getProperty = (obj: TNewData, key: any) => {
+    return obj[key]
+  }
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setUserData(prevState => ({
+      ...(prevState as TUserData),
+      [name]: value,
+    }))
+
+    const prop = getProperty(user, name)
+
+    if (prop !== value) {
+      setNewUserData(prevState => ({
+        ...(prevState as TUserData),
+        [name]: value,
+      }))
+    }
+    if (prop === value) {
+      const t = Object.fromEntries(
+        Object.entries(newUserData as TNewData).filter(([k]) => k !== name),
+      )
+      setNewUserData(t)
+    }
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setChangeInfo(!isChangeInfo)
+    if (Object.keys(newUserData as TNewData).length !== 0) {
+      console.log('отправляем на сервер NewUserData')
+    }
+  }
+
   return (
     <main className={styles.profile}>
-      <Link className={styles.profileLink} to={'/main'}>
-        <ButtonGoBack />
-      </Link>
+      <ButtonGoBack />
       <div className={styles.profileContent}>
         <Avatar
           size="l"
@@ -56,7 +95,9 @@ export const ProfilePage = () => {
         {userData && (
           <ProfileForm
             formData={userData}
-            handleChange={() => console.log('change')}
+            handleChange={handleChange}
+            onSubmit={handleSubmit}
+            isChange={isChangeInfo}
           />
         )}
       </div>

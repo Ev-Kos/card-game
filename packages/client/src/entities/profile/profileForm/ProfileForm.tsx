@@ -1,12 +1,14 @@
-import { FC } from 'react'
-import { ProfileField } from '../profileField'
+import { ChangeEvent, FC, FormEventHandler } from 'react'
+import { ProfileField } from '../profile-field'
 import { Button } from '../../../shared/button'
 import styles from './styles.module.css'
 import { TUserData } from '../../../shared/hooks/api/getUserData'
 
 type TProfileFormProps = {
-  formData: TUserData
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  formData: TUserData | null
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onSubmit: FormEventHandler<HTMLFormElement>
+  isChange: boolean
 }
 
 const fields = [
@@ -21,29 +23,27 @@ const fields = [
 export const ProfileForm: FC<TProfileFormProps> = ({
   formData,
   handleChange,
+  onSubmit,
+  isChange,
 }) => {
   return (
-    <form className={styles.profileUserData}>
+    <form className={styles.profileUserData} onSubmit={onSubmit}>
       {fields.map((field, index) => (
         <ProfileField
           key={index}
           label={field.label}
           name={field.name}
           type={field.type}
-          value={formData[field.name] ? String(formData[field.name]) : ''}
+          value={
+            formData && formData[field.name] ? String(formData[field.name]) : ''
+          }
           onChange={handleChange}
-          isChange={false}
+          isChange={isChange}
         />
       ))}
       <div className={styles.profileButtonCenter}>
-        <Button
-          color="secondary"
-          size="m"
-          onClick={e => {
-            e.preventDefault()
-            alert('редактирование данных')
-          }}>
-          Редактировать
+        <Button color="secondary" size="m">
+          {isChange ? 'Сохранить' : 'Редактировать'}
         </Button>
       </div>
     </form>
