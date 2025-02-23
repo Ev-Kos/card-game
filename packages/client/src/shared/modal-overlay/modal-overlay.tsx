@@ -1,5 +1,5 @@
 import styles from './styles.module.css'
-import { FC, MouseEventHandler } from 'react'
+import { MouseEventHandler } from 'react'
 
 type TModalOverlay = {
   closeModal: MouseEventHandler<HTMLDivElement>

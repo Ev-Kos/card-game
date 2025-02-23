@@ -1,5 +1,4 @@
-import { FC, MouseEventHandler, ReactNode, useEffect } from 'react'
-import { Button } from '../../shared/button'
+import { MouseEventHandler, ReactNode, useEffect } from 'react'
 import styles from './styles.module.css'
 import { createPortal } from 'react-dom'
 import { ModalOverlay } from '../../shared/modal-overlay/modal-overlay'
