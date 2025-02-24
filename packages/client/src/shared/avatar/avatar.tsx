@@ -16,16 +16,30 @@ type TAvatarProps = {
    */
   size?: 's' | 'm' | 'l'
   url?: string
+  isProfile: boolean
+  onClick?: VoidFunction
 }
 
-export const Avatar = ({ size = 's', url }: TAvatarProps) => {
+export const Avatar = ({
+  size = 's',
+  url,
+  isProfile = false,
+  onClick,
+}: TAvatarProps) => {
   const avatarClassName = classNames(
     styles.avatarContainer,
     styles[`avatar-${size}`],
   )
 
+  const avatarClassNameProfile = classNames(
+    styles.avatarContainerProfile,
+    styles[`avatar-${size}`],
+  )
+
   return (
-    <div className={avatarClassName}>
+    <div
+      className={isProfile ? avatarClassNameProfile : avatarClassName}
+      onClick={onClick}>
       {url ? (
         <img src={url} alt="Аватар" className={styles.avatarImg} />
       ) : (
@@ -34,6 +48,11 @@ export const Avatar = ({ size = 's', url }: TAvatarProps) => {
           alt="Аватар"
           className={styles[`image-${size}`]}
         />
+      )}
+      {isProfile && (
+        <div className={styles.profileAvatarText}>
+          Поменять <br /> аватар
+        </div>
       )}
     </div>
   )

@@ -15,9 +15,6 @@ export const SignInPage = () => {
         <Link to="/registration" label="Нет аккаунта?">
           Зарегистрироваться
         </Link>
-        <Link to="/" label="Забыли пароль?">
-          Восстановить пароль
-        </Link>
       </div>
     </div>
   )
