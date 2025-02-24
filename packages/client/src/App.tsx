@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
 
 import { routes } from './assets/assets'
+import ErrorBoundary from './shared/error-boundary/error-boundary'
 import imports from './features/game/imports'
 import ServerErrorPage from './pages/server-error-page'
 import NotFoundErrorPage from './pages/not-found-error-page'
@@ -36,7 +37,7 @@ function App() {
   }, [])
 
   return (
-    <>
+    <ErrorBoundary>
       <Routes>
         <Route path={routes.login} element={<SignInPage />} />
         <Route path={routes.main} element={<MainMenuPage />} />
@@ -58,7 +59,7 @@ function App() {
           <img key={image} src={image} />
         ))}
       </div>
-    </>
+    </ErrorBoundary>
   )
 }
 
