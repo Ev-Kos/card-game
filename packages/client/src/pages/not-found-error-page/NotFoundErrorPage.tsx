@@ -12,5 +12,10 @@ export const NotFoundErrorPage = () => {
       <img src={Diamonds} alt="0" />
       <h1 className={styles.errorTitle}>4</h1>
     </Error>
+    // <Error
+    //   description="что-то тут не так!"
+    //   text="Попробуйте перегрузить страницу">
+    //     <h1 className={styles.errorTitle}>Ой  :(</h1>
+    // </Error>
   )
 }
