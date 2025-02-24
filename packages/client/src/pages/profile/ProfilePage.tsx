@@ -16,12 +16,9 @@ import { logout } from '../../shared/hooks/api/logout'
 import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../assets/assets'
-import { useAppSelector } from '../../shared/store/store'
 import { getProperty } from '../../shared/utils/getProperty'
-
-type TNewData = {
-  [key: string]: unknown
-}
+import { userSelector } from '../../shared/store/selectors/userSelector'
+import { useSelector } from 'react-redux'
 
 export const ProfilePage = () => {
   useGetUserData()
@@ -36,7 +33,7 @@ export const ProfilePage = () => {
   const [oldPassworValue, setOldPasswor] = useState('')
   const [newPassworValue, setNewPasswor] = useState('')
 
-  const user = useAppSelector(store => store.userSlice.user)
+  const user = useSelector(userSelector)
   const navigate = useNavigate()
 
   useEffect(() => {
