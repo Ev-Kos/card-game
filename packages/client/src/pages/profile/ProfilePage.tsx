@@ -9,12 +9,14 @@ import { Modal } from '../../entities/modal/modal'
 import { InputUpload } from '../../shared/input-upload/input-upload'
 import { Button } from '../../shared/button'
 import { changeUserAvatar } from '../../shared/hooks/api/changeUserAvatar'
-import { user } from './assets'
 import { changeUserProfile } from '../../shared/hooks/api/changeUserProfile'
 import { ProfileField } from '../../entities/profile-field'
 import { changeUserPassword } from '../../shared/hooks/api/changePassword'
 import { logout } from '../../shared/hooks/api/logout'
 import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
+import { useNavigate } from 'react-router-dom'
+import { routes } from '../../assets/assets'
+import { useAppSelector } from '../../shared/store/store'
 
 type TNewData = {
   [key: string]: unknown
@@ -32,6 +34,9 @@ export const ProfilePage = () => {
   const [isChangeInfo, setChangeInfo] = useState(false)
   const [oldPassworValue, setOldPasswor] = useState('')
   const [newPassworValue, setNewPasswor] = useState('')
+
+  const user = useAppSelector(store => store.userSlice.user)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user) {
@@ -120,6 +125,7 @@ export const ProfilePage = () => {
 
   const logoutUser = () => {
     logout()
+    navigate(routes.login)
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
