@@ -108,7 +108,7 @@ export const findCartToAdd = (
   arrBotCard: TCard[],
   arrBattle: TBattleCart[],
   trumpCard: TCard,
-  deckCards: TCard[],
+  deckCardsLength: number,
 ): TBattleCart[] => {
   const res: TBattleCart[] = []
   const botBattleCards: string[] = []
@@ -123,7 +123,7 @@ export const findCartToAdd = (
     item => item.suit !== trumpCard.suit,
   )
 
-  if (deckCards.length !== 0) {
+  if (deckCardsLength !== 0) {
     botCardNotTrump.forEach(item => {
       if (
         botBattleCards.includes(item.rang) ||

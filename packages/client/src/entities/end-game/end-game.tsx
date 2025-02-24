@@ -19,10 +19,18 @@ export const EndGame = ({
         {isNobodyWin ? 'Ничья' : isPlayerWin ? 'Победа!' : 'Вы проиграли'}
       </p>
       <div className={styles.endGameButtons}>
-        <Button size="xl" color="contrast" onClick={onClick}>
+        <Button
+          size="xl"
+          color="contrast"
+          onClick={onClick}
+          data-testid="button-new-game">
           Новая игра
         </Button>
-        <ButtonLink size="xl" color="contrast" to={routes.main}>
+        <ButtonLink
+          size="xl"
+          color="contrast"
+          to={routes.main}
+          data-testid="button-menu">
           Главное меню
         </ButtonLink>
       </div>

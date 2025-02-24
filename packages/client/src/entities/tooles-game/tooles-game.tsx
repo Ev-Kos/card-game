@@ -38,7 +38,7 @@ export const ToolesGame = ({
   shirtCardArray,
 }: TToolesGame) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-testid="tools">
       <p className={styles.name}>Настройки</p>
       <div className={styles.toolsWrap}>
         <p className={styles.toolsName}>Звук</p>
@@ -87,7 +87,10 @@ export const ToolesGame = ({
           </div>
         </div>
       </div>
-      <Button size="s" onClick={onClickSaveButton}>
+      <Button
+        size="s"
+        onClick={onClickSaveButton}
+        data-testid="button-submit-tools">
         Ок
       </Button>
     </div>
