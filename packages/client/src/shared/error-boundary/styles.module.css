@@ -1,0 +1,6 @@
+.errorTitle {
+  color: var(--color-primary);
+  font-size: 128px;
+  line-height: 128px;
+  font-weight: 700;
+}

@@ -14,6 +14,7 @@ import Logo from './assets/Logo.svg'
 import styles from './styles.module.css'
 import GamePage from './pages/game-page'
 import { routes } from './assets/assets'
+import ErrorBoundary from './shared/error-boundary/error-boundary'
 
 function App() {
   useEffect(() => {
@@ -28,7 +29,7 @@ function App() {
   }, [])
 
   return (
-    <>
+    <ErrorBoundary>
       <Routes>
         <Route path={routes.login} element={<SignInPage />} />
         <Route path={routes.main} element={<MainMenuPage />} />
@@ -44,7 +45,7 @@ function App() {
 
       <img src={Logo} className={styles.logo} alt="Desc Masters" />
       <img src={BackgroundImage} className={styles.backgroundImage} />
-    </>
+    </ErrorBoundary>
   )
 }
 
