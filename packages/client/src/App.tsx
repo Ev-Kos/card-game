@@ -21,12 +21,13 @@ function App() {
   useEffect(() => {
     const fetchServerData = async () => {
       try {
-        const url = `http://localhost:${__SERVER_PORT__}`
+        const serverUrl = __SERVER_URL__ || 'http://localhost:'
+        const url = `${serverUrl}${__SERVER_PORT__}`
         const response = await fetch(url)
         const data = await response.json()
-        console.log(data)
+        console.info(data)
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
 

@@ -1,8 +1,7 @@
 const CACHE_NAME = 'site-cache'
 const URLS = [
+  '/',
   '/index.html',
-  '/src/main.tsx',
-  '/src/App.tsx',
 ]
 
 const startServiceWorker = () => {
