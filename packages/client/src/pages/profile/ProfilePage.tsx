@@ -17,7 +17,7 @@ import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../assets/assets'
 import { getProperty } from '../../shared/utils/getProperty'
-import { userSelector } from '../../shared/store/selectors/userSelector'
+import { getUser } from '../../shared/store/selectors/userSelector'
 import { useSelector } from 'react-redux'
 
 export const ProfilePage = () => {
@@ -33,7 +33,7 @@ export const ProfilePage = () => {
   const [oldPassworValue, setOldPasswor] = useState('')
   const [newPassworValue, setNewPasswor] = useState('')
 
-  const user = useSelector(userSelector)
+  const user = useSelector(getUser)
   const navigate = useNavigate()
 
   useEffect(() => {

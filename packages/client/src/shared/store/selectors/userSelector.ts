@@ -1,6 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { RootState } from '../store'
+import { type RootState } from '../store'
 
-const getUser = (state: RootState) => state.userSlice.user
+const getUserSliceState = (state: RootState) => state.userSlice
 
-export const userSelector = createSelector([getUser], user => user)
+export const getUser = createSelector(
+  getUserSliceState,
+  userState => userState.user,
+)
