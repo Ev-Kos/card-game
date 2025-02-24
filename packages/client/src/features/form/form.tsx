@@ -71,7 +71,7 @@ export const Form = ({ formFieldsData, buttonLabel, onSubmit }: TFormProps) => {
               name={name}
               rules={{
                 required: 'заполните данные',
-                pattern: fieldError[name].pattern,
+                pattern: fieldError[name]?.pattern,
               }}
               render={({ formState: { errors } }) => {
                 const errorMessage =
