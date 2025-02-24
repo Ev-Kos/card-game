@@ -289,3 +289,56 @@ export const initialDeckCard = [
     image: 'sprites/deck/6-spades.png',
   },
 ]
+
+export const cardsForTests = [
+  {
+    id: 28,
+    suit: suits.spades,
+    rang: '8',
+    value: 8,
+    image: 'sprites/deck/8-spades.png',
+  },
+  {
+    id: 2,
+    suit: suits.hearts,
+    rang: '8',
+    value: 8,
+    image: 'sprites/deck/8-hearts.png',
+  },
+  {
+    id: 3,
+    suit: suits.spades,
+    rang: 'J',
+    value: 11,
+    image: 'sprites/deck/J-spades.png',
+  },
+  {
+    id: 4,
+    suit: suits.hearts,
+    rang: 'Q',
+    value: 12,
+    image: 'sprites/deck/Q-hearts.png',
+  },
+  {
+    id: 5,
+    suit: suits.spades,
+    rang: 'K',
+    value: 13,
+    image: 'sprites/deck/K-spades.png',
+  },
+  {
+    id: 29,
+    suit: suits.clubs,
+    rang: '7',
+    value: 7,
+    image: 'sprites/deck/7-clubs.png',
+  },
+]
+
+export const trumpCardForTests = {
+  id: 36,
+  suit: suits.spades,
+  rang: '6',
+  value: 6,
+  image: 'sprites/deck/6-spades.png',
+}

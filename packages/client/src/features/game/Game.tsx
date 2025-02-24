@@ -232,7 +232,12 @@ export const Game = () => {
       }
       if (battleCards.length !== 0 && battleCards[0].isPlayer === false) {
         const cardToAdd = imports.shuffle(
-          imports.findCartToAdd(botCards, battleCards, trumpCard, deckCards),
+          imports.findCartToAdd(
+            botCards,
+            battleCards,
+            trumpCard,
+            deckCards.length,
+          ),
         )[0]
         if (cardToAdd) {
           const wait = imports.debounce(() => {
@@ -527,7 +532,8 @@ export const Game = () => {
       {isStartGame && (
         <div
           className={styles.gameBoard}
-          style={{ background: backgroundBoard }}>
+          style={{ background: backgroundBoard }}
+          data-testid="game">
           <div className={styles.inputSound}>
             <InputRange
               valueSound={valueSoundMusic}
@@ -556,7 +562,9 @@ export const Game = () => {
             )}
           <div className={styles.button}>
             {buttonText.length !== 0 && (
-              <imports.Button onClick={clickButton}>
+              <imports.Button
+                onClick={clickButton}
+                data-testid="button-player-action">
                 <p className={styles.buttonText}>{buttonText}</p>
               </imports.Button>
             )}

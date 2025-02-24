@@ -98,16 +98,24 @@ export const BeforeGame = ({
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-testid="before-game">
       {!isShowRules && !isShowTools && (
         <div className={styles.list}>
-          <Button size="xl" color="contrast" onClick={onClickStart}>
+          <Button
+            size="xl"
+            color="contrast"
+            onClick={onClickStart}
+            data-testid="button-start-game">
             <p className={styles.buttonText}>Начать игру</p>
           </Button>
-          <Button size="xl" color="contrast" onClick={showRules}>
+          <Button
+            size="xl"
+            color="contrast"
+            onClick={showRules}
+            data-testid="button-rules">
             <p className={styles.buttonText}>Правила</p>
           </Button>
-          <Button size="xl" color="contrast">
+          <Button size="xl" color="contrast" data-testid="button-tools">
             <p className={styles.buttonText} onClick={showTools}>
               Настройки
             </p>

@@ -12,7 +12,8 @@
   gap: 12px;
 }
 
-.input {
+.input,
+.inputProfile {
   font-size: 14px;
   color: var(--color-primary);
   background-color: var(--color-background-light);
@@ -23,6 +24,12 @@
     color: var(--color-primary);
     opacity: 65%;
   }
+}
+
+.inputProfile {
+  text-align: end;
+  color: var(--color-secondary);
+  font-weight: 600;
 }
 
 .inputError {

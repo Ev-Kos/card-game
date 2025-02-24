@@ -10,6 +10,7 @@ import RatingPage from './pages/rating-page'
 import SignInPage from './pages/sign-in-page'
 import SignUpPage from './pages/sign-up-page'
 import GamePage from './pages/game-page'
+import ProfilePage from './pages/profile'
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 
@@ -44,7 +45,7 @@ function App() {
         <Route path={routes.forumId} element={<>ForumTopicPage</>} />
         <Route path={routes.game} element={<GamePage />} />
         <Route path={routes.leaderboard} element={<RatingPage />} />
-        <Route path={routes.profile} element={<>ProfilePage</>} />
+        <Route path={routes.profile} element={<ProfilePage />} />
         <Route path="/*" element={<NotFoundErrorPage />} />
         <Route path={routes.error} element={<ServerErrorPage />} />
       </Routes>

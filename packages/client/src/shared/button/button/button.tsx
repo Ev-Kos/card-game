@@ -14,7 +14,7 @@ export type TButtonProps = {
    * @default 'primary'
    */
   color?: 'primary' | 'secondary' | 'contrast'
-} & React.HTMLAttributes<HTMLButtonElement>
+} & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 export const Button = ({
   size = 's',
