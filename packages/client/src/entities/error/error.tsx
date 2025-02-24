@@ -1,8 +1,7 @@
 import React from 'react'
-
-import { Button } from '../../shared/button'
-
+import { ButtonLink } from '../../shared/button'
 import styles from './styles.module.css'
+import { routes } from '../../assets/assets'
 
 type TErrorProps = {
   description: string
@@ -22,9 +21,9 @@ export const Error = ({ description, text, children }: TErrorProps) => {
         </div>
       </div>
 
-      <Button size="l" color="contrast">
+      <ButtonLink size="l" color="contrast" to={routes.main}>
         Играть дальше
-      </Button>
+      </ButtonLink>
     </div>
   )
 }
