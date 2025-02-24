@@ -2,7 +2,6 @@ import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { routes } from '../../assets/assets'
 import { ButtonLink } from '../../shared/button'
 import { SpadesIcon } from '../../assets/SpadesIcon'
-
 import styles from './styles.module.css'
 
 export const MainMenuPage = () => {
