@@ -17,6 +17,7 @@ import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../assets/assets'
 import { useAppSelector } from '../../shared/store/store'
+import { getProperty } from '../../shared/utils/getProperty'
 
 type TNewData = {
   [key: string]: unknown
@@ -67,10 +68,6 @@ export const ProfilePage = () => {
     } catch (error) {
       console.error('Ошибка обновления аватара:', error)
     }
-  }
-
-  const getProperty = (obj: TNewData, key: string) => {
-    return obj[key]
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -135,6 +132,7 @@ export const ProfilePage = () => {
       try {
         const res = (await changeUserProfile(newUserData)) as TUserData
         setUserData(res)
+        setNewUserData({})
       } catch (error) {
         console.error('Ошибка обновления профиля:', error)
       }
