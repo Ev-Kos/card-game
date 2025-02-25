@@ -9,16 +9,16 @@ import { Modal } from '../../entities/modal/modal'
 import { InputUpload } from '../../shared/input-upload/input-upload'
 import { Button } from '../../shared/button'
 import { changeUserAvatar } from '../../shared/hooks/api/changeUserAvatar'
-import { user } from './assets'
 import { changeUserProfile } from '../../shared/hooks/api/changeUserProfile'
 import { ProfileField } from '../../entities/profile-field'
 import { changeUserPassword } from '../../shared/hooks/api/changePassword'
 import { logout } from '../../shared/hooks/api/logout'
 import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
-
-type TNewData = {
-  [key: string]: unknown
-}
+import { useNavigate } from 'react-router-dom'
+import { routes } from '../../assets/assets'
+import { getProperty } from '../../shared/utils/getProperty'
+import { getUser } from '../../shared/store/selectors/userSelector'
+import { useSelector } from 'react-redux'
 
 export const ProfilePage = () => {
   useGetUserData()
@@ -32,6 +32,9 @@ export const ProfilePage = () => {
   const [isChangeInfo, setChangeInfo] = useState(false)
   const [oldPassworValue, setOldPasswor] = useState('')
   const [newPassworValue, setNewPasswor] = useState('')
+
+  const user = useSelector(getUser)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user) {
@@ -62,10 +65,6 @@ export const ProfilePage = () => {
     } catch (error) {
       console.error('Ошибка обновления аватара:', error)
     }
-  }
-
-  const getProperty = (obj: TNewData, key: string) => {
-    return obj[key]
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -120,6 +119,7 @@ export const ProfilePage = () => {
 
   const logoutUser = () => {
     logout()
+    navigate(routes.login)
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -129,6 +129,7 @@ export const ProfilePage = () => {
       try {
         const res = (await changeUserProfile(newUserData)) as TUserData
         setUserData(res)
+        setNewUserData({})
       } catch (error) {
         console.error('Ошибка обновления профиля:', error)
       }

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { TUserData } from '../../shared/hooks/api/getUserData'
+import { TUserData } from '../../hooks/api/getUserData'
 
 type TInitialState = {
   user: TUserData | null
