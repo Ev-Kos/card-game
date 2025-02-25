@@ -21,19 +21,18 @@ const { initialDeckCard, cards } = imports
 
 function App() {
   useEffect(() => {
-    const fetchServerData = async () => {
-      try {
-        const serverUrl = __SERVER_URL__ || 'http://localhost:'
-        const url = `${serverUrl}${__SERVER_PORT__}`
-        const response = await fetch(url)
-        const data = await response.json()
-        console.info(data)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    fetchServerData()
+    // const fetchServerData = async () => {
+    //   try {
+    //     const serverUrl = __SERVER_URL__ || 'http://localhost:'
+    //     const url = `${serverUrl}${__SERVER_PORT__}`
+    //     const response = await fetch(url)
+    //     const data = await response.json()
+    //     console.info(data)
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // }
+    // fetchServerData()
   }, [])
 
   return (
