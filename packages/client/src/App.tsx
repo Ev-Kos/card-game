@@ -15,9 +15,8 @@ import GamePage from './pages/game-page'
 import ProfilePage from './pages/profile'
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
-
-import styles from './styles.module.css'
 import { ForumTopicPage } from './pages/forum-topic-page/ForumTopicPage'
+import styles from './styles.module.css'
 
 const { initialDeckCard, cards } = imports
 

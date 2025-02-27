@@ -1,5 +1,7 @@
-export const DeleteIcon = () => (
-  <svg width="48" height="48" fill="none">
+import { SVGProps } from 'react'
+
+export const DeleteIcon: React.FC<SVGProps<SVGSVGElement>> = props => (
+  <svg width="48" height="48" fill="none" {...props}>
     <rect width="48" height="48" fill="#B38FF1" rx="24" />
     <path
       fill="currentColor"
