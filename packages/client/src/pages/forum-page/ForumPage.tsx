@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import styles from './styles.module.css'
-import { ForumItem } from '../../entities/forum/forumItem'
+import { ForumItem } from '../../entities/forum-item'
 import { Button } from '../../shared/button'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { forumTopics } from './accets'
 import { Input } from '../../shared/input'
 import { Modal } from '../../entities/modal'
 import { Textarea } from '../../shared/textarea/textarea'
+import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 
-export const ForumPage: React.FC = () => {
+export const ForumPage = () => {
+  useGetUserData()
+
   const [isModalOpen, setModalOpen] = useState(false)
   const [isScrolling, setIsScrolling] = useState(false)
 
@@ -40,19 +43,12 @@ export const ForumPage: React.FC = () => {
         className={`${styles.forumHeaderBlock} ${
           isScrolling ? styles.forumHeaderBlockScrolling : ''
         }`}>
-        <h1 className={styles.forumPageTitle}>Форум по карточным играм</h1>
+        <h1 className={styles.forumPageTitle}>Форум</h1>
       </div>
       <div className={styles.forumPageContent}>
         <ul className={styles.forumPageList}>
           {forumTopics.map(item => (
-            <ForumItem
-              key={item.id}
-              title={item.title}
-              author={item.author}
-              description={item.description}
-              date={item.date}
-              time={item.time}
-            />
+            <ForumItem key={item.id} forum={item} />
           ))}
         </ul>
 

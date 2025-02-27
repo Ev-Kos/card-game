@@ -17,23 +17,24 @@ import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 
 import styles from './styles.module.css'
+import { ForumTopicPage } from './pages/forum-topic-page/ForumTopicPage'
 
 const { initialDeckCard, cards } = imports
 
 function App() {
   useEffect(() => {
-    // const fetchServerData = async () => {
-    //   try {
-    //     const serverUrl = __SERVER_URL__ || 'http://localhost:'
-    //     const url = `${serverUrl}${__SERVER_PORT__}`
-    //     const response = await fetch(url)
-    //     const data = await response.json()
-    //     console.info(data)
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // }
-    // fetchServerData()
+    const fetchServerData = async () => {
+      try {
+        const serverUrl = __SERVER_URL__ || 'http://localhost:'
+        const url = `${serverUrl}${__SERVER_PORT__}`
+        const response = await fetch(url)
+        const data = await response.json()
+        console.info(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchServerData()
   }, [])
 
   return (
@@ -43,7 +44,7 @@ function App() {
         <Route path={routes.main} element={<MainMenuPage />} />
         <Route path={routes.registration} element={<SignUpPage />} />
         <Route path={routes.forum} element={<ForumPage />} />
-        <Route path={routes.forumId} element={<>ForumTopicPage</>} />
+        <Route path={routes.forumId} element={<ForumTopicPage />} />
         <Route path={routes.game} element={<GamePage />} />
         <Route path={routes.leaderboard} element={<RatingPage />} />
         <Route path={routes.profile} element={<ProfilePage />} />

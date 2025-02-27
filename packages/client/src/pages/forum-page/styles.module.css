@@ -3,8 +3,11 @@
 }
 
 .forumHeaderBlock {
-  position: relative;
   height: 108px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .forumHeaderBlockScrolling {
@@ -14,12 +17,7 @@
 }
 
 .forumPageTitle {
-  text-align: center;
   color: var(--color-primary);
-  position: absolute;
-  bottom: 19px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .forumPageContent {
