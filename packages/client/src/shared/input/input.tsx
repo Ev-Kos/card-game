@@ -1,48 +1,9 @@
-import classNames from 'classnames'
+import { FC, InputHTMLAttributes } from 'react'
 
-import type React from 'react'
+type TInputProps = InputHTMLAttributes<HTMLInputElement> & {
+  className: string
+}
 
-import styles from './styles.module.css'
-
-export type TInputProps = {
-  isError?: boolean
-  isProfile?: boolean
-  isComment?: boolean
-} & React.InputHTMLAttributes<HTMLInputElement>
-
-export const Input = ({
-  title,
-  isError,
-  isProfile,
-  isComment,
-  ...props
-}: TInputProps) => {
-  const className = classNames(styles.input, {
-    [styles.inputError]: isError,
-  })
-
-  const classNameProfile = classNames(styles.inputProfile, {
-    [styles.inputError]: isError,
-  })
-
-  const classNameComment = classNames(styles.inputComment, {
-    [styles.inputError]: isError,
-  })
-
-  return (
-    <div className={styles.inputContainer}>
-      {title && <p className={styles.inputLabel}>{title}</p>}
-      <input
-        type="text"
-        className={
-          isProfile
-            ? classNameProfile
-            : isComment
-              ? classNameComment
-              : className
-        }
-        {...props}
-      />
-    </div>
-  )
+export const Input: FC<TInputProps> = ({ className, ...props }) => {
+  return <input className={className} {...props} />
 }
