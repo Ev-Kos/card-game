@@ -1,4 +1,0 @@
-.arrowBackButton:hover path {
-  transition: all 0.3s ease;
-  fill: var(--color-secondary);
-}

@@ -1,1 +1,0 @@
-export { ModalProfile } from './ModalProfile'
