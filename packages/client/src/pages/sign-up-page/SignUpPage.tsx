@@ -1,6 +1,6 @@
 import { signUpFormData } from './assets'
 import { Link } from '../../shared/link/link'
-import { Form } from '../../entities/form'
+import { Form } from '../../features/form'
 
 import styles from './styles.module.css'
 

@@ -1,9 +1,12 @@
-import { SpadesIcon } from '../../assets/SpadesIcon'
+import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
+import { routes } from '../../assets/assets'
 import { ButtonLink } from '../../shared/button'
-
+import { SpadesIcon } from '../../assets/SpadesIcon'
 import styles from './styles.module.css'
 
 export const MainMenuPage = () => {
+  useGetUserData()
+
   return (
     <div className={styles.pageContentContainer}>
       <h1 className={styles.title}>Дурак</h1>
@@ -26,26 +29,30 @@ export const MainMenuPage = () => {
         </p>
 
         <div className={styles.menuButtonsContainer}>
-          <ButtonLink size="xl" color="contrast" to="/game">
+          <ButtonLink size="xl" color="contrast" to={routes.game}>
             Продолжить
           </ButtonLink>
 
-          <ButtonLink size="xl" color="contrast" to="/game">
+          <ButtonLink
+            size="xl"
+            color="contrast"
+            to={routes.game}
+            data-testid="button-new-game">
             Новая игра
           </ButtonLink>
 
-          <ButtonLink size="xl" color="contrast" to="/forum">
+          <ButtonLink size="xl" color="contrast" to={routes.forum}>
             Форумы
           </ButtonLink>
 
-          <ButtonLink size="xl" color="contrast" to="/leaderboard">
+          <ButtonLink size="xl" color="contrast" to={routes.leaderboard}>
             Статистика
           </ButtonLink>
         </div>
       </div>
 
       <div className={styles.buttonProfileContainer}>
-        <ButtonLink className={styles.buttonToProfile} to="/profile">
+        <ButtonLink className={styles.buttonToProfile} to={routes.profile}>
           <p className={styles.buttonToProfileText}>Профиль</p>
           <SpadesIcon className={styles.spadesIcon} width="33" height="30" />
         </ButtonLink>
