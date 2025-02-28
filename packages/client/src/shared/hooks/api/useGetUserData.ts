@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getUserData } from './getUserData'
 
+import { getUserData } from './getUserData'
 import { getProperty } from '../../utils/getProperty'
 import { useAppDispatch } from '../../store/store'
 import { getUser } from '../../store/slices/userSlice'
+import { routes } from '../../../assets/assets'
 
 export const useGetUserData = () => {
   const navigate = useNavigate()
@@ -24,7 +25,7 @@ export const useGetUserData = () => {
       navigate('/')
     }
     if (result.status >= 500) {
-      navigate('error')
+      navigate(routes.error)
     }
   }
 

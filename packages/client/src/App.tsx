@@ -11,7 +11,7 @@ import RatingPage from './pages/rating-page'
 import SignInPage from './pages/sign-in-page'
 import SignUpPage from './pages/sign-up-page'
 import GamePage from './pages/game-page'
-import ProfilePage from './pages/profile'
+import ProfilePage from './pages/profile-page'
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
 

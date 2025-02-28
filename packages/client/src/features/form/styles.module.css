@@ -1,5 +1,5 @@
 .formContainer {
-  width: 333px;
+  width: 100%;
   min-height: 240px;
   display: flex;
   flex-direction: column;

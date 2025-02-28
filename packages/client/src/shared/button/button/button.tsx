@@ -23,13 +23,14 @@ export const Button = ({
   ...props
 }: TButtonProps) => {
   const className = classNames(
+    props?.className,
     styles.buttonContainer,
     styles[`button-${size}`],
     styles[`button-${color}`],
   )
 
   return (
-    <button className={className} {...props}>
+    <button {...props} className={className}>
       {children}
     </button>
   )

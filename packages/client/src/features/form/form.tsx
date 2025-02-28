@@ -1,27 +1,35 @@
-import { Controller, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Controller } from 'react-hook-form'
 
 import { fieldError } from './assets'
 import { Input } from '../../shared/input/input'
 import { InputError } from '../../shared/input-error'
-import { Button } from '../../shared/button'
 
 import type { TInputProps } from '../../shared/input/input'
+import type { UseFormReturn } from 'react-hook-form'
 
 import styles from './styles.module.css'
 
-type TFormData = Record<string, string>
+export type TFormData = Record<string, string>
 
 export type TFormProps = {
+  methods: UseFormReturn
   formFieldsData: TInputProps[]
-  buttonLabel: string
-  onSubmit?: (data: TFormData) => Promise<number | undefined>
+  formFieldsDefaultValue?: TFormData
+  inputTitlePosition?: 'internal' | 'external'
+  onSubmit?: (data: TFormData) => Promise<void>
+  getSubmitButton?: (onSubmit: () => Promise<void>) => JSX.Element
 }
 
-export const Form = ({ formFieldsData, buttonLabel, onSubmit }: TFormProps) => {
-  const methods = useForm<TFormData>({ mode: 'all' })
-  const navigate = useNavigate()
-  const { trigger, watch, setValue, setError, formState, control } = methods
+export const Form = ({
+  methods,
+  formFieldsData,
+  formFieldsDefaultValue,
+  inputTitlePosition,
+  getSubmitButton,
+  onSubmit,
+}: TFormProps) => {
+  const { trigger, watch, setValue, formState, control } = methods
 
   const handleSubmit = async () => {
     formFieldsData.forEach(({ name }) => trigger(name))
@@ -33,30 +41,20 @@ export const Form = ({ formFieldsData, buttonLabel, onSubmit }: TFormProps) => {
     if (!onSubmit) {
       return
     }
-    const result = await onSubmit(formData)
-
-    if (!result) {
-      return
-    }
-    if (result === 200 || result === 400) {
-      navigate('/main')
-    }
-    if (result === 401) {
-      setError('login', {
-        message: 'пользователя с таким логином не существует',
-        type: 'custom',
-      })
-    }
-    if (result >= 500) {
-      navigate('/error')
-    }
+    onSubmit(formData)
   }
+
+  const $submitButton = getSubmitButton?.(handleSubmit)
 
   const handleSetInputValue = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setValue(name, value)
     trigger(name)
   }
+
+  useEffect(() => {
+    return methods.reset
+  }, [])
 
   return (
     <div className={styles.formContainer}>
@@ -70,7 +68,7 @@ export const Form = ({ formFieldsData, buttonLabel, onSubmit }: TFormProps) => {
               control={control}
               name={name}
               rules={{
-                required: 'заполните данные',
+                required: input.required && 'заполните данные',
                 pattern: fieldError[name]?.pattern,
               }}
               render={({ formState: { errors } }) => {
@@ -82,12 +80,14 @@ export const Form = ({ formFieldsData, buttonLabel, onSubmit }: TFormProps) => {
                 return (
                   <div className={styles.inputContainer}>
                     <Input
+                      defaultValue={formFieldsDefaultValue?.[input.name || '']}
+                      titlePosition={inputTitlePosition}
                       isError={!!errorMessage}
                       onBlur={handleSetInputValue}
                       onFocus={handleSetInputValue}
                       {...input}
                     />
-                    <InputError error={errorMessage} />
+                    <InputError error={errorMessage as string} />
                   </div>
                 )
               }}
@@ -95,9 +95,7 @@ export const Form = ({ formFieldsData, buttonLabel, onSubmit }: TFormProps) => {
           )
         })}
       </form>
-      <Button size="s" color="primary" onClick={handleSubmit}>
-        {buttonLabel}
-      </Button>
+      {$submitButton}
     </div>
   )
 }
