@@ -7,9 +7,16 @@ import styles from './styles.module.css'
 export type TInputProps = {
   isError?: boolean
   isProfile?: boolean
+  isComment?: boolean
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export const Input = ({ title, isError, isProfile, ...props }: TInputProps) => {
+export const Input = ({
+  title,
+  isError,
+  isProfile,
+  isComment,
+  ...props
+}: TInputProps) => {
   const className = classNames(styles.input, {
     [styles.inputError]: isError,
   })
@@ -18,12 +25,22 @@ export const Input = ({ title, isError, isProfile, ...props }: TInputProps) => {
     [styles.inputError]: isError,
   })
 
+  const classNameComment = classNames(styles.inputComment, {
+    [styles.inputError]: isError,
+  })
+
   return (
     <div className={styles.inputContainer}>
       {title && <p className={styles.inputLabel}>{title}</p>}
       <input
         type="text"
-        className={isProfile ? classNameProfile : className}
+        className={
+          isProfile
+            ? classNameProfile
+            : isComment
+              ? classNameComment
+              : className
+        }
         {...props}
       />
     </div>

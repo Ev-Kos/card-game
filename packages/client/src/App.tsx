@@ -10,11 +10,12 @@ import MainMenuPage from './pages/main-menu-page'
 import RatingPage from './pages/rating-page'
 import SignInPage from './pages/sign-in-page'
 import SignUpPage from './pages/sign-up-page'
+import ForumPage from './pages/forum-page'
 import GamePage from './pages/game-page'
 import ProfilePage from './pages/profile'
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
-
+import { ForumTopicPage } from './pages/forum-topic-page/ForumTopicPage'
 import styles from './styles.module.css'
 
 const { initialDeckCard, cards } = imports
@@ -32,7 +33,6 @@ function App() {
         console.error(error)
       }
     }
-
     fetchServerData()
   }, [])
 
@@ -42,8 +42,8 @@ function App() {
         <Route path={routes.login} element={<SignInPage />} />
         <Route path={routes.main} element={<MainMenuPage />} />
         <Route path={routes.registration} element={<SignUpPage />} />
-        <Route path={routes.forum} element={<>ForumPage</>} />
-        <Route path={routes.forumId} element={<>ForumTopicPage</>} />
+        <Route path={routes.forum} element={<ForumPage />} />
+        <Route path={routes.forumId} element={<ForumTopicPage />} />
         <Route path={routes.game} element={<GamePage />} />
         <Route path={routes.leaderboard} element={<RatingPage />} />
         <Route path={routes.profile} element={<ProfilePage />} />

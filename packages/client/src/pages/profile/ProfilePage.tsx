@@ -196,12 +196,14 @@ export const ProfilePage = () => {
               name="oldPassword"
               isChange={true}
               onChange={onChangeOldPassword}
+              type="password"
             />
             <ProfileField
               label="Новый пароль"
               name="newPassword"
               isChange={true}
               onChange={onChangeNewPassword}
+              type="password"
             />
           </div>
           <Button
