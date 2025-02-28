@@ -13,9 +13,10 @@ export const Input = ({
   title,
   isError,
   titlePosition = 'external',
+  className,
   ...props
 }: TInputProps) => {
-  const inputClassName = classNames(styles.input, {
+  const inputClassName = classNames(styles.input, className, {
     [styles.inputInternalLabel]: titlePosition === 'internal',
     [styles.inputError]: isError,
   })
@@ -28,7 +29,7 @@ export const Input = ({
   return (
     <div className={styles.inputContainer}>
       {title && <p className={labelClassName}>{title}</p>}
-      <input type="text" className={inputClassName} {...props} />
+      <input {...props} type="text" className={inputClassName} />
     </div>
   )
 }

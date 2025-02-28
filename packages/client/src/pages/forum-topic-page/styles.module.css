@@ -1,0 +1,152 @@
+.page {
+  margin: 45px 0 63px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+}
+
+.topicContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.topicContainerScrolling {
+  border-bottom: 1px solid black;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 7px 10px;
+  padding-bottom: 20px;
+}
+
+.topicTitle,
+.date,
+.topicDescription {
+  color: var(--color-primary);
+}
+
+.topicInfo {
+  display: flex;
+  justify-content: space-between;
+  width: 45%;
+  gap: 20px;
+}
+
+.topicDate {
+  display: flex;
+  flex-direction: column;
+  max-height: 95px;
+  justify-content: space-between;
+  padding: 5px 0;
+  align-items: center;
+}
+
+.date,
+.topicDescription {
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+.date {
+  font-size: 12px;
+}
+
+.topicDescription {
+  font-size: 16px;
+}
+
+.topicAuthor {
+  display: flex;
+  max-height: 95px;
+  align-items: center;
+}
+
+.commentCreate {
+  width: 45%;
+  position: relative;
+}
+
+.buttonDelete,
+.buttonSendComment,
+.buttonEmojy {
+  background-color: rgba(0, 0, 0, 0);
+  padding: 0;
+}
+
+.buttonDelete {
+  width: 48px;
+  height: 48px;
+  color: var(--color-secondary);
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.buttonsComment {
+  position: absolute;
+  bottom: 7px;
+  right: 14px;
+  display: flex;
+  gap: 12px;
+}
+
+.buttonSendComment {
+  width: 20px;
+  height: 24px;
+  color: var(--color-secondary);
+  rotate: 90deg;
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.buttonEmojy {
+  color: var(--color-secondary);
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.commentsContainer {
+  height: calc(100vh - 280px);
+  width: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.commentsContainer::-webkit-scrollbar {
+  display: none;
+  scrollbar-width: none;
+}
+
+.commentList {
+  height: 100%;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  list-style-type: none;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 0;
+}
+
+.commentList::-webkit-scrollbar {
+  display: none;
+  scrollbar-width: none;
+}
+
+.commentListEmpty {
+  font-weight: 20px;
+  color: var(--color-primary);
+}
+
+.inputComment {
+  border: 1px solid var(--color-secondary);
+  padding: 12px 75px 12px 14px;
+}
