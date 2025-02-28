@@ -29,7 +29,7 @@ export const Input = ({
   return (
     <div className={styles.inputContainer}>
       {title && <p className={labelClassName}>{title}</p>}
-      <input {...props} type="text" className={inputClassName} />
+      <input type="text" {...props} className={inputClassName} />
     </div>
   )
 }
