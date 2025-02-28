@@ -108,11 +108,11 @@ export const ForumTopicPage = () => {
       </div>
       <div className={styles.commentCreate}>
         <Input
-          isComment={true}
           placeholder="Сообщение"
           value={valueComment}
           onChange={onChangeComment}
           name="comment"
+          className={styles.inputComment}
         />
         <div className={styles.buttonsComment}>
           <button className={styles.buttonEmojy}>

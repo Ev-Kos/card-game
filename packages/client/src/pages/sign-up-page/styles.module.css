@@ -20,6 +20,10 @@
   }
 }
 
+.formContainer {
+  width: 333px;
+}
+
 .title {
   font-size: 24px;
   font-weight: 700;

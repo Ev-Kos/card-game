@@ -12,10 +12,11 @@ import SignInPage from './pages/sign-in-page'
 import SignUpPage from './pages/sign-up-page'
 import ForumPage from './pages/forum-page'
 import GamePage from './pages/game-page'
-import ProfilePage from './pages/profile'
+import ProfilePage from './pages/profile-page'
+import ForumTopicPage from './pages/forum-topic-page'
 import BackgroundImage from './assets/BackgroundImage.svg'
 import Logo from './assets/Logo.svg'
-import { ForumTopicPage } from './pages/forum-topic-page/ForumTopicPage'
+
 import styles from './styles.module.css'
 
 const { initialDeckCard, cards } = imports
@@ -33,6 +34,7 @@ function App() {
         console.error(error)
       }
     }
+
     fetchServerData()
   }, [])
 

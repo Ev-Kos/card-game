@@ -6,43 +6,30 @@ import styles from './styles.module.css'
 
 export type TInputProps = {
   isError?: boolean
-  isProfile?: boolean
-  isComment?: boolean
+  titlePosition?: 'internal' | 'external'
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 export const Input = ({
   title,
   isError,
-  isProfile,
-  isComment,
+  titlePosition = 'external',
+  className,
   ...props
 }: TInputProps) => {
-  const className = classNames(styles.input, {
+  const inputClassName = classNames(styles.input, className, {
+    [styles.inputInternalLabel]: titlePosition === 'internal',
     [styles.inputError]: isError,
   })
 
-  const classNameProfile = classNames(styles.inputProfile, {
-    [styles.inputError]: isError,
-  })
-
-  const classNameComment = classNames(styles.inputComment, {
-    [styles.inputError]: isError,
+  const labelClassName = classNames(styles.inputLabel, {
+    [styles.inputLabelExternal]: titlePosition === 'external',
+    [styles.inputLabelInternal]: titlePosition === 'internal',
   })
 
   return (
     <div className={styles.inputContainer}>
-      {title && <p className={styles.inputLabel}>{title}</p>}
-      <input
-        type="text"
-        className={
-          isProfile
-            ? classNameProfile
-            : isComment
-              ? classNameComment
-              : className
-        }
-        {...props}
-      />
+      {title && <p className={labelClassName}>{title}</p>}
+      <input type="text" {...props} className={inputClassName} />
     </div>
   )
 }

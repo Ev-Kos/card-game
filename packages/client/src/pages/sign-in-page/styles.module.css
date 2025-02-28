@@ -13,6 +13,10 @@
   color: var(--color-primary);
 }
 
+.formContainer {
+  width: 333px;
+}
+
 .linksContainer {
   display: flex;
   flex-direction: column;
