@@ -53,8 +53,6 @@ async function createServer() {
         var _a;
         const url = req.originalUrl;
         try {
-            // Получаем файл client/index.html который мы правили ранее
-            // Создаём переменные
             let render;
             let template;
             if (vite) {
@@ -67,7 +65,7 @@ async function createServer() {
                 const pathToServer = path_1.default.join(clientPath, 'dist/server/entry-server.js');
                 render = (await (_a = pathToServer, Promise.resolve().then(() => __importStar(require(_a))))).render;
             }
-            const appHtml = await render();
+            const { html: appHtml } = await render(req);
             const html = template.replace(`<!--ssr-outlet-->`, appHtml);
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         }

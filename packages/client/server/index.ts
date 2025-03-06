@@ -33,9 +33,7 @@ async function createServer() {
     const url = req.originalUrl
 
     try {
-      // Получаем файл client/index.html который мы правили ранее
-      // Создаём переменные
-      let render: () => Promise<string>
+      let render: (req: ExpressRequest) => Promise<{ html: string }>
       let template: string
       if (vite) {
         template = await fs.readFile(
@@ -64,7 +62,7 @@ async function createServer() {
         render = (await import(pathToServer)).render
       }
 
-      const appHtml = await render()
+      const { html: appHtml } = await render(req)
 
       const html = template.replace(`<!--ssr-outlet-->`, appHtml)
 

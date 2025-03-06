@@ -4,7 +4,6 @@ import dotenv from 'dotenv'
 import path from 'path'
 dotenv.config()
 
-// https://vitejs.dev/config/
 export default defineConfig({
   server: {
     port: Number(process.env.CLIENT_PORT) || 3000,
@@ -20,6 +19,9 @@ export default defineConfig({
   },
   build: {
     outDir: path.join(__dirname, 'dist/client'),
+  },
+  ssr: {
+    noExternal: ['react-router-dom', 'react-router', '@remix-run/router'],
   },
   plugins: [react()],
 })
