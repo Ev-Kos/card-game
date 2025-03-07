@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode, useEffect } from 'react'
+import { MouseEventHandler, ReactNode, useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import { createPortal } from 'react-dom'
 import { ModalOverlay } from '../../shared/modal-overlay/modal-overlay'
@@ -10,10 +10,11 @@ type TModalProps = {
   closeModal: MouseEventHandler<HTMLDivElement | HTMLButtonElement>
 }
 
-const modalRoot = document.getElementById('modal') as HTMLDivElement
-
 export const Modal = ({ children, title, closeModal }: TModalProps) => {
+  const [modalRoot, setModalRoot] = useState<HTMLDivElement | null>(null)
+
   useEffect(() => {
+    setModalRoot(document.getElementById('modal') as HTMLDivElement)
     const closeEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         closeModal
@@ -25,6 +26,8 @@ export const Modal = ({ children, title, closeModal }: TModalProps) => {
       document.removeEventListener('keydown', closeEsc)
     }
   }, [])
+
+  if (!modalRoot) return null
 
   return createPortal(
     <>

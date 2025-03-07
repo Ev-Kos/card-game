@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dotenv from 'dotenv'
 import path from 'path'
+
 dotenv.config()
 
 export default defineConfig({
@@ -12,16 +13,8 @@ export default defineConfig({
     __SERVER_URL__: process.env.SERVER_URL,
     __SERVER_PORT__: process.env.SERVER_PORT,
   },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
-  },
   build: {
     outDir: path.join(__dirname, 'dist/client'),
-  },
-  ssr: {
-    noExternal: ['react-router-dom', 'react-router', '@remix-run/router'],
   },
   plugins: [react()],
 })

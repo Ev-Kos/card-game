@@ -7,7 +7,7 @@ import path from 'path'
 import fs from 'fs/promises'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 
-const port = process.env.CLIENT_PORT || 3001
+const port = process.env.CLIENT_PORT || 3000
 const clientPath = path.join(__dirname, '..')
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -68,7 +68,9 @@ async function createServer() {
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
-      vite.ssrFixStacktrace(e as Error)
+      if (isDev && vite) {
+        vite.ssrFixStacktrace(e as Error)
+      }
       next(e)
     }
   })

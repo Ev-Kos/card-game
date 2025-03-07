@@ -32,7 +32,7 @@ const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
 const vite_1 = require("vite");
-const port = process.env.CLIENT_PORT || 3001;
+const port = process.env.CLIENT_PORT || 3000;
 const clientPath = path_1.default.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
 async function createServer() {
@@ -70,7 +70,9 @@ async function createServer() {
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         }
         catch (e) {
-            vite.ssrFixStacktrace(e);
+            if (isDev && vite) {
+                vite.ssrFixStacktrace(e);
+            }
             next(e);
         }
     });
