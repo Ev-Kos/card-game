@@ -12,3 +12,5 @@ export const routes = {
   profile: '/profile',
   error: '/error',
 }
+
+export const redirect_uri = `${import.meta.env._EXTERNAL_SERVER_URL || 'http://localhost:3000'}`
