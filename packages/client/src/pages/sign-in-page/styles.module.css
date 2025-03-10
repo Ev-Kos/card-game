@@ -17,6 +17,16 @@
   width: 333px;
 }
 
+.yandexButton {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.yandexButtonText {
+  font-weight: 600;
+}
+
 .linksContainer {
   display: flex;
   flex-direction: column;

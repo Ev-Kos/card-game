@@ -98,3 +98,16 @@
     color: var(--color-secondary);
   }
 }
+
+.button-black {
+  color: var(--color-primary);
+  background-color: var(--color-black-transparent);
+
+  &:hover {
+    color: var(--color-background-light);
+  }
+
+  &:disabled {
+    color: var(--color-primary);
+  }
+}

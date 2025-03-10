@@ -11,6 +11,7 @@ import { Form } from '../../features/form'
 import type { TFormData } from '../../features/form/form'
 
 import styles from './styles.module.css'
+import { YandexIcon } from '../../assets/yandexIcon'
 
 export const SignInPage = () => {
   const navigate = useNavigate()
@@ -54,7 +55,12 @@ export const SignInPage = () => {
           {...signInFormData}
         />
       </div>
-
+      <Button color="black">
+        <div className={styles.yandexButton}>
+          <YandexIcon />
+          <span className={styles.yandexButtonText}>Яндекс ID</span>
+        </div>
+      </Button>
       <div className={styles.linksContainer}>
         <Link to="/registration" label="Нет аккаунта?">
           Зарегистрироваться
