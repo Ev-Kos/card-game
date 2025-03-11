@@ -19,12 +19,11 @@ import { Button } from '../../shared/button'
 import { Modal } from '../../entities/modal/modal'
 import { ProfileInfoItem } from '../../entities/profile-info-item'
 import { Form } from '../../features/form'
-
 import type { TFormData } from '../../features/form/form'
-
 import styles from './styles.module.css'
 import { useAppDispatch } from '../../shared/store/store'
 import { getUserAction } from '../../shared/store/slices/userSlice'
+import Cookies from 'js-cookie'
 
 export const ProfilePage = () => {
   useGetUserData()
@@ -104,8 +103,9 @@ export const ProfilePage = () => {
 
   const logoutUser = () => {
     logout()
-    dispatch(getUserAction({}))
+    dispatch(getUserAction(null))
     navigate(routes.login)
+    Cookies.remove('isAuth')
   }
 
   const handleSubmit = async (formData: TFormData) => {

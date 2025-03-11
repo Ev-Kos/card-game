@@ -1,12 +1,13 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getProperty } from '../../utils/getProperty'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../store/store'
 import { getUserAction } from '../../store/slices/userSlice'
 import { routes } from '../../../assets/assets'
 import { useSelector } from 'react-redux'
 import { getUser } from '../../store/selectors/userSelector'
 import { getUserData } from './getUserData'
+import { isAxiosSuccessResponse } from '../../utils/isAxiosSuccessResponse'
+import Cookies from 'js-cookie'
 
 export const useGetUserData = () => {
   const navigate = useNavigate()
@@ -20,8 +21,8 @@ export const useGetUserData = () => {
       if (!result.status) {
         return
       }
-      if (result.status === 200) {
-        dispatch(getUserAction(getProperty(result, 'data')))
+      if (result.status === 200 && isAxiosSuccessResponse(result, 'data')) {
+        dispatch(getUserAction(result.data))
         return
       }
       if (result.status === 401) {
