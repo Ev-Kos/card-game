@@ -1,25 +1,6 @@
-import { Route, Routes } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './shared/routes/routes'
 import { useEffect } from 'react'
-
-import { routes } from './assets/assets'
-import ErrorBoundary from './shared/error-boundary/error-boundary'
-import imports from './features/game/imports'
-import ServerErrorPage from './pages/server-error-page'
-import NotFoundErrorPage from './pages/not-found-error-page'
-import MainMenuPage from './pages/main-menu-page'
-import RatingPage from './pages/rating-page'
-import SignInPage from './pages/sign-in-page'
-import SignUpPage from './pages/sign-up-page'
-import ForumPage from './pages/forum-page'
-import GamePage from './pages/game-page'
-import ProfilePage from './pages/profile-page'
-import ForumTopicPage from './pages/forum-topic-page'
-import BackgroundImage from './assets/BackgroundImage.svg'
-import Logo from './assets/Logo.svg'
-
-import styles from './styles.module.css'
-
-const { initialDeckCard, cards } = imports
 
 function App() {
   useEffect(() => {
@@ -38,31 +19,7 @@ function App() {
     fetchServerData()
   }, [])
 
-  return (
-    <ErrorBoundary>
-      <Routes>
-        <Route path={routes.login} element={<SignInPage />} />
-        <Route path={routes.main} element={<MainMenuPage />} />
-        <Route path={routes.registration} element={<SignUpPage />} />
-        <Route path={routes.forum} element={<ForumPage />} />
-        <Route path={routes.forumId} element={<ForumTopicPage />} />
-        <Route path={routes.game} element={<GamePage />} />
-        <Route path={routes.leaderboard} element={<RatingPage />} />
-        <Route path={routes.profile} element={<ProfilePage />} />
-        <Route path="/*" element={<NotFoundErrorPage />} />
-        <Route path={routes.error} element={<ServerErrorPage />} />
-      </Routes>
-
-      <img src={Logo} className={styles.logo} alt="Desc Masters" />
-      <img src={BackgroundImage} className={styles.backgroundImage} />
-
-      <div className={styles.preloadImagesContainer}>
-        {[...initialDeckCard, ...cards].map(({ image }) => (
-          <img key={image} src={image} />
-        ))}
-      </div>
-    </ErrorBoundary>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App
