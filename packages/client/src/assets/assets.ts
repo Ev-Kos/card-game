@@ -13,5 +13,4 @@ export const routes = {
   error: '/error',
 }
 
-export const redirect_uri =
-  process.env.EXTERNAL_SERVER_URL || 'http://localhost:3000'
+export const redirect_uri = 'http://localhost:3000' //добавить EXTERNAL_SERVER_URL
