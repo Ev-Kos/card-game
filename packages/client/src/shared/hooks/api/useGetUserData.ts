@@ -25,6 +25,7 @@ export const useGetUserData = () => {
         return
       }
       if (result.status === 401) {
+        localStorage.removeItem('isAuth')
         navigate('/')
       }
       if (result.status >= 500) {

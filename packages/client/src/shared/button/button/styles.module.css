@@ -101,7 +101,7 @@
 
 .button-black {
   color: var(--color-primary);
-  background-color: var(--color-black-transparent);
+  background-color: var(--color-black);
 
   &:hover {
     color: var(--color-background-light);

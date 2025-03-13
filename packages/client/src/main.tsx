@@ -7,9 +7,10 @@ import './index.css'
 
 ReactDOM.hydrateRoot(
   document.getElementById('root') as HTMLElement,
-  //<React.StrictMode>
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  //</React.StrictMode>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+    ,
+  </React.StrictMode>,
 )

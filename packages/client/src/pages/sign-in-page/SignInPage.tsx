@@ -12,7 +12,6 @@ import { YandexIcon } from '../../assets/yandexIcon'
 import { getServiceId, yandexSingIn } from '../../shared/hooks/api/yandexAuth'
 import { useEffect, useState } from 'react'
 import { sliceString } from '../../shared/utils/sliceString'
-import Cookies from 'js-cookie'
 import { isAxiosSuccessResponse } from '../../shared/utils/isAxiosSuccessResponse'
 
 export const SignInPage = () => {
@@ -21,8 +20,6 @@ export const SignInPage = () => {
   const methods = useForm<TFormData>({ mode: 'all' })
   const { setError } = methods
   const [isYandexError, setYandexError] = useState(false)
-
-  const isAuth = Cookies.get('isAuth')
 
   const getSubmitButton = (onSubmit: () => Promise<void>) => (
     <Button size="s" color="primary" onClick={onSubmit}>
@@ -38,7 +35,7 @@ export const SignInPage = () => {
     }
     if (result === 200 || result === 400) {
       navigate(routes.main)
-      Cookies.set('isAuth', 'true')
+      localStorage.setItem('isAuth', 'true')
     }
     if (result === 401) {
       setError('login', {
@@ -67,6 +64,8 @@ export const SignInPage = () => {
   }
 
   useEffect(() => {
+    const isAuth = localStorage.getItem('isAuth')
+
     const fetchData = async () => {
       if (location.search.includes('code')) {
         try {
@@ -76,7 +75,7 @@ export const SignInPage = () => {
           })
           if (result.status === 400 || result.status === 200) {
             navigate(routes.main)
-            Cookies.set('isAuth', 'true')
+            localStorage.setItem('isAuth', 'true')
           } else {
             setYandexError(true)
           }
