@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { signInFormData } from './assets'
-import { redirect_uri, routes } from '../../assets/assets'
+import { redirect_uri, routes, yandexAuthUrl } from '../../assets/assets'
 import { authorize } from '../../shared/hooks/api/authorize'
 import { Link } from '../../shared/link/link'
 import { Button } from '../../shared/button'
@@ -53,7 +53,7 @@ export const SignInPage = () => {
       const serviceId = await getServiceId()
       if (isAxiosSuccessResponse(serviceId, 'service_id')) {
         window.location.replace(
-          `https://oauth.yandex.ru/authorize?response_type=code&client_id=${serviceId.service_id}&redirect_uri=${redirect_uri}`,
+          yandexAuthUrl(serviceId.service_id, redirect_uri),
         )
       } else {
         setYandexError(true)
