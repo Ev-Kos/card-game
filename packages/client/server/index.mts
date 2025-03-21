@@ -57,7 +57,7 @@ async function createServer() {
 
         const pathToServer = path.join(
           clientPath,
-          'dist/server/entry-server.js',
+          'dist/server/entry-server.mjs',
         )
 
         render = (await import(pathToServer)).render
