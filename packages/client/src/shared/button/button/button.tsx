@@ -13,7 +13,7 @@ export type TButtonProps = {
    * Цвет кнопки
    * @default 'primary'
    */
-  color?: 'primary' | 'secondary' | 'contrast'
+  color?: 'primary' | 'secondary' | 'contrast' | 'black'
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 export const Button = ({

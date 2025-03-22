@@ -16,5 +16,6 @@ export default {
   },
   globals: {
     __SERVER_PORT__: process.env.SERVER_PORT,
+    __EXTERNAL_SERVER_URL__: process.env.EXTERNAL_SERVER_URL || 'http://localhost:3000'
   },
 }
