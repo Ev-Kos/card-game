@@ -1,3 +1,6 @@
+import { replyModel } from './models/reply-model'
+import { commentModel } from './models/comment-modal'
+import { topicModel } from './models/topic-modal'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
 
 const {
@@ -8,8 +11,6 @@ const {
   POSTGRES_PASSWORD,
 } = process.env
 
-console.log(POSTGRES_DB)
-
 const sequelizeOptions: SequelizeOptions = {
   host: POSTGRES_HOST,
   port: Number(POSTGRES_PORT),
@@ -19,4 +20,17 @@ const sequelizeOptions: SequelizeOptions = {
   dialect: 'postgres',
 }
 
-export const sequelize = new Sequelize(sequelizeOptions)
+const sequelize = new Sequelize(sequelizeOptions)
+
+const topic = sequelize.define('Topic', topicModel, {})
+const comment = sequelize.define('Comment', commentModel, {})
+const reply = sequelize.define('Reply', replyModel, {})
+
+topic.hasMany(comment, { foreignKey: 'topic_id', as: 'comments' })
+comment.belongsTo(topic, { foreignKey: 'topic_id', as: 'topic' })
+comment.hasMany(reply, { foreignKey: 'comment_id', as: 'replies' })
+reply.belongsTo(comment, { foreignKey: 'comment_id', as: 'comment' })
+reply.hasMany(reply, { foreignKey: 'parent_id', as: 'parentReply' })
+// reply.belongsTo(reply, {foreignKey: 'parent_id', as: 'reply'})
+
+export { sequelize, topic, comment, reply }
