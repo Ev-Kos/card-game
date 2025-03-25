@@ -3,25 +3,29 @@ import cors from 'cors'
 
 dotenv.config({ path: '../../.env' })
 
-import express from 'express'
+import express, { json } from 'express'
 import { sequelize } from './db'
+import errorHandler from './middlewares/error-handler'
+import router from './routes/router'
 
 const port = Number(process.env.SERVER_PORT) || 3001
 const isDev = process.env.NODE_ENV === 'development'
 
 const initDB = async () => {
   try {
+    const app = express()
+    app.use(cors())
+    app.use(json())
+    app.use(router)
+
+    app.use(errorHandler)
+
+    app.listen(port, () => {
+      console.log(`  ➜ 🎸 Server is listening on port: ${port}`)
+    })
+
     if (isDev) {
       await sequelize.sync()
-      const app = express()
-      app.use(cors())
-      app.get('/', (_, res) => {
-        res.json('👋 Howdy from the server :)')
-      })
-
-      app.listen(port, () => {
-        console.log(`  ➜ 🎸 Server is listening on port: ${port}`)
-      })
     } else {
       // добавить миграции для production
       await sequelize.authenticate()

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import styles from './styles.module.css'
-import { ForumItem } from '../../entities/forum-item'
 import { Button } from '../../shared/button'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { forumTopics } from './accets'
@@ -8,6 +7,7 @@ import { Input } from '../../shared/input'
 import { Modal } from '../../entities/modal'
 import { Textarea } from '../../shared/textarea/textarea'
 import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
+import { TopicItem } from '../../entities/topic-item/topic-item'
 
 export const ForumPage = () => {
   useGetUserData()
@@ -48,7 +48,7 @@ export const ForumPage = () => {
       <div className={styles.forumPageContent}>
         <ul className={styles.forumPageList}>
           {forumTopics.map(item => (
-            <ForumItem key={item.id} forum={item} />
+            <TopicItem key={item.id} topic={item} />
           ))}
         </ul>
 

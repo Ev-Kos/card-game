@@ -32,7 +32,7 @@ export const routesArr: RouteObject[] = [
       { path: routes.registration, element: <SignUpPage /> },
       { path: routes.main, element: <MainMenuPage /> },
       { path: routes.forum, element: <ForumPage /> },
-      { path: routes.forumId, element: <ForumTopicPage /> },
+      { path: routes.topicId, element: <ForumTopicPage /> },
       { path: routes.game, element: <GamePage /> },
       { path: routes.leaderboard, element: <RatingPage /> },
       { path: routes.profile, element: <ProfilePage /> },

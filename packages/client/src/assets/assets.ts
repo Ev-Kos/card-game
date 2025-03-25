@@ -6,7 +6,7 @@ export const routes = {
   main: '/main',
   registration: '/registration',
   forum: '/forum',
-  forumId: '/forum/:id',
+  topicId: '/forum/topic/:id',
   game: '/game',
   leaderboard: '/leaderboard',
   profile: '/profile',

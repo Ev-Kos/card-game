@@ -1,7 +1,7 @@
 import { useState, useEffect, ChangeEvent } from 'react'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import styles from './styles.module.css'
-import { TForum } from '../../entities/forum-item/forum-item'
+import { TForum } from '../../entities/topic-item/topic-item'
 import { useParams } from 'react-router-dom'
 import { forumTopics } from '../forum-page/accets'
 import { Avatar } from '../../shared/avatar'
