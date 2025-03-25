@@ -3,6 +3,15 @@ export type TBaseType = {
   author_login: string
   createdAt: Date
   updatedAt: Date
-  limit: number
-  offset: number
+}
+
+export type TUserData = {
+  id: number
+  first_name: string
+  second_name: string
+  display_name: string | null
+  login: string
+  avatar: string | null
+  email: string
+  phone: string
 }

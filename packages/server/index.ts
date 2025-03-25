@@ -5,7 +5,6 @@ dotenv.config({ path: '../../.env' })
 
 import express, { json } from 'express'
 import { sequelize } from './db'
-import errorHandler from './middlewares/error-handler'
 import router from './routes/router'
 
 const port = Number(process.env.SERVER_PORT) || 3001
@@ -17,8 +16,6 @@ const initDB = async () => {
     app.use(cors())
     app.use(json())
     app.use(router)
-
-    app.use(errorHandler)
 
     app.listen(port, () => {
       console.log(`  ➜ 🎸 Server is listening on port: ${port}`)

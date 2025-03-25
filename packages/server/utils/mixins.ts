@@ -15,19 +15,6 @@ export const BaseForumMixin = {
     },
     allowNull: false,
   },
-  limit: {
-    type: DataType.INTEGER,
-    defaultValue: 10,
-    allowNull: false,
-    validate: {
-      max: 100,
-    },
-  },
-  offset: {
-    type: DataType.INTEGER,
-    defaultValue: 0,
-    allowNull: false,
-  },
   createdAt: {
     type: DataType.DATE,
     defaultValue: DataType.NOW,
