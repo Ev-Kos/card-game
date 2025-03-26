@@ -20,8 +20,10 @@ const sequelizeOptions: SequelizeOptions = {
   dialect: 'postgres',
   dialectOptions: {
     quoteIdentifiers: true,
+    rejectUnauthorized: true,
   },
-  logging: console.log,
+  minifyAliases: true,
+  logging: false,
 }
 
 const sequelize = new Sequelize(sequelizeOptions)

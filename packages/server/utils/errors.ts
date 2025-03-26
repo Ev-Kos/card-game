@@ -31,12 +31,12 @@ export const conflictError = (res: Response, error: unknown) => {
 }
 
 export const serverError = (res: Response) => {
-  res.status(500).json({ message: 'Internal server error' })
+  res.status(500).json({ error: 'Internal server error' })
 }
 
 export const errorHandler = (res: Response, error: unknown) => {
   if (error instanceof Error) {
-    badRequestError(res, error)
+    res.status(res.statusCode).json({ error: error.message })
   } else {
     serverError(res)
   }
