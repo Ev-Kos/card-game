@@ -61,4 +61,4 @@ services:
         - ./tmp/pgadmin:/var/lib/pgadmin
       depends_on:
         - postgres
-        
+
