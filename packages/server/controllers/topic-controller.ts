@@ -1,9 +1,4 @@
-import {
-  badRequestError,
-  conflictError,
-  errorHandler,
-  unauthorizedError,
-} from '../utils/errors'
+import { badRequestError, conflictError, errorHandler } from '../utils/errors'
 import {
   createTopicService,
   deleteTopicService,
@@ -55,11 +50,6 @@ export const createTopic = [
         return
       }
 
-      if (!user) {
-        unauthorizedError(res, 'User not authenticated')
-        return
-      }
-
       if (user) {
         const newTopic = await createTopicService(
           title,
@@ -92,6 +82,11 @@ export const deleteTopic = [
 
       if (topicToDelete.author_login !== user?.login) {
         conflictError(res, 'only the author can delete')
+        return
+      }
+
+      if (topicToDelete.comments_count && topicToDelete.comments_count !== 0) {
+        conflictError(res, 'topic has comments')
         return
       }
 

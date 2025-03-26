@@ -6,6 +6,7 @@ import { TBaseType } from '../utils/types'
 export type TTopic = {
   title: string
   description: string
+  comments_count?: number
 } & TBaseType
 
 export const topicModel: ModelAttributes<Model, TTopic> = {

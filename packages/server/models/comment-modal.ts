@@ -4,9 +4,10 @@ import { BaseForumMixin } from '../utils/mixins'
 import { TBaseType } from '../utils/types'
 import { topic } from '../db'
 
-type TComment = {
+export type TComment = {
   topic_id: string
   comment: string
+  replies_count?: number
 } & TBaseType
 
 export const commentModel: ModelAttributes<Model, TComment> = {
