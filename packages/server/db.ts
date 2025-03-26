@@ -18,6 +18,10 @@ const sequelizeOptions: SequelizeOptions = {
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
   dialect: 'postgres',
+  dialectOptions: {
+    quoteIdentifiers: true,
+  },
+  logging: console.log,
 }
 
 const sequelize = new Sequelize(sequelizeOptions)

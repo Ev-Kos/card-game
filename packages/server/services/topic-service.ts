@@ -1,4 +1,4 @@
-import { topic } from '../db'
+import { comment, sequelize, topic } from '../db'
 
 export const findTopicsService = async (limit: number, offset: number) => {
   try {
@@ -6,6 +6,24 @@ export const findTopicsService = async (limit: number, offset: number) => {
       order: [['createdAt', 'DESC']],
       limit: limit,
       offset: offset,
+      include: {
+        model: comment,
+        as: 'comments',
+        attributes: [],
+      },
+      attributes: {
+        include: [
+          [
+            sequelize.cast(
+              sequelize.fn('COUNT', sequelize.col('comments.id')),
+              'INTEGER',
+            ),
+            'comments_count',
+          ],
+        ],
+      },
+      group: ['Topic.id'],
+      subQuery: false,
     })
     return topics
   } catch (e) {
