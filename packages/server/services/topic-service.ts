@@ -1,3 +1,4 @@
+import { TTopic } from '../models/topic-modal'
 import { comment, sequelize, topic } from '../db'
 
 export const findTopicsService = async (limit: number, offset: number) => {
@@ -45,6 +46,26 @@ export const createTopicService = async (
       author_login: author_login,
     })
     return newTopic
+  } catch (e) {
+    throw new Error(
+      `Ошибка создания topic:${e instanceof Error ? e.message : e}`,
+    )
+  }
+}
+
+export const updateTopicService = async (
+  topic_id: string,
+  updateData: Partial<Pick<TTopic, 'title' | 'description'>>,
+) => {
+  try {
+    await topic.update(updateData, {
+      where: { id: topic_id },
+    })
+    const updatedTopic = (await topic.findOne({
+      where: { id: topic_id },
+    })) as TTopic | null
+
+    return updatedTopic
   } catch (e) {
     throw new Error(
       `Ошибка создания topic:${e instanceof Error ? e.message : e}`,

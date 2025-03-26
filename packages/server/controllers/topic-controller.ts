@@ -3,6 +3,7 @@ import {
   createTopicService,
   deleteTopicService,
   findTopicsService,
+  updateTopicService,
 } from '../services/topic-service'
 import { Request, Response } from 'express'
 import { topic } from '../db'
@@ -58,6 +59,41 @@ export const createTopic = [
         )
         res.status(201).json(newTopic)
       }
+    } catch (error) {
+      errorHandler(res, error)
+    }
+  },
+]
+
+export const updateTopic = [
+  checkAuth,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { topic_id, title, description } = req.body
+      const user = req.user
+
+      const topicToUpdate = (await topic.findOne({
+        where: { id: topic_id },
+      })) as TTopic | null
+
+      if (!topicToUpdate) {
+        badRequestError(res, 'topic not found')
+        return
+      }
+
+      if (topicToUpdate.author_login !== user?.login) {
+        conflictError(res, 'only the author can update')
+        return
+      }
+
+      if (topicToUpdate.comments_count && topicToUpdate.comments_count !== 0) {
+        conflictError(res, 'topic has comments')
+        return
+      }
+
+      const result = await updateTopicService(topic_id, { title, description })
+
+      res.status(200).send(result)
     } catch (error) {
       errorHandler(res, error)
     }
