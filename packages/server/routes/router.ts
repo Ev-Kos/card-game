@@ -10,7 +10,6 @@ router.get('/crash-test', () => {
   }, 0)
 })
 
-// router.use(checkAuth);
 router.use('/forum', topicRouter)
 
 router.use((res: Response) => {

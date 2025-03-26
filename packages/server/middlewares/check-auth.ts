@@ -19,6 +19,7 @@ export const checkAuth = async (
 
     if (!cookies) {
       unauthorizedError(res, 'Not authenticated')
+      return
     }
     const response = await axios.get(
       'https://ya-praktikum.tech/api/v2/auth/user',
@@ -32,6 +33,7 @@ export const checkAuth = async (
 
     if (response.status !== 200) {
       unauthorizedError(res, 'Not authenticated')
+      return
     }
 
     req.user = response.data

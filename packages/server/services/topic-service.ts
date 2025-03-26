@@ -27,7 +27,9 @@ export const findTopicsService = async (limit: number, offset: number) => {
     })
     return topics
   } catch (e) {
-    throw new Error(`Ошибка получения topics:${e}`)
+    throw new Error(
+      `Ошибка получения topics:${e instanceof Error ? e.message : e}`,
+    )
   }
 }
 
@@ -44,6 +46,22 @@ export const createTopicService = async (
     })
     return newTopic
   } catch (e) {
-    throw new Error(`Ошибка создания topic:${e}`)
+    throw new Error(
+      `Ошибка создания topic:${e instanceof Error ? e.message : e}`,
+    )
+  }
+}
+
+export const deleteTopicService = async (topic_id: string): Promise<'OK'> => {
+  try {
+    await topic.destroy({
+      where: { id: topic_id },
+    })
+
+    return 'OK'
+  } catch (e) {
+    throw new Error(
+      `Ошибка удаления topic:${e instanceof Error ? e.message : e}`,
+    )
   }
 }

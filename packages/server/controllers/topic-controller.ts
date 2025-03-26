@@ -6,30 +6,31 @@ import {
 } from '../utils/errors'
 import {
   createTopicService,
+  deleteTopicService,
   findTopicsService,
 } from '../services/topic-service'
 import { Request, Response } from 'express'
 import { topic } from '../db'
 import { checkAuth } from '../middlewares/check-auth'
+import { TTopic } from '../models/topic-modal'
 
-export const findTopics = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const { limit, offset } = req.body
+export const findTopics = [
+  checkAuth,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { limit, offset } = req.body
+      const topics = await findTopicsService(Number(limit), Number(offset))
 
-    const topics = await findTopicsService(Number(limit), Number(offset))
-
-    if (topics.length === 0) {
-      res.status(200).json([])
-    } else {
-      res.status(200).json(topics)
+      if (topics.length === 0) {
+        res.status(200).json([])
+      } else {
+        res.status(200).json(topics)
+      }
+    } catch (error) {
+      errorHandler(res, error)
     }
-  } catch (error) {
-    badRequestError(res, error as Error)
-  }
-}
+  },
+]
 
 export const createTopic = [
   checkAuth,
@@ -65,8 +66,38 @@ export const createTopic = [
           description,
           user.login,
         )
-        res.status(201).json({ newTopic })
+        res.status(201).json(newTopic)
       }
+    } catch (error) {
+      errorHandler(res, error)
+    }
+  },
+]
+
+export const deleteTopic = [
+  checkAuth,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { topic_id } = req.body
+      const user = req.user
+
+      const topicToDelete = (await topic.findOne({
+        where: { id: topic_id },
+      })) as TTopic | null
+
+      if (!topicToDelete) {
+        badRequestError(res, 'topic not found')
+        return
+      }
+
+      if (topicToDelete.author_login !== user?.login) {
+        conflictError(res, 'only the author can delete')
+        return
+      }
+
+      const result = await deleteTopicService(topic_id)
+
+      res.status(200).send(result)
     } catch (error) {
       errorHandler(res, error)
     }

@@ -3,7 +3,7 @@ import { ModelAttributes } from 'sequelize/types'
 import { BaseForumMixin } from '../utils/mixins'
 import { TBaseType } from '../utils/types'
 
-type TTopic = {
+export type TTopic = {
   title: string
   description: string
 } & TBaseType
