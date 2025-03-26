@@ -4,7 +4,7 @@ import { BaseForumMixin } from '../utils/mixins'
 import { TBaseType } from '../utils/types'
 import { comment, reply } from '../db'
 
-type TReply = {
+export type TReply = {
   comment_id: string
   reply_text: string
   parent_id: string
@@ -15,7 +15,7 @@ export const replyModel: ModelAttributes<Model, TReply> = {
   ...BaseForumMixin,
   comment_id: {
     type: DataType.UUID,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: comment,
       key: 'id',
@@ -27,7 +27,7 @@ export const replyModel: ModelAttributes<Model, TReply> = {
   },
   parent_id: {
     type: DataType.UUID,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: reply,
       key: 'id',

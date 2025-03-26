@@ -35,5 +35,6 @@ comment.belongsTo(topic, { foreignKey: 'topic_id', as: 'topic' })
 comment.hasMany(reply, { foreignKey: 'comment_id', as: 'replies' })
 reply.belongsTo(comment, { foreignKey: 'comment_id', as: 'comment' })
 reply.hasMany(reply, { foreignKey: 'parent_id', as: 'parentReply' })
+reply.belongsTo(reply, { foreignKey: 'parent_id', as: 'parent' })
 
 export { sequelize, topic, comment, reply }

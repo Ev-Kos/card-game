@@ -75,13 +75,11 @@ export const updateComment = [
         return
       }
 
-      const { count } = await reply.findAndCountAll({
-        where: {
-          comment_id: commentToUpdate.id,
-        },
+      const replies = await reply.findOne({
+        where: { comment_id: commentToUpdate.id },
       })
 
-      if (count !== 0) {
+      if (replies) {
         conflictError(res, 'comment has replies')
         return
       }
@@ -116,13 +114,11 @@ export const deleteComment = [
         return
       }
 
-      const { count } = await reply.findAndCountAll({
-        where: {
-          comment_id: commentToDelete.id,
-        },
+      const replies = await reply.findOne({
+        where: { comment_id: commentToDelete.id },
       })
 
-      if (count !== 0) {
+      if (replies) {
         conflictError(res, 'comment has replies')
         return
       }

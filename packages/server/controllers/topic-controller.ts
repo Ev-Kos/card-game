@@ -93,13 +93,11 @@ export const updateTopic = [
         return
       }
 
-      const { count } = await comment.findAndCountAll({
-        where: {
-          topic_id: topicToUpdate.id,
-        },
+      const comments = await comment.findOne({
+        where: { topic_id: topicToUpdate.id },
       })
 
-      if (count !== 0) {
+      if (comments) {
         conflictError(res, 'topic has comments')
         return
       }
@@ -134,13 +132,11 @@ export const deleteTopic = [
         return
       }
 
-      const { count } = await comment.findAndCountAll({
-        where: {
-          topic_id: topicToDelete.id,
-        },
+      const comments = await comment.findOne({
+        where: { topic_id: topicToDelete.id },
       })
 
-      if (count !== 0) {
+      if (comments) {
         conflictError(res, 'topic has comments')
         return
       }
