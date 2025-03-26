@@ -6,7 +6,7 @@ import { topic } from '../db'
 
 export type TComment = {
   topic_id: string
-  comment: string
+  comment_text: string
   replies_count?: number
 } & TBaseType
 
@@ -20,7 +20,7 @@ export const commentModel: ModelAttributes<Model, TComment> = {
       key: 'id',
     },
   },
-  comment: {
+  comment_text: {
     type: DataType.TEXT,
     allowNull: false,
   },

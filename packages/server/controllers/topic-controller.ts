@@ -6,7 +6,7 @@ import {
   updateTopicService,
 } from '../services/topic-service'
 import { Request, Response } from 'express'
-import { topic } from '../db'
+import { comment, topic } from '../db'
 import { checkAuth } from '../middlewares/check-auth'
 import { TTopic } from '../models/topic-modal'
 
@@ -76,6 +76,13 @@ export const updateTopic = [
         where: { id: topic_id },
       })) as TTopic | null
 
+      const existingTopic = await topic.findOne({ where: { title } })
+
+      if (existingTopic) {
+        conflictError(res, 'topic with this title already exists')
+        return
+      }
+
       if (!topicToUpdate) {
         badRequestError(res, 'topic not found')
         return
@@ -86,7 +93,13 @@ export const updateTopic = [
         return
       }
 
-      if (topicToUpdate.comments_count && topicToUpdate.comments_count !== 0) {
+      const { count } = await comment.findAndCountAll({
+        where: {
+          topic_id: topicToUpdate.id,
+        },
+      })
+
+      if (count !== 0) {
         conflictError(res, 'topic has comments')
         return
       }
@@ -121,7 +134,13 @@ export const deleteTopic = [
         return
       }
 
-      if (topicToDelete.comments_count && topicToDelete.comments_count !== 0) {
+      const { count } = await comment.findAndCountAll({
+        where: {
+          topic_id: topicToDelete.id,
+        },
+      })
+
+      if (count !== 0) {
         conflictError(res, 'topic has comments')
         return
       }

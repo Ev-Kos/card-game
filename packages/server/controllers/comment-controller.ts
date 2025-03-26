@@ -2,11 +2,12 @@ import {
   createCommentService,
   deleteCommentService,
   findCommentsService,
+  updateCommentService,
 } from '../services/comment-service'
 import { checkAuth } from '../middlewares/check-auth'
 import { badRequestError, conflictError, errorHandler } from '../utils/errors'
 import { Request, Response } from 'express'
-import { comment } from '../db'
+import { comment, reply } from '../db'
 import { TComment } from '../models/comment-modal'
 
 export const findComments = [
@@ -31,10 +32,10 @@ export const createComment = [
   checkAuth,
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const { topic_id, comment } = req.body
+      const { topic_id, comment_text } = req.body
       const user = req.user
 
-      if (!topic_id || !comment) {
+      if (!topic_id || !comment_text) {
         badRequestError(res, 'topic_id and comment are required fields')
         return
       }
@@ -42,11 +43,52 @@ export const createComment = [
       if (user) {
         const newComment = await createCommentService(
           topic_id,
-          comment,
+          comment_text,
           user.login,
         )
         res.status(201).json(newComment)
       }
+    } catch (error) {
+      errorHandler(res, error)
+    }
+  },
+]
+
+export const updateComment = [
+  checkAuth,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { comment_id, comment_text } = req.body
+      const user = req.user
+
+      const commentToUpdate = (await comment.findOne({
+        where: { id: comment_id },
+      })) as TComment | null
+
+      if (!commentToUpdate) {
+        badRequestError(res, 'comment not found')
+        return
+      }
+
+      if (commentToUpdate.author_login !== user?.login) {
+        conflictError(res, 'only the author can update')
+        return
+      }
+
+      const { count } = await reply.findAndCountAll({
+        where: {
+          comment_id: commentToUpdate.id,
+        },
+      })
+
+      if (count !== 0) {
+        conflictError(res, 'comment has replies')
+        return
+      }
+
+      const result = await updateCommentService(comment_id, { comment_text })
+
+      res.status(200).send(result)
     } catch (error) {
       errorHandler(res, error)
     }
@@ -74,10 +116,13 @@ export const deleteComment = [
         return
       }
 
-      if (
-        commentToDelete.replies_count &&
-        commentToDelete.replies_count !== 0
-      ) {
+      const { count } = await reply.findAndCountAll({
+        where: {
+          comment_id: commentToDelete.id,
+        },
+      })
+
+      if (count !== 0) {
         conflictError(res, 'comment has replies')
         return
       }

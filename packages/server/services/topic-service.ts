@@ -44,6 +44,7 @@ export const createTopicService = async (
       title: title,
       description: description,
       author_login: author_login,
+      comment_count: 0,
     })
     return newTopic
   } catch (e) {
@@ -68,7 +69,7 @@ export const updateTopicService = async (
     return updatedTopic
   } catch (e) {
     throw new Error(
-      `Ошибка создания topic:${e instanceof Error ? e.message : e}`,
+      `Ошибка обновления topic:${e instanceof Error ? e.message : e}`,
     )
   }
 }

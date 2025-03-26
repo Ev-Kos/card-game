@@ -1,3 +1,4 @@
+import { TComment } from '../models/comment-modal'
 import { comment, reply, sequelize } from '../db'
 
 export const findCommentsService = async (limit: number, offset: number) => {
@@ -41,13 +42,33 @@ export const createCommentService = async (
   try {
     const newTopic = await comment.create({
       topic_id: topic_id,
-      comment: comment_text,
+      comment_text: comment_text,
       author_login: author_login,
     })
     return newTopic
   } catch (e) {
     throw new Error(
       `Ошибка создания comment:${e instanceof Error ? e.message : e}`,
+    )
+  }
+}
+
+export const updateCommentService = async (
+  comment_id: string,
+  updateData: Partial<Pick<TComment, 'comment_text'>>,
+) => {
+  try {
+    await comment.update(updateData, {
+      where: { id: comment_id },
+    })
+    const updatedTopic = (await comment.findOne({
+      where: { id: comment_id },
+    })) as TComment | null
+
+    return updatedTopic
+  } catch (e) {
+    throw new Error(
+      `Ошибка обновления comment:${e instanceof Error ? e.message : e}`,
     )
   }
 }

@@ -6,8 +6,9 @@ import { comment, reply } from '../db'
 
 type TReply = {
   comment_id: string
-  reply: string
+  reply_text: string
   parent_id: string
+  reply_count?: number
 } & TBaseType
 
 export const replyModel: ModelAttributes<Model, TReply> = {
@@ -20,7 +21,7 @@ export const replyModel: ModelAttributes<Model, TReply> = {
       key: 'id',
     },
   },
-  reply: {
+  reply_text: {
     type: DataType.TEXT,
     allowNull: false,
   },
