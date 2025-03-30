@@ -1,5 +1,6 @@
 import { TTopic } from '../models/topic-modal'
 import { comment, sequelize, topic } from '../db'
+import { handlerServiceError } from '../utils/errors'
 
 export const findTopicsService = async (limit: number, offset: number) => {
   try {
@@ -28,9 +29,7 @@ export const findTopicsService = async (limit: number, offset: number) => {
     })
     return topics
   } catch (e) {
-    throw new Error(
-      `Ошибка получения topics:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'findTopicsService')
   }
 }
 
@@ -47,9 +46,7 @@ export const createTopicService = async (
     })
     return newTopic
   } catch (e) {
-    throw new Error(
-      `Ошибка создания topic:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'createTopicService')
   }
 }
 
@@ -67,13 +64,13 @@ export const updateTopicService = async (
 
     return updatedTopic
   } catch (e) {
-    throw new Error(
-      `Ошибка обновления topic:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'updateTopicService')
   }
 }
 
-export const deleteTopicService = async (topic_id: string): Promise<'OK'> => {
+export const deleteTopicService = async (
+  topic_id: string,
+): Promise<'OK' | void> => {
   try {
     await topic.destroy({
       where: { id: topic_id },
@@ -81,8 +78,6 @@ export const deleteTopicService = async (topic_id: string): Promise<'OK'> => {
 
     return 'OK'
   } catch (e) {
-    throw new Error(
-      `Ошибка удаления topic:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'deleteTopicService')
   }
 }

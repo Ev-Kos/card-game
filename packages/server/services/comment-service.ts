@@ -1,5 +1,6 @@
 import { TComment } from '../models/comment-modal'
 import { comment, reply, sequelize } from '../db'
+import { handlerServiceError } from '../utils/errors'
 
 export const findCommentsService = async (limit: number, offset: number) => {
   try {
@@ -28,9 +29,7 @@ export const findCommentsService = async (limit: number, offset: number) => {
     })
     return comments
   } catch (e) {
-    throw new Error(
-      `Ошибка получения comments:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'findCommentsService')
   }
 }
 
@@ -47,9 +46,7 @@ export const createCommentService = async (
     })
     return newTopic
   } catch (e) {
-    throw new Error(
-      `Ошибка создания comment:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'createCommentService')
   }
 }
 
@@ -67,15 +64,13 @@ export const updateCommentService = async (
 
     return updatedTopic
   } catch (e) {
-    throw new Error(
-      `Ошибка обновления comment:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'updateCommentService')
   }
 }
 
 export const deleteCommentService = async (
   comment_id: string,
-): Promise<'OK'> => {
+): Promise<'OK' | void> => {
   try {
     await comment.destroy({
       where: { id: comment_id },
@@ -83,8 +78,6 @@ export const deleteCommentService = async (
 
     return 'OK'
   } catch (e) {
-    throw new Error(
-      `Ошибка удаления comment:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'deleteCommentService')
   }
 }

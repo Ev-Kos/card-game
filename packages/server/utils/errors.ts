@@ -1,33 +1,29 @@
 import { Response } from 'express'
 
-export const badRequestError = (res: Response, error: unknown) => {
+const handlerError = (status: number, res: Response, error: unknown): void => {
   res
-    .status(400)
-    .json({ error: error instanceof Error ? error.message : error })
+    .status(status)
+    .json({ error: error instanceof Error ? error.message : String(error) })
+}
+
+export const badRequestError = (res: Response, error: unknown) => {
+  handlerError(400, res, error)
 }
 
 export const forbiddenError = (res: Response, error: unknown) => {
-  res
-    .status(403)
-    .json({ error: error instanceof Error ? error.message : error })
+  handlerError(403, res, error)
 }
 
 export const unauthorizedError = (res: Response, error: unknown) => {
-  res
-    .status(401)
-    .json({ error: error instanceof Error ? error.message : error })
+  handlerError(401, res, error)
 }
 
 export const notFoundError = (res: Response, error: unknown) => {
-  res
-    .status(404)
-    .json({ error: error instanceof Error ? error.message : error })
+  handlerError(404, res, error)
 }
 
 export const conflictError = (res: Response, error: unknown) => {
-  res
-    .status(409)
-    .json({ error: error instanceof Error ? error.message : error })
+  handlerError(409, res, error)
 }
 
 export const serverError = (res: Response) => {
@@ -40,4 +36,13 @@ export const errorHandler = (res: Response, error: unknown) => {
   } else {
     serverError(res)
   }
+}
+
+export const handlerServiceError = (
+  error: unknown,
+  serviceName: string,
+): void => {
+  throw new Error(
+    `Ошибка ${serviceName}:${error instanceof Error ? error.message : String(error)}`,
+  )
 }

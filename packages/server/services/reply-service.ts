@@ -1,3 +1,4 @@
+import { handlerServiceError } from '../utils/errors'
 import { reply, sequelize } from '../db'
 
 export const findRepliesService = async (limit: number, offset: number) => {
@@ -27,9 +28,7 @@ export const findRepliesService = async (limit: number, offset: number) => {
     })
     return replies
   } catch (e) {
-    throw new Error(
-      `Ошибка получения replies:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'findRepliesService')
   }
 }
 
@@ -48,9 +47,7 @@ export const createReplyService = async (
     })
     return newReply
   } catch (e) {
-    throw new Error(
-      `Ошибка создания reply:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'createReplyService')
   }
 }
 
@@ -71,13 +68,13 @@ export const updateReplyService = async (
 
     return updatedReply
   } catch (e) {
-    throw new Error(
-      `Ошибка обновления reply:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'updateReplyService')
   }
 }
 
-export const deleteReplyService = async (reply_id: string): Promise<'OK'> => {
+export const deleteReplyService = async (
+  reply_id: string,
+): Promise<'OK' | void> => {
   try {
     await reply.destroy({
       where: { id: reply_id },
@@ -85,8 +82,6 @@ export const deleteReplyService = async (reply_id: string): Promise<'OK'> => {
 
     return 'OK'
   } catch (e) {
-    throw new Error(
-      `Ошибка удаления reply:${e instanceof Error ? e.message : e}`,
-    )
+    return handlerServiceError(e, 'deleteReplyService')
   }
 }
