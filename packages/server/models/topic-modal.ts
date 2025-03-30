@@ -1,15 +1,16 @@
-import { DataType, Model } from 'sequelize-typescript'
-import { ModelAttributes } from 'sequelize/types'
+import { DataType } from 'sequelize-typescript'
+import { Model, ModelAttributes } from 'sequelize/types'
 import { BaseForumMixin } from '../utils/mixins'
 import { TBaseType } from '../utils/types'
 
 export type TTopic = {
   title: string
   description: string
-  comments_count?: number
 } & TBaseType
 
-export const topicModel: ModelAttributes<Model, TTopic> = {
+export interface TopicInstance extends Model<TTopic>, TTopic {}
+
+export const topicModel: ModelAttributes<TopicInstance> = {
   ...BaseForumMixin,
   title: {
     type: DataType.STRING(256),

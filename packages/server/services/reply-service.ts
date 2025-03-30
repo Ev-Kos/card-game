@@ -1,4 +1,3 @@
-import { TReply } from '../models/reply-model'
 import { reply, sequelize } from '../db'
 
 export const findRepliesService = async (limit: number, offset: number) => {
@@ -66,9 +65,9 @@ export const updateReplyService = async (
         where: { id: reply_id },
       },
     )
-    const updatedReply = (await reply.findOne({
+    const updatedReply = await reply.findOne({
       where: { id: reply_id },
-    })) as TReply | null
+    })
 
     return updatedReply
   } catch (e) {

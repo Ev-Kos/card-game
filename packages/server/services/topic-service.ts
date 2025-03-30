@@ -44,7 +44,6 @@ export const createTopicService = async (
       title: title,
       description: description,
       author_login: author_login,
-      comment_count: 0,
     })
     return newTopic
   } catch (e) {
@@ -62,9 +61,9 @@ export const updateTopicService = async (
     await topic.update(updateData, {
       where: { id: topic_id },
     })
-    const updatedTopic = (await topic.findOne({
+    const updatedTopic = await topic.findOne({
       where: { id: topic_id },
-    })) as TTopic | null
+    })
 
     return updatedTopic
   } catch (e) {

@@ -61,9 +61,9 @@ export const updateCommentService = async (
     await comment.update(updateData, {
       where: { id: comment_id },
     })
-    const updatedTopic = (await comment.findOne({
+    const updatedTopic = await comment.findOne({
       where: { id: comment_id },
-    })) as TComment | null
+    })
 
     return updatedTopic
   } catch (e) {

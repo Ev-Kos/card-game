@@ -1,5 +1,5 @@
-import { DataType, Model } from 'sequelize-typescript'
-import { ModelAttributes } from 'sequelize/types'
+import { DataType } from 'sequelize-typescript'
+import { Model, ModelAttributes } from 'sequelize/types'
 import { BaseForumMixin } from '../utils/mixins'
 import { TBaseType } from '../utils/types'
 import { topic } from '../db'
@@ -7,10 +7,11 @@ import { topic } from '../db'
 export type TComment = {
   topic_id: string
   comment_text: string
-  replies_count?: number
 } & TBaseType
 
-export const commentModel: ModelAttributes<Model, TComment> = {
+export interface CommentInstance extends Model<TComment>, TComment {}
+
+export const commentModel: ModelAttributes<CommentInstance> = {
   ...BaseForumMixin,
   topic_id: {
     type: DataType.UUID,

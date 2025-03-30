@@ -1,8 +1,8 @@
 export type TBaseType = {
-  id: string
+  id?: string
   author_login: string
-  createdAt: Date
-  updatedAt: Date
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export type TUserData = {

@@ -8,7 +8,6 @@ import { checkAuth } from '../middlewares/check-auth'
 import { badRequestError, conflictError, errorHandler } from '../utils/errors'
 import { Request, Response } from 'express'
 import { comment, reply } from '../db'
-import { TComment } from '../models/comment-modal'
 
 export const findComments = [
   checkAuth,
@@ -61,9 +60,9 @@ export const updateComment = [
       const { comment_id, comment_text } = req.body
       const user = req.user
 
-      const commentToUpdate = (await comment.findOne({
+      const commentToUpdate = await comment.findOne({
         where: { id: comment_id },
-      })) as TComment | null
+      })
 
       if (!commentToUpdate) {
         badRequestError(res, 'comment not found')
@@ -100,9 +99,9 @@ export const deleteComment = [
       const { comment_id } = req.body
       const user = req.user
 
-      const commentToDelete = (await comment.findOne({
+      const commentToDelete = await comment.findOne({
         where: { id: comment_id },
-      })) as TComment | null
+      })
 
       if (!commentToDelete) {
         badRequestError(res, 'comment not found')

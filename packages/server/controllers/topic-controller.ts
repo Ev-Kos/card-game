@@ -8,7 +8,6 @@ import {
 import { Request, Response } from 'express'
 import { comment, topic } from '../db'
 import { checkAuth } from '../middlewares/check-auth'
-import { TTopic } from '../models/topic-modal'
 
 export const findTopics = [
   checkAuth,
@@ -72,9 +71,9 @@ export const updateTopic = [
       const { topic_id, title, description } = req.body
       const user = req.user
 
-      const topicToUpdate = (await topic.findOne({
+      const topicToUpdate = await topic.findOne({
         where: { id: topic_id },
-      })) as TTopic | null
+      })
 
       const existingTopic = await topic.findOne({ where: { title } })
 
@@ -118,9 +117,9 @@ export const deleteTopic = [
       const { topic_id } = req.body
       const user = req.user
 
-      const topicToDelete = (await topic.findOne({
+      const topicToDelete = await topic.findOne({
         where: { id: topic_id },
-      })) as TTopic | null
+      })
 
       if (!topicToDelete) {
         badRequestError(res, 'topic not found')

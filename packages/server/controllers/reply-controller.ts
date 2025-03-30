@@ -8,7 +8,6 @@ import { checkAuth } from '../middlewares/check-auth'
 import { badRequestError, conflictError, errorHandler } from '../utils/errors'
 import { Request, Response } from 'express'
 import { reply } from '../db'
-import { TReply } from '../models/reply-model'
 
 export const findReplies = [
   checkAuth,
@@ -67,9 +66,9 @@ export const updateReply = [
       const { reply_id, reply_text } = req.body
       const user = req.user
 
-      const replyToUpdate = (await reply.findOne({
+      const replyToUpdate = await reply.findOne({
         where: { id: reply_id },
-      })) as TReply | null
+      })
 
       if (!replyToUpdate) {
         badRequestError(res, 'reply not found')
@@ -106,9 +105,9 @@ export const deleteReply = [
       const { reply_id } = req.body
       const user = req.user
 
-      const replyToDelete = (await reply.findOne({
+      const replyToDelete = await reply.findOne({
         where: { id: reply_id },
-      })) as TReply | null
+      })
 
       if (!replyToDelete) {
         badRequestError(res, 'reply not found')

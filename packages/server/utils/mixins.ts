@@ -1,7 +1,8 @@
-import { UUIDV4 } from 'sequelize'
-import { DataType } from 'sequelize-typescript'
+import { ModelAttributes, UUIDV4 } from 'sequelize'
+import { DataType, Model } from 'sequelize-typescript'
+import { TBaseType } from './types'
 
-export const BaseForumMixin = {
+export const BaseForumMixin: ModelAttributes<Model<TBaseType>> = {
   id: {
     type: DataType.UUID,
     defaultValue: UUIDV4,
@@ -17,10 +18,12 @@ export const BaseForumMixin = {
   },
   createdAt: {
     type: DataType.DATE,
+    field: 'create_at',
     defaultValue: DataType.NOW,
   },
   updatedAt: {
     type: DataType.DATE,
+    field: 'update_at',
     defaultValue: DataType.NOW,
   },
 }
