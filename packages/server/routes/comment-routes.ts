@@ -9,9 +9,9 @@ import { Router } from 'express'
 
 const commentRouter = Router()
 
-commentRouter.get('/', findComments)
-commentRouter.post('/create', createComment)
+commentRouter.get('/', checkAuth, findComments)
+commentRouter.post('/create', checkAuth, createComment)
 commentRouter.put('/', checkAuth, updateComment)
-commentRouter.delete('/', deleteComment)
+commentRouter.delete('/', checkAuth, deleteComment)
 
 export default commentRouter
