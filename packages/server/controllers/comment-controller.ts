@@ -4,129 +4,96 @@ import {
   findCommentsService,
   updateCommentService,
 } from '../services/comment-service'
-import { checkAuth } from '../middlewares/check-auth'
-import { badRequestError, conflictError, errorHandler } from '../utils/errors'
-import { Request, Response } from 'express'
+import { badRequestError, conflictError } from '../utils/errors'
 import { comment, reply } from '../db'
+import { withErrorHandling } from '../middlewares/with-error-handling'
 
-export const findComments = [
-  checkAuth,
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { limit, offset } = req.body
-      const comments = await findCommentsService(Number(limit), Number(offset))
+export const findComments = withErrorHandling(async (req, res) => {
+  const { limit, offset } = req.query
+  const comments = await findCommentsService(Number(limit), Number(offset))
 
-      if (comments.length === 0) {
-        res.status(200).json([])
-      } else {
-        res.status(200).json(comments)
-      }
-    } catch (error) {
-      errorHandler(res, error)
-    }
-  },
-]
+  res.status(200).json(comments)
+})
 
-export const createComment = [
-  checkAuth,
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { topic_id, comment_text } = req.body
-      const user = req.user
+export const createComment = withErrorHandling(async (req, res) => {
+  const { topic_id, comment_text } = req.body
+  const user = req.user
 
-      if (!topic_id || !comment_text) {
-        badRequestError(res, 'topic_id and comment are required fields')
-        return
-      }
+  if (!topic_id || !comment_text) {
+    badRequestError(res, 'topic_id and comment are required fields')
+    return
+  }
 
-      if (user) {
-        const newComment = await createCommentService(
-          topic_id,
-          comment_text,
-          user.login,
-        )
-        res.status(201).json(newComment)
-      }
-    } catch (error) {
-      errorHandler(res, error)
-    }
-  },
-]
+  if (user) {
+    const newComment = await createCommentService(
+      topic_id,
+      comment_text,
+      user.login,
+    )
+    res.status(201).json(newComment)
+  }
+})
 
-export const updateComment = [
-  checkAuth,
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { comment_id, comment_text } = req.body
-      const user = req.user
+export const updateComment = withErrorHandling(async (req, res) => {
+  const { comment_id, comment_text } = req.body
+  const user = req.user
 
-      const commentToUpdate = await comment.findOne({
-        where: { id: comment_id },
-      })
+  const commentToUpdate = await comment.findOne({
+    where: { id: comment_id },
+  })
 
-      if (!commentToUpdate) {
-        badRequestError(res, 'comment not found')
-        return
-      }
+  if (!commentToUpdate) {
+    badRequestError(res, 'comment not found')
+    return
+  }
 
-      if (commentToUpdate.author_login !== user?.login) {
-        conflictError(res, 'only the author can update')
-        return
-      }
+  if (commentToUpdate.author_login !== user?.login) {
+    conflictError(res, 'only the author can update')
+    return
+  }
 
-      const replies = await reply.findOne({
-        where: { comment_id: commentToUpdate.id },
-      })
+  const replies = await reply.findOne({
+    where: { comment_id: commentToUpdate.id },
+  })
 
-      if (replies) {
-        conflictError(res, 'comment has replies')
-        return
-      }
+  if (replies) {
+    conflictError(res, 'comment has replies')
+    return
+  }
 
-      const result = await updateCommentService(comment_id, { comment_text })
+  const result = await updateCommentService(comment_id, { comment_text })
 
-      res.status(200).send(result)
-    } catch (error) {
-      errorHandler(res, error)
-    }
-  },
-]
+  res.status(200).send(result)
+})
 
-export const deleteComment = [
-  checkAuth,
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { comment_id } = req.body
-      const user = req.user
+export const deleteComment = withErrorHandling(async (req, res) => {
+  const { comment_id } = req.body
+  const user = req.user
 
-      const commentToDelete = await comment.findOne({
-        where: { id: comment_id },
-      })
+  const commentToDelete = await comment.findOne({
+    where: { id: comment_id },
+  })
 
-      if (!commentToDelete) {
-        badRequestError(res, 'comment not found')
-        return
-      }
+  if (!commentToDelete) {
+    badRequestError(res, 'comment not found')
+    return
+  }
 
-      if (commentToDelete.author_login !== user?.login) {
-        conflictError(res, 'only the author can delete')
-        return
-      }
+  if (commentToDelete.author_login !== user?.login) {
+    conflictError(res, 'only the author can delete')
+    return
+  }
 
-      const replies = await reply.findOne({
-        where: { comment_id: commentToDelete.id },
-      })
+  const replies = await reply.findOne({
+    where: { comment_id: commentToDelete.id },
+  })
 
-      if (replies) {
-        conflictError(res, 'comment has replies')
-        return
-      }
+  if (replies) {
+    conflictError(res, 'comment has replies')
+    return
+  }
 
-      const result = await deleteCommentService(comment_id)
+  const result = await deleteCommentService(comment_id)
 
-      res.status(200).send(result)
-    } catch (error) {
-      errorHandler(res, error)
-    }
-  },
-]
+  res.status(200).send(result)
+})

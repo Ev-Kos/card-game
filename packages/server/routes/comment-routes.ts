@@ -1,3 +1,4 @@
+import { checkAuth } from '../middlewares/check-auth'
 import {
   createComment,
   deleteComment,
@@ -10,7 +11,7 @@ const commentRouter = Router()
 
 commentRouter.get('/', findComments)
 commentRouter.post('/create', createComment)
-commentRouter.put('/', updateComment)
+commentRouter.put('/', checkAuth, updateComment)
 commentRouter.delete('/', deleteComment)
 
 export default commentRouter
