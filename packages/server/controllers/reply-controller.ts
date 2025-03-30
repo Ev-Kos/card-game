@@ -13,7 +13,7 @@ export const findReplies = [
   checkAuth,
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const { limit, offset } = req.body
+      const { limit, offset } = req.query
       const replies = await findRepliesService(Number(limit), Number(offset))
 
       if (replies.length === 0) {

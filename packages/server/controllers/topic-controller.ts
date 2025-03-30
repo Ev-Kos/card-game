@@ -13,7 +13,7 @@ export const findTopics = [
   checkAuth,
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const { limit, offset } = req.body
+      const { limit, offset } = req.query
       const topics = await findTopicsService(Number(limit), Number(offset))
 
       if (topics.length === 0) {

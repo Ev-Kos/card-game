@@ -8,7 +8,7 @@ import { Router } from 'express'
 
 const replyRouter = Router()
 
-replyRouter.post('/', findReplies)
+replyRouter.get('/', findReplies)
 replyRouter.post('/create', createReply)
 replyRouter.put('/', updateReply)
 replyRouter.delete('/', deleteReply)

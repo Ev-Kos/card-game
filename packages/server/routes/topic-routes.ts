@@ -8,7 +8,7 @@ import {
 
 const topicRouter = Router()
 
-topicRouter.post('/', findTopics)
+topicRouter.get('/', findTopics)
 topicRouter.post('/create', createTopic)
 topicRouter.put('/', updateTopic)
 topicRouter.delete('/', deleteTopic)

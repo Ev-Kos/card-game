@@ -8,7 +8,7 @@ import { Router } from 'express'
 
 const commentRouter = Router()
 
-commentRouter.post('/', findComments)
+commentRouter.get('/', findComments)
 commentRouter.post('/create', createComment)
 commentRouter.put('/', updateComment)
 commentRouter.delete('/', deleteComment)
