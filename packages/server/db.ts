@@ -1,28 +1,42 @@
-import { Client } from 'pg'
+import { replyModel } from './models/reply-model'
+import { commentModel } from './models/comment-modal'
+import { topicModel } from './models/topic-modal'
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-  process.env
+const {
+  POSTGRES_HOST,
+  POSTGRES_PORT,
+  POSTGRES_DB,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+} = process.env
 
-export const createClientAndConnect = async (): Promise<Client | null> => {
-  try {
-    const client = new Client({
-      user: POSTGRES_USER,
-      host: 'localhost',
-      database: POSTGRES_DB,
-      password: POSTGRES_PASSWORD,
-      port: Number(POSTGRES_PORT),
-    })
-
-    await client.connect()
-
-    const res = await client.query('SELECT NOW()')
-    console.log('  ➜ 🎸 Connected to the database at:', res?.rows?.[0].now)
-    client.end()
-
-    return client
-  } catch (e) {
-    console.error(e)
-  }
-
-  return null
+const sequelizeOptions: SequelizeOptions = {
+  host: POSTGRES_HOST,
+  port: Number(POSTGRES_PORT),
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DB,
+  dialect: 'postgres',
+  dialectOptions: {
+    quoteIdentifiers: true,
+    rejectUnauthorized: true,
+  },
+  minifyAliases: true,
+  logging: false,
 }
+
+const sequelize = new Sequelize(sequelizeOptions)
+
+const topic = sequelize.define('Topic', topicModel, {})
+const comment = sequelize.define('Comment', commentModel, {})
+const reply = sequelize.define('Reply', replyModel, {})
+
+topic.hasMany(comment, { foreignKey: 'topic_id', as: 'comments' })
+comment.belongsTo(topic, { foreignKey: 'topic_id', as: 'topic' })
+comment.hasMany(reply, { foreignKey: 'comment_id', as: 'replies' })
+reply.belongsTo(comment, { foreignKey: 'comment_id', as: 'comment' })
+reply.hasMany(reply, { foreignKey: 'parent_id', as: 'parentReply' })
+reply.belongsTo(reply, { foreignKey: 'parent_id', as: 'parent' })
+
+export { sequelize, topic, comment, reply }
