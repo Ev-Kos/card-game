@@ -10,7 +10,7 @@ import { checkAuth } from '../middlewares/check-auth'
 const topicRouter = Router()
 
 topicRouter.get('/', findTopics)
-topicRouter.post('/create', checkAuth, createTopic)
+topicRouter.post('/create', createTopic)
 topicRouter.put('/', checkAuth, updateTopic)
 topicRouter.delete('/', checkAuth, deleteTopic)
 

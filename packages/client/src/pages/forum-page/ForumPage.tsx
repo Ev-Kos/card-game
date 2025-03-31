@@ -9,7 +9,10 @@ import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { TopicItem } from '../../entities/topic-item/topic-item'
 import { useSelector } from 'react-redux'
 import { topicsSelectors } from '../../shared/store/selectors/topicsSelector'
-import { fetchTopics } from '../../shared/store/slices/topicsSlice'
+import {
+  fetchTopics,
+  getTopicsAction,
+} from '../../shared/store/slices/topicsSlice'
 import { useAppDispatch } from '../../shared/store/store'
 import { Notice } from '../../shared/notice/notice'
 import { getUser } from '../../shared/store/selectors/userSelector'
@@ -89,13 +92,20 @@ export const ForumPage = () => {
   const createTopic = async () => {
     if (titleValue.length !== 0 && descriptionValue.length !== 0) {
       try {
-        //const newTopic = await createTopicData(titleValue, descriptionValue)
+        const newTopic = await createTopicData({
+          title: titleValue,
+          description: descriptionValue,
+          author_login: userData?.login,
+        })
+        dispatch(getTopicsAction(newTopic))
+        setTitleValue('')
+        setDiscriptionValue('')
+        setModalOpen(false)
       } catch (error) {
         console.error('Ошибка создания темы:', error)
       }
     }
   }
-
   return (
     <main className={styles.forumPage}>
       <ButtonGoBack />

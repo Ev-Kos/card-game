@@ -9,7 +9,7 @@ export const createTopicData = async (data: Partial<TTopic>) => {
       getEndPoint('forum', 'create'),
       data,
     )
-    return result
+    return result.data
   } catch (e) {
     return e as AxiosError
   }

@@ -33,10 +33,7 @@ const topicsSlice = createSlice({
   initialState,
   reducers: {
     getTopicsAction(state, action) {
-      state.topics = [
-        ...state.topics,
-        ...getUniqueEntities(state.topics, action.payload, 'id'),
-      ]
+      state.topics = [action.payload, ...state.topics]
     },
   },
   extraReducers: builder => {
