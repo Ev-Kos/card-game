@@ -9,6 +9,12 @@ declare module 'express' {
   }
 }
 
+function getCookie(cookies: string, name: string): string | undefined {
+  const cookiesReceived = cookies.split('; ')
+  const cookie = cookiesReceived.find(row => row.startsWith(`${name}=`))
+  return cookie ? cookie.split('=')[1] : undefined
+}
+
 export const checkAuth = async (
   req: Request,
   res: Response,
@@ -16,16 +22,19 @@ export const checkAuth = async (
 ): Promise<void> => {
   try {
     const cookies = req.headers.cookie
+    const uuid = getCookie(String(cookies), 'uuid')
+    const authCookie = getCookie(String(cookies), 'authCookie')
 
-    if (!cookies) {
+    if (!uuid || !authCookie) {
       unauthorizedError(res, 'Not authenticated')
       return
     }
+
     const response = await axios.get(
       'https://ya-praktikum.tech/api/v2/auth/user',
       {
         headers: {
-          Cookie: cookies,
+          Cookie: `uuid=${uuid}; authCookie=${authCookie}`,
         },
         validateStatus: (status: number) => status < 500,
       },

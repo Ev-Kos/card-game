@@ -8,12 +8,35 @@ import { Modal } from '../../entities/modal'
 import { Textarea } from '../../shared/textarea/textarea'
 import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { TopicItem } from '../../entities/topic-item/topic-item'
+import { useSelector } from 'react-redux'
+import { topicsSelectors } from '../../shared/store/selectors/topicsSelector'
+import { fetchTopics } from '../../shared/store/slices/topicsSlice'
+import { useAppDispatch } from '../../shared/store/store'
 
 export const ForumPage = () => {
   useGetUserData()
 
+  const dispatch = useAppDispatch()
   const [isModalOpen, setModalOpen] = useState(false)
   const [isScrolling, setIsScrolling] = useState(false)
+  const [offset, setOffset] = useState(0)
+  const limit = 10
+  const topics = useSelector(topicsSelectors.getTopics)
+  const { request, success, failed } = useSelector(
+    topicsSelectors.getStatusFlags,
+  )
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchTopics({ limit, offset }))
+      } catch (e) {
+        console.error('Ошибка получения тем:', e)
+      }
+    }
+
+    fetchData()
+  }, [offset, dispatch])
 
   useEffect(() => {
     const handleScroll = () => {

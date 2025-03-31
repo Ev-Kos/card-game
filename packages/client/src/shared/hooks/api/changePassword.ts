@@ -1,7 +1,7 @@
 import type { AxiosError } from 'axios'
 
 import { getEndPoint } from './getEndPoint'
-import axiosInstance from './axiosInstance'
+import { axiosInstance } from './axiosInstance'
 
 export const changeUserPassword = async (data: Record<string, string>) => {
   try {

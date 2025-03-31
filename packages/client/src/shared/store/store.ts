@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import userSlice from './slices/userSlice'
+import topicsSlice from './slices/topicsSlice'
 
 export const store = configureStore({
   reducer: {
     userSlice,
+    topicsSlice,
   },
 })
 

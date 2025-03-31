@@ -1,5 +1,5 @@
+import { axiosInstance } from './axiosInstance'
 import { getEndPoint } from './getEndPoint'
-import axiosInstance from './axiosInstance'
 
 import type { AxiosError } from 'axios'
 
