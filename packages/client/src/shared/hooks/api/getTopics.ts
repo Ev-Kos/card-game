@@ -10,7 +10,7 @@ export type TTopic = {
   updatedAt: string
   title: string
   description: string
-  comments_count: number
+  comments_count?: number
 }
 
 export const getTopicsData = async (limit: number, offset: number) => {

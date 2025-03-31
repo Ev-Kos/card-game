@@ -16,7 +16,7 @@ export const findTopics = withErrorHandling(async (req, res) => {
 })
 
 export const createTopic = withErrorHandling(async (req, res) => {
-  const { title, description } = req.body
+  const { title, description, author_login } = req.body
   const user = req.user
 
   if (!title || !description) {
@@ -37,6 +37,9 @@ export const createTopic = withErrorHandling(async (req, res) => {
 
   if (user) {
     const newTopic = await createTopicService(title, description, user.login)
+    res.status(201).json(newTopic)
+  } else {
+    const newTopic = await createTopicService(title, description, author_login)
     res.status(201).json(newTopic)
   }
 })

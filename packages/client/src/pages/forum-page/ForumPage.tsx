@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import { Button } from '../../shared/button'
 import { ButtonGoBack } from '../../shared/button-go-back'
@@ -12,6 +12,8 @@ import { topicsSelectors } from '../../shared/store/selectors/topicsSelector'
 import { fetchTopics } from '../../shared/store/slices/topicsSlice'
 import { useAppDispatch } from '../../shared/store/store'
 import { Notice } from '../../shared/notice/notice'
+import { getUser } from '../../shared/store/selectors/userSelector'
+import { createTopicData } from '../../shared/hooks/api/createTopic'
 
 export const ForumPage = () => {
   useGetUserData()
@@ -21,11 +23,15 @@ export const ForumPage = () => {
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(true)
   const [isScrolling, setIsScrolling] = useState(false)
+  const [titleValue, setTitleValue] = useState('')
+  const [descriptionValue, setDiscriptionValue] = useState('')
   const limit = 10
   const topics = useSelector(topicsSelectors.getTopics)
   const { request, success, failed } = useSelector(
     topicsSelectors.getStatusFlags,
   )
+
+  const userData = useSelector(getUser)
   const topicsListRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
@@ -72,6 +78,24 @@ export const ForumPage = () => {
     setModalOpen(!isModalOpen)
   }
 
+  const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitleValue(e.target.value)
+  }
+
+  const onChangeDiscription = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setDiscriptionValue(e.target.value)
+  }
+
+  const createTopic = async () => {
+    if (titleValue.length !== 0 && descriptionValue.length !== 0) {
+      try {
+        //const newTopic = await createTopicData(titleValue, descriptionValue)
+      } catch (error) {
+        console.error('Ошибка создания темы:', error)
+      }
+    }
+  }
+
   return (
     <main className={styles.forumPage}>
       <ButtonGoBack />
@@ -101,15 +125,18 @@ export const ForumPage = () => {
           <form className={styles.modalForm}>
             <div className={styles.modalField}>
               <label className={styles.modalLabel}>Тема:</label>
-              <Input type="text" />
+              <Input type="text" value={titleValue} onChange={onChangeTitle} />
             </div>
             <div className={styles.modalField}>
               <label className={styles.modalLabel}>Описание:</label>
-              <Textarea />
+              <Textarea
+                value={descriptionValue}
+                onChange={onChangeDiscription}
+              />
             </div>
 
             <div className={styles.modalProfileButtonCenter}>
-              <Button size="m" type="button">
+              <Button size="m" type="button" onClick={createTopic}>
                 Добавить
               </Button>
             </div>
