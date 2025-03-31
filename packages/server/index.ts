@@ -32,7 +32,12 @@ const startServer = async () => {
   const app = express()
 
   app.use(helmet())
-  app.use(cors())
+  app.use(
+    cors({
+      origin: process.env.EXTERNAL_SERVER_URL,
+      credentials: true,
+    }),
+  )
   app.use(json({ limit: '10kb' }))
   app.use(urlencoded({ extended: true }))
   app.use(xssClean())
@@ -55,7 +60,6 @@ const startServer = async () => {
     console.error('Unhandled Rejection:', reason)
     server.close(() => process.exit(1))
   })
-
   ;['SIGINT', 'SIGTERM'].forEach(signal => {
     process.on(signal, () => {
       console.log(`${signal} received: closing server`)

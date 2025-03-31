@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import axios from 'axios'
 import { serverError, unauthorizedError } from '../utils/errors'
 import { TUserData } from '../utils/types'
+import { getCookie } from '../utils/get-cookie'
 
 declare module 'express' {
   interface Request {
@@ -16,16 +17,19 @@ export const checkAuth = async (
 ): Promise<void> => {
   try {
     const cookies = req.headers.cookie
+    const uuid = getCookie(String(cookies), 'uuid')
+    const authCookie = getCookie(String(cookies), 'authCookie')
 
-    if (!cookies) {
+    if (!uuid || !authCookie) {
       unauthorizedError(res, 'Not authenticated')
       return
     }
+
     const response = await axios.get(
       'https://ya-praktikum.tech/api/v2/auth/user',
       {
         headers: {
-          Cookie: cookies,
+          Cookie: `uuid=${uuid}; authCookie=${authCookie}`,
         },
         validateStatus: (status: number) => status < 500,
       },
