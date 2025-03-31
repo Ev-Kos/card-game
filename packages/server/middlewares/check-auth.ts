@@ -2,17 +2,12 @@ import { Request, Response, NextFunction } from 'express'
 import axios from 'axios'
 import { serverError, unauthorizedError } from '../utils/errors'
 import { TUserData } from '../utils/types'
+import { getCookie } from '../utils/get-cookie'
 
 declare module 'express' {
   interface Request {
     user?: TUserData
   }
-}
-
-function getCookie(cookies: string, name: string): string | undefined {
-  const cookiesReceived = cookies.split('; ')
-  const cookie = cookiesReceived.find(row => row.startsWith(`${name}=`))
-  return cookie ? cookie.split('=')[1] : undefined
 }
 
 export const checkAuth = async (

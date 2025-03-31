@@ -1,6 +1,7 @@
 import { getTopicsData, TTopic } from '../../hooks/api/getTopics'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { isAxiosSuccessResponse } from '../../utils/isAxiosSuccessResponse'
+import { getUniqueEntities } from '../../utils/unique-entities'
 
 type TTopicsSlice = {
   topics: TTopic[]
@@ -32,7 +33,10 @@ const topicsSlice = createSlice({
   initialState,
   reducers: {
     getTopicsAction(state, action) {
-      state.topics = [...state.topics, ...action.payload]
+      state.topics = [
+        ...state.topics,
+        ...getUniqueEntities(state.topics, action.payload, 'id'),
+      ]
     },
   },
   extraReducers: builder => {
@@ -43,7 +47,10 @@ const topicsSlice = createSlice({
     builder.addCase(fetchTopics.fulfilled, (state, action) => {
       ;(state.success = true),
         (state.request = false),
-        (state.topics = [...state.topics, ...action.payload])
+        (state.topics = [
+          ...state.topics,
+          ...getUniqueEntities(state.topics, action.payload, 'id'),
+        ])
     })
 
     builder.addCase(fetchTopics.rejected, state => {

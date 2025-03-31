@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import { Button } from '../../shared/button'
 import { ButtonGoBack } from '../../shared/button-go-back'
-import { forumTopics } from './accets'
 import { Input } from '../../shared/input'
 import { Modal } from '../../entities/modal'
 import { Textarea } from '../../shared/textarea/textarea'
@@ -12,48 +11,62 @@ import { useSelector } from 'react-redux'
 import { topicsSelectors } from '../../shared/store/selectors/topicsSelector'
 import { fetchTopics } from '../../shared/store/slices/topicsSlice'
 import { useAppDispatch } from '../../shared/store/store'
+import { Notice } from '../../shared/notice/notice'
 
 export const ForumPage = () => {
   useGetUserData()
 
   const dispatch = useAppDispatch()
   const [isModalOpen, setModalOpen] = useState(false)
-  const [isScrolling, setIsScrolling] = useState(false)
   const [offset, setOffset] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
+  const [isScrolling, setIsScrolling] = useState(false)
   const limit = 10
   const topics = useSelector(topicsSelectors.getTopics)
   const { request, success, failed } = useSelector(
     topicsSelectors.getStatusFlags,
   )
+  const topicsListRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
-    const fetchData = async () => {
+    if (!hasMore) return
+
+    const getTopicsData = async () => {
       try {
-        await dispatch(fetchTopics({ limit, offset }))
+        const result = await dispatch(fetchTopics({ limit, offset })).unwrap()
+        if (result.length < limit) setHasMore(false)
       } catch (e) {
         console.error('Ошибка получения тем:', e)
       }
     }
 
-    fetchData()
-  }, [offset, dispatch])
+    getTopicsData()
+  }, [offset])
+
+  const handleScroll = useCallback(() => {
+    if (!topicsListRef.current) return
+
+    const { scrollTop } = topicsListRef.current
+
+    setIsScrolling(scrollTop > 0)
+    if (request || !hasMore) return
+
+    const { clientHeight, scrollHeight } = topicsListRef.current
+    const isBottomReached = scrollHeight - (scrollTop + clientHeight) < 100
+
+    if (isBottomReached) {
+      setOffset(prev => prev + limit)
+    }
+  }, [request, hasMore])
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(true)
-
-      if (topicsList) {
-        setIsScrolling(topicsList.scrollTop > 0)
-      }
-    }
-
-    const topicsList = document.querySelector(`.${styles.forumPageList}`)
-    topicsList?.addEventListener('scroll', handleScroll)
+    const listElement = topicsListRef.current
+    listElement?.addEventListener('scroll', handleScroll)
 
     return () => {
-      topicsList?.removeEventListener('scroll', handleScroll)
+      listElement?.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [handleScroll])
 
   const handleModal = () => {
     setModalOpen(!isModalOpen)
@@ -69,12 +82,13 @@ export const ForumPage = () => {
         <h1 className={styles.forumPageTitle}>Форум</h1>
       </div>
       <div className={styles.forumPageContent}>
-        <ul className={styles.forumPageList}>
-          {forumTopics.map(item => (
+        <ul className={styles.forumPageList} ref={topicsListRef}>
+          {topics.map(item => (
             <TopicItem key={item.id} topic={item} />
           ))}
+          {request && <Notice text="Загрузка..." />}
+          {!hasMore && <Notice text="Все темы загружены" />}
         </ul>
-
         <div className={styles.forumPageButton}>
           <Button color="secondary" size="m" onClick={handleModal}>
             Добавить тему

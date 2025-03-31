@@ -1,9 +1,7 @@
 import { useState, useEffect, ChangeEvent } from 'react'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import styles from './styles.module.css'
-import { TForum } from '../../entities/topic-item/topic-item'
 import { useParams } from 'react-router-dom'
-import { forumTopics } from '../forum-page/accets'
 import { Avatar } from '../../shared/avatar'
 import { useSelector } from 'react-redux'
 import { getUser } from '../../shared/store/selectors/userSelector'
@@ -14,12 +12,14 @@ import { SpadesIcon } from '../../assets/SpadesIcon'
 import { SmileIcon } from '../../assets/SmileIcon'
 import { mockComments } from './assets'
 import { CommentItem } from '../../entities/comment-item/comment-item'
+import { topicsSelectors } from '../../shared/store/selectors/topicsSelector'
+import { TTopic } from '../../shared/hooks/api/getTopics'
 
 export type TComment = {
-  id: number
+  id: string
   author_id: number
   author: string
-  topic_id: number
+  topic_id: string
   comment: string
   date: string
   time: string
@@ -30,10 +30,10 @@ export const ForumTopicPage = () => {
 
   const { id } = useParams()
   const [isScrolling, setIsScrolling] = useState(false)
-  const [topic, setTopic] = useState<TForum>()
+  const [topic, setTopic] = useState<TTopic>()
   const [valueComment, setValueComment] = useState('')
   const [comments, setComments] = useState<TComment[]>([])
-
+  const topics = useSelector(topicsSelectors.getTopics)
   const user = useSelector(getUser)
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export const ForumTopicPage = () => {
   }, [])
 
   useEffect(() => {
-    const topic = forumTopics.find(item => String(item.id) === id)
+    const topic = topics.find(item => String(item.id) === id)
     if (topic) {
       setTopic(topic)
     }
@@ -80,12 +80,12 @@ export const ForumTopicPage = () => {
         <h1 className={styles.topicTitle}>{topic?.title}</h1>
         <div className={styles.topicInfo}>
           <div className={styles.topicDate}>
-            <p className={styles.date}>{topic?.date}</p>
-            <p className={styles.date}>{topic?.time}</p>
+            <p className={styles.date}>{topic?.createdAt}</p>
+            <p className={styles.date}>{topic?.createdAt}</p>
           </div>
           <div className={styles.topicDescription}>{topic?.description}</div>
           <div className={styles.topicAuthor}>
-            {user?.id === topic?.author_id ? (
+            {user?.id === topic?.author_login ? (
               <button className={styles.buttonDelete}>
                 <DeleteIcon />
               </button>
