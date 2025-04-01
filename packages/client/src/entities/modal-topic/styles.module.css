@@ -1,0 +1,31 @@
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  min-width: 256px;
+  width: calc((100vw * 30) / 100);
+  gap: 30px;
+  align-items: center;
+}
+
+.modalField {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.modalLabel {
+  color: var(--color-background);
+  font-weight: bold;
+  font-size: 14px;
+  width: 90px;
+  text-align: end;
+}
+
+.modalProfileTextarea {
+  width: 485px;
+  height: 150px;
+  border-radius: 15px;
+  border: 1px solid var(--color-background);
+  background-color: var(--color-background-light);
+}

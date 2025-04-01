@@ -17,6 +17,7 @@ import { useAppDispatch } from '../../shared/store/store'
 import { Notice } from '../../shared/notice/notice'
 import { getUser } from '../../shared/store/selectors/userSelector'
 import { createTopicData } from '../../shared/hooks/api/createTopic'
+import { ModalTopic } from '../../entities/modal-topic/modal-topic'
 
 export const ForumPage = () => {
   useGetUserData()
@@ -131,27 +132,16 @@ export const ForumPage = () => {
       </div>
 
       {isModalOpen && (
-        <Modal title="Добавление темы" closeModal={handleModal}>
-          <form className={styles.modalForm}>
-            <div className={styles.modalField}>
-              <label className={styles.modalLabel}>Тема:</label>
-              <Input type="text" value={titleValue} onChange={onChangeTitle} />
-            </div>
-            <div className={styles.modalField}>
-              <label className={styles.modalLabel}>Описание:</label>
-              <Textarea
-                value={descriptionValue}
-                onChange={onChangeDiscription}
-              />
-            </div>
-
-            <div className={styles.modalProfileButtonCenter}>
-              <Button size="m" type="button" onClick={createTopic}>
-                Добавить
-              </Button>
-            </div>
-          </form>
-        </Modal>
+        <ModalTopic
+          title="Добавление темы"
+          closeModal={handleModal}
+          titleValue={titleValue}
+          onChangeTitle={onChangeTitle}
+          descriptionValue={descriptionValue}
+          onChangeDiscription={onChangeDiscription}
+          onClick={createTopic}
+          buttonText="Добавить"
+        />
       )}
     </main>
   )
