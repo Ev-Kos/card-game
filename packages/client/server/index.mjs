@@ -4,12 +4,15 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs/promises';
 import { createServer as createViteServer } from 'vite';
+import serialize from 'serialize-javascript';
+import cookieParser from 'cookie-parser';
 const port = process.env.CLIENT_PORT || 3000;
 const __dirname = path.resolve();
 const clientPath = __dirname;
 const isDev = process.env.NODE_ENV === 'development';
 async function createServer() {
     const app = express();
+    app.use(cookieParser());
     let vite;
     if (isDev) {
         vite = await createViteServer({
@@ -37,8 +40,10 @@ async function createServer() {
                 const pathToServer = path.join(clientPath, 'dist/server/entry-server.mjs');
                 render = (await import(pathToServer)).render;
             }
-            const { html: appHtml } = await render(req);
-            const html = template.replace(`<!--ssr-outlet-->`, appHtml);
+            const { html: appHtml, initialState } = await render(req);
+            const html = template.replace(`<!--ssr-outlet-->`, appHtml).replace(`<!--ssr-initial-state-->`, `<script>window.APP_INITIAL_STATE = ${serialize(initialState, {
+                isJSON: true,
+            })}</script>`);
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         }
         catch (e) {
