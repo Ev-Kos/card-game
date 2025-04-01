@@ -14,6 +14,8 @@
   align-items: center;
   width: 100%;
   gap: 20px;
+  border-bottom: 1px solid var(--color-secondary);
+  padding-bottom: 20px;
 }
 
 .topicContainerScrolling {
@@ -31,7 +33,7 @@
 .topicInfo {
   display: flex;
   justify-content: space-between;
-  width: 45%;
+  width: 60%;
   gap: 20px;
 }
 
@@ -62,10 +64,16 @@
   display: flex;
   max-height: 95px;
   align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topicAuthorLogin {
+  color: var(--color-primary);
 }
 
 .commentCreate {
-  width: 45%;
+  width: 55%;
   position: relative;
 }
 
@@ -80,6 +88,17 @@
   width: 48px;
   height: 48px;
   color: var(--color-secondary);
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.buttonEdit {
+  border: 1px solid var(--color-secondary);
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 12px;
+  background-color: var(--color-background-light);
   &:hover {
     color: var(--color-primary);
   }
@@ -111,8 +130,8 @@
 }
 
 .commentsContainer {
-  height: calc(100vh - 280px);
-  width: 45%;
+  height: calc(100vh - 320px);
+  width: 55%;
   display: flex;
   align-items: center;
   justify-content: center;

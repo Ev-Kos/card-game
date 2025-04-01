@@ -30,9 +30,7 @@ export const ForumPage = () => {
   const [descriptionValue, setDiscriptionValue] = useState('')
   const limit = 10
   const topics = useSelector(topicsSelectors.getTopics)
-  const { request, success, failed } = useSelector(
-    topicsSelectors.getStatusFlags,
-  )
+  const { request } = useSelector(topicsSelectors.getStatusFlags)
 
   const userData = useSelector(getUser)
   const topicsListRef = useRef<HTMLUListElement>(null)
@@ -43,7 +41,9 @@ export const ForumPage = () => {
     const getTopicsData = async () => {
       try {
         const result = await dispatch(fetchTopics({ limit, offset })).unwrap()
-        if (result.length < limit) setHasMore(false)
+        if (result.length < limit) {
+          setHasMore(false)
+        }
       } catch (e) {
         console.error('Ошибка получения тем:', e)
       }
@@ -61,9 +61,9 @@ export const ForumPage = () => {
     if (request || !hasMore) return
 
     const { clientHeight, scrollHeight } = topicsListRef.current
-    const isBottomReached = scrollHeight - (scrollTop + clientHeight) < 100
+    const isBottom = scrollHeight - (scrollTop + clientHeight) < 100
 
-    if (isBottomReached) {
+    if (isBottom) {
       setOffset(prev => prev + limit)
     }
   }, [request, hasMore])

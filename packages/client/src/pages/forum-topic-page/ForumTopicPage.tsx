@@ -14,6 +14,8 @@ import { mockComments } from './assets'
 import { CommentItem } from '../../entities/comment-item/comment-item'
 import { topicsSelectors } from '../../shared/store/selectors/topicsSelector'
 import { TTopic } from '../../shared/hooks/api/getTopics'
+import { Button } from '../../shared/button'
+import { getDate } from '../../shared/utils/get-date'
 
 export type TComment = {
   id: string
@@ -80,17 +82,25 @@ export const ForumTopicPage = () => {
         <h1 className={styles.topicTitle}>{topic?.title}</h1>
         <div className={styles.topicInfo}>
           <div className={styles.topicDate}>
-            <p className={styles.date}>{topic?.createdAt}</p>
-            <p className={styles.date}>{topic?.createdAt}</p>
+            <p className={styles.date}>{getDate(String(topic?.createdAt))}</p>
+            <p className={styles.date}>
+              {getDate(String(topic?.createdAt), true)}
+            </p>
           </div>
           <div className={styles.topicDescription}>{topic?.description}</div>
           <div className={styles.topicAuthor}>
-            {user?.id === topic?.author_login ? (
-              <button className={styles.buttonDelete}>
-                <DeleteIcon />
-              </button>
+            {user?.login === topic?.author_login ? (
+              <>
+                <button className={styles.buttonDelete}>
+                  <DeleteIcon />
+                </button>
+                <button className={styles.buttonEdit}>Редактировать</button>
+              </>
             ) : (
-              <Avatar isProfile={false} />
+              <>
+                <Avatar isProfile={false} />
+                <p className={styles.topicAuthorLogin}>{topic?.author_login}</p>
+              </>
             )}
           </div>
         </div>
