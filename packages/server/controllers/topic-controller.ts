@@ -78,7 +78,10 @@ export const updateTopic = withErrorHandling(async (req, res) => {
     return
   }
 
-  const result = await updateTopicService(topic_id, { title, description })
+  const result = await updateTopicService(String(topic_id), {
+    title,
+    description,
+  })
 
   res.status(200).send(result)
 })

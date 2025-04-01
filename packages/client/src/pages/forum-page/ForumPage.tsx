@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import { topicsSelectors } from '../../shared/store/selectors/topicsSelector'
 import {
   fetchTopics,
-  getTopicsAction,
+  addTopicAction,
 } from '../../shared/store/slices/topicsSlice'
 import { useAppDispatch } from '../../shared/store/store'
 import { Notice } from '../../shared/notice/notice'
@@ -98,7 +98,7 @@ export const ForumPage = () => {
           description: descriptionValue,
           author_login: userData?.login,
         })
-        dispatch(getTopicsAction(newTopic))
+        dispatch(addTopicAction(newTopic))
         setTitleValue('')
         setDiscriptionValue('')
         setModalOpen(false)

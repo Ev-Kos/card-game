@@ -11,7 +11,7 @@ const topicRouter = Router()
 
 topicRouter.get('/', findTopics)
 topicRouter.post('/create', createTopic)
-topicRouter.put('/', checkAuth, updateTopic)
+topicRouter.put('/', updateTopic)
 topicRouter.delete('/', checkAuth, deleteTopic)
 
 export default topicRouter

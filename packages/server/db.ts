@@ -23,7 +23,7 @@ const sequelizeOptions: SequelizeOptions = {
     rejectUnauthorized: true,
   },
   minifyAliases: true,
-  logging: false,
+  logging: true,
 }
 
 const sequelize = new Sequelize(sequelizeOptions)

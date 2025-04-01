@@ -16,6 +16,10 @@ import { topicsSelectors } from '../../shared/store/selectors/topicsSelector'
 import { TTopic } from '../../shared/hooks/api/getTopics'
 import { Button } from '../../shared/button'
 import { getDate } from '../../shared/utils/get-date'
+import { ModalTopic } from '../../entities/modal-topic/modal-topic'
+import { updateTopic } from '../../shared/hooks/api/updateTopic'
+import { useAppDispatch } from '../../shared/store/store'
+import { isAxiosSuccessResponse } from '../../shared/utils/isAxiosSuccessResponse'
 
 export type TComment = {
   id: string
@@ -32,9 +36,15 @@ export const ForumTopicPage = () => {
 
   const { id } = useParams()
   const [isScrolling, setIsScrolling] = useState(false)
+  const [isOpenModal, setIsOpenModal] = useState(false)
   const [topic, setTopic] = useState<TTopic>()
   const [valueComment, setValueComment] = useState('')
   const [comments, setComments] = useState<TComment[]>([])
+  const [titleValue, setTitleValue] = useState('')
+  const [descriptionValue, setDiscriptionValue] = useState('')
+  const [newTopicData, setNewTopicData] = useState({})
+
+  const dispatch = useAppDispatch()
   const topics = useSelector(topicsSelectors.getTopics)
   const user = useSelector(getUser)
 
@@ -59,6 +69,8 @@ export const ForumTopicPage = () => {
     const topic = topics.find(item => String(item.id) === id)
     if (topic) {
       setTopic(topic)
+      setTitleValue(topic.title)
+      setDiscriptionValue(topic.description)
     }
   }, [id])
 
@@ -71,6 +83,56 @@ export const ForumTopicPage = () => {
       setComments(mockComments.filter(item => item.topic_id === topic.id))
     }
   }, [topic])
+
+  const handleModal = () => {
+    setIsOpenModal(!isOpenModal)
+  }
+
+  const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitleValue(e.target.value)
+  }
+
+  const onChangeDiscription = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setDiscriptionValue(e.target.value)
+  }
+
+  const editTopic = async () => {
+    if (titleValue !== topic?.title) {
+      setNewTopicData({
+        ...newTopicData,
+        topic_id: topic?.id,
+        title: titleValue,
+      })
+    }
+    if (descriptionValue !== topic?.description) {
+      setNewTopicData({
+        ...newTopicData,
+        topic_id: topic?.id,
+        description: descriptionValue,
+      })
+    }
+
+    if (Object.keys(newTopicData).length !== 0) {
+      try {
+        if (topic) {
+          await updateTopic(newTopicData)
+
+          console.log(topic?.id)
+
+          setTopic({
+            ...topic,
+            title: titleValue,
+            description: descriptionValue,
+          })
+          setTitleValue('')
+          setDiscriptionValue('')
+          setIsOpenModal(false)
+        }
+      } catch (e) {
+        console.error('Ошибка редактирования темы:', e)
+      }
+    }
+  }
 
   return (
     <main className={styles.page}>
@@ -91,10 +153,15 @@ export const ForumTopicPage = () => {
           <div className={styles.topicAuthor}>
             {user?.login === topic?.author_login ? (
               <>
-                <button className={styles.buttonDelete}>
+                <button className={styles.buttonDelete} type="button">
                   <DeleteIcon />
                 </button>
-                <button className={styles.buttonEdit}>Редактировать</button>
+                <button
+                  className={styles.buttonEdit}
+                  type="button"
+                  onClick={handleModal}>
+                  Редактировать
+                </button>
               </>
             ) : (
               <>
@@ -133,6 +200,19 @@ export const ForumTopicPage = () => {
           </button>
         </div>
       </div>
+
+      {isOpenModal && (
+        <ModalTopic
+          title="Редактировать тему"
+          closeModal={handleModal}
+          titleValue={titleValue}
+          onChangeTitle={onChangeTitle}
+          descriptionValue={descriptionValue}
+          onChangeDiscription={onChangeDiscription}
+          onClick={editTopic}
+          buttonText="Редактировать"
+        />
+      )}
     </main>
   )
 }

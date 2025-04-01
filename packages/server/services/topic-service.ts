@@ -58,6 +58,7 @@ export const updateTopicService = async (
     await topic.update(updateData, {
       where: { id: topic_id },
     })
+
     const updatedTopic = await topic.findOne({
       where: { id: topic_id },
     })

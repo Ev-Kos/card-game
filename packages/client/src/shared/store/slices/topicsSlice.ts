@@ -32,7 +32,7 @@ const topicsSlice = createSlice({
   name: 'topics',
   initialState,
   reducers: {
-    getTopicsAction(state, action) {
+    addTopicAction(state, action) {
       state.topics = [action.payload, ...state.topics]
     },
   },
@@ -56,5 +56,5 @@ const topicsSlice = createSlice({
   },
 })
 
-export const { getTopicsAction } = topicsSlice.actions
+export const { addTopicAction } = topicsSlice.actions
 export default topicsSlice.reducer
