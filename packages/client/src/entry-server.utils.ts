@@ -1,10 +1,16 @@
 import { Request as ExpressRequest } from 'express'
+import { PageInitContext } from './shared/routes/routes'
 
 export const createUrl = (req: ExpressRequest) => {
   const origin = `${req.protocol}://${req.get('host')}`
 
   return new URL(req.originalUrl || req.url, origin)
 }
+
+export const createContext = (req: ExpressRequest): PageInitContext => ({
+  authCookie: req.cookies.authCookie,
+  uuid: req.cookies.uuid,
+})
 
 export const createFetchRequest = (req: ExpressRequest) => {
   const url = createUrl(req)
