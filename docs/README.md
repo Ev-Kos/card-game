@@ -9,6 +9,7 @@
 ## Видео-презентация
 
 [5-6 спринт](https://drive.google.com/file/d/1Y58zSzrW0ODVD-S6atJMYiZJKnN-i3Gf/view?usp=sharing)
+[7-8 спринт](https://drive.google.com/file/d/1U0ppWCbNbhvuz7czkAxqhiUAzXv276p3/view?usp=sharing)
 
 ## Отчет по утечкам памяти
 [Отчет](https://github.com/Ev-Kos/card-game/blob/7475736870e93ac5afbdf9a846927ff74d2de74a/docs/MEMORYLEAKS.md)
