@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-
 import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { RatingCard } from '../../entities/rating-card'
-
 import styles from './styles.module.css'
 import { useSelector } from 'react-redux'
 import { leaderboardSelectors } from '../../shared/store/selectors/leaderboardSelector'
 import { useAppDispatch } from '../../shared/store/store'
 import { fetchLeaderboard } from '../../shared/store/slices/leaderboardSlise'
 import { Notice } from '../../shared/notice/notice'
+import { teamName } from '../../assets/assets'
 
 const limit = 10
 
@@ -36,7 +35,6 @@ export const RatingPage = () => {
           limit: limit,
         }
 
-        const teamName = 'deckMasters'
         const result = await dispatch(
           fetchLeaderboard({ data, teamName }),
         ).unwrap()

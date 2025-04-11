@@ -9,6 +9,15 @@ import { EndGame } from '../../entities/end-game/end-game'
 import { findCard } from './helpers'
 import { useMusic } from '../../shared/hooks/useMusic'
 import { InputRange } from '../../shared/input-range/input-range'
+import { useSelector } from 'react-redux'
+import { getUser } from '../../shared/store/selectors/userSelector'
+import { addUserToLeaderBoard } from '../../shared/hooks/api/leaderboard'
+import { teamName } from '../../assets/assets'
+import { leaderboardSelectors } from '../../shared/store/selectors/leaderboardSelector'
+import { useAppDispatch } from '../../shared/store/store'
+import { fetchLeaderboard } from '../../shared/store/slices/leaderboardSlise'
+
+const limit = 100
 
 export const Game = () => {
   const [widthGame, setWidthGame] = useState(0)
@@ -49,6 +58,12 @@ export const Game = () => {
 
   const [valueSoundMusic, setValueSoundMusic] = useState(1)
   const [valueSoundEffects, setValueSoundEffects] = useState(1)
+  const [offset, setOffset] = useState(0)
+  const [isGetLeaderboard, setIsGetLeaderboard] = useState(false)
+
+  const userData = useSelector(getUser)
+  const leaderboard = useSelector(leaderboardSelectors.getLeaderboard)
+  const dispatch = useAppDispatch()
 
   useMusic({
     loop: true,
@@ -80,6 +95,89 @@ export const Game = () => {
   const endGame =
     (playerCards.length === 0 || botCards.length === 0) &&
     deckCards.length === 0
+
+  useEffect(() => {
+    if (!isPlayerWin) return
+
+    const updateLeaderboard = async (
+      newWins: number,
+      user: typeof userData,
+    ) => {
+      const data = {
+        data: {
+          login_deckMasters: user?.login || '',
+          avatarUrl: user?.avatar || null,
+          numberOfWins: newWins,
+        },
+        ratingFieldName: 'numberOfWins',
+        teamName: teamName,
+      }
+
+      try {
+        await addUserToLeaderBoard(data)
+        localStorage.setItem('wins', String(newWins))
+      } catch (e) {
+        console.error('Ошибка addUserToLeaderboard:', e)
+      }
+    }
+
+    const handleNewUser = async () => {
+      if (leaderboard.length % limit === 0) {
+        setOffset(prev => prev + limit)
+        setIsGetLeaderboard(true)
+      } else {
+        localStorage.setItem('wins', '1')
+        await updateLeaderboard(1, userData)
+      }
+    }
+
+    const handleExistingUser = async () => {
+      const storedWins = Number(localStorage.getItem('wins')) || 0
+      const leaderboardUser = leaderboard.find(
+        item => item.data.login_deckMasters === userData?.login,
+      )
+
+      if (leaderboardUser) {
+        const newWins = leaderboardUser.data.numberOfWins + 1
+        await updateLeaderboard(newWins, userData)
+      } else if (storedWins > 0) {
+        const newWins = storedWins + 1
+        await updateLeaderboard(newWins, userData)
+      } else {
+        await handleNewUser()
+      }
+    }
+
+    const executeUpdate = async () => {
+      const storedWins = localStorage.getItem('wins')
+
+      if (storedWins && userData) {
+        await updateLeaderboard(Number(storedWins) + 1, userData)
+      } else {
+        await handleExistingUser()
+      }
+    }
+
+    executeUpdate()
+  }, [isPlayerWin, leaderboard])
+
+  useEffect(() => {
+    if (!isGetLeaderboard) return
+    const getLeaderboard = async () => {
+      try {
+        const data = {
+          ratingFieldName: 'login_deckMasters',
+          cursor: offset,
+          limit: limit,
+        }
+        await dispatch(fetchLeaderboard({ data, teamName }))
+        setIsGetLeaderboard(true)
+      } catch (e) {
+        console.error('Ошибка getLeaderboard:', e)
+      }
+    }
+    getLeaderboard()
+  }, [isGetLeaderboard])
 
   useEffect(() => {
     if (deckCards.length !== 0) return
@@ -118,6 +216,8 @@ export const Game = () => {
     setMoveBot(false)
     setMovePlayer(false)
     setPlayer(false)
+    setPlayerWin(false)
+    setNobodyWin(false)
   }
 
   const onClickNewGame = () => {
