@@ -36,3 +36,10 @@
   align-items: center;
   margin-top: 12px;
 }
+
+.errorText {
+  color: var(--color-contrast);
+  font-size: 12px;
+  font-weight: 400;
+  padding-left: 4px;
+}
