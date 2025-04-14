@@ -50,7 +50,6 @@ async function createServer() {
             `frame-src 'none'`,
             `object-src 'none'`,
         ].join('; ');
-        console.log(cspDirectives);
         res.setHeader('Content-Security-Policy', cspDirectives);
         try {
             let render;

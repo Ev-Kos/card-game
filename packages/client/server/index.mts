@@ -10,11 +10,9 @@ import serialize from 'serialize-javascript'
 import cookieParser from 'cookie-parser'
 import crypto from 'crypto';
 
-declare global {
-  namespace Express {
-    interface Request {
-      nonce?: string;
-    }
+declare module 'express' {
+  interface Request {
+    nonce?: string
   }
 }
 
@@ -27,7 +25,7 @@ const api = process.env.API
 async function createServer() {
   const app = express()
 
-  app.use((req, _res, next) => {
+  app.use((req: ExpressRequest, _res, next) => {
     const nonce = crypto.randomBytes(16).toString('base64');
     req.nonce = nonce
     next();
@@ -50,7 +48,7 @@ async function createServer() {
     )
   }
 
-  app.get('*', async (req, res, next) => {
+  app.get('*', async (req: ExpressRequest, res, next) => {
     const url = req.originalUrl
     const nonce = req.nonce;
 
