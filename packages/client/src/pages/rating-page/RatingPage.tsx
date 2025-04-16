@@ -1,50 +1,112 @@
-import { useEffect } from 'react'
-
-import { addHeaderShadowWhileScroll } from '../../shared/utils/addHeaderShadowWhileScroll'
-import { rateList } from './assets'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { RatingCard } from '../../entities/rating-card'
-
 import styles from './styles.module.css'
+import { useSelector } from 'react-redux'
+import { leaderboardSelectors } from '../../shared/store/selectors/leaderboardSelector'
+import { useAppDispatch } from '../../shared/store/store'
+import { fetchLeaderboard } from '../../shared/store/slices/leaderboardSlise'
+import { Notice } from '../../shared/notice/notice'
+import { teamName } from '../../assets/assets'
 
-const rateItemId = 'rateItem'
-const rateListId = 'rateList'
-const headerId = 'header'
-
-const changeHeaderStyle = () => {
-  addHeaderShadowWhileScroll(headerId, rateItemId)
-}
+const limit = 10
 
 export const RatingPage = () => {
   useGetUserData()
 
-  useEffect(() => {
-    const targetBlock = document.getElementById(rateListId)
-    targetBlock?.addEventListener('scroll', changeHeaderStyle)
+  const [offset, setOffset] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const leaderboard = useSelector(leaderboardSelectors.getLeaderboard)
+  const { request } = useSelector(leaderboardSelectors.getStatusFlags)
+  const leaderboardRef = useRef<HTMLUListElement>(null)
 
-    return () => targetBlock?.removeEventListener('scroll', changeHeaderStyle)
-  }, [])
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (!hasMore) return
+
+    const getLeaderBoardData = async () => {
+      try {
+        const data = {
+          ratingFieldName: 'login_deckMasters',
+          cursor: offset,
+          limit: limit,
+        }
+
+        const result = await dispatch(
+          fetchLeaderboard({ data, teamName }),
+        ).unwrap()
+
+        if (result && result.length < limit) {
+          setHasMore(false)
+        }
+      } catch (e) {
+        console.error('Ошибка получения leaderboard:', e)
+      }
+    }
+
+    getLeaderBoardData()
+  }, [offset])
+
+  const handleScroll = useCallback(() => {
+    if (!leaderboardRef.current) return
+
+    const { scrollTop } = leaderboardRef.current
+
+    setIsScrolling(scrollTop > 0)
+    if (request || !hasMore) return
+
+    const { clientHeight, scrollHeight } = leaderboardRef.current
+    const isBottom = scrollHeight - (scrollTop + clientHeight) < 100
+
+    if (isBottom) {
+      setOffset(prev => prev + limit)
+    }
+  }, [request, hasMore])
+
+  useEffect(() => {
+    const listElement = leaderboardRef.current
+    listElement?.addEventListener('scroll', handleScroll)
+
+    return () => {
+      listElement?.removeEventListener('scroll', handleScroll)
+    }
+  }, [handleScroll])
+
+  const isShowNoticeAllDataLoaded =
+    leaderboard.length % limit === 0 ? false : true
+
+  const leaderBoardSort = leaderboard
+    .slice()
+    .sort((a, b) => b.data.numberOfWins - a.data.numberOfWins)
 
   return (
     <div className={styles.pageContentContainer}>
       <ButtonGoBack />
-      <div id={headerId} className={styles.headerContainer}>
+      <div
+        className={`${styles.headerContainer} ${
+          isScrolling ? styles.headerContainerScrolling : ''
+        }`}>
         <h1 className={styles.title}>Статистика</h1>
       </div>
 
-      <div id={rateListId} className={styles.rateListContainer}>
-        {rateList.map((rateItem, idx) => (
+      <ul ref={leaderboardRef} className={styles.rateListContainer}>
+        {leaderBoardSort.map((rateItem, idx) => (
           <RatingCard
-            cardId={rateItemId}
             key={idx}
             cardIdx={idx}
-            userName={rateItem.name}
-            score={rateItem.score}
-            avatarUrl={rateItem.avatarUrl}
+            userName={rateItem.data.login_deckMasters}
+            score={rateItem.data.numberOfWins}
+            avatarUrl={rateItem.data.avatarUrl}
           />
         ))}
-      </div>
+        {request && <Notice text="Загрузка..." />}
+        {!hasMore && !isShowNoticeAllDataLoaded && (
+          <Notice text="Все темы загружены" />
+        )}
+      </ul>
     </div>
   )
 }

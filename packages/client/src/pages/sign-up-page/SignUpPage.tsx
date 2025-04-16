@@ -17,7 +17,7 @@ export const SignUpPage = () => {
   const methods = useForm<TFormData>({ mode: 'all' })
   const { formState } = methods
   const navigate = useNavigate()
-  const [isError, setError] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const getSubmitButton = (onSubmit: () => Promise<void>) => (
     <Button size="s" color="primary" onClick={onSubmit}>
@@ -34,7 +34,7 @@ export const SignUpPage = () => {
       }
 
       if (result === 409) {
-        setError(true)
+        setIsError(true)
       }
 
       if (result === 200) {

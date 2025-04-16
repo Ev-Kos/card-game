@@ -11,6 +11,7 @@
   --color-link: #4f2982;
   --color-secondary-transparent: rgba(21, 6, 41, 0.5);
   --color-black: #000000;
+  --color-black-shadow: #00000040;
 }
 
 body {

@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore as useStoreBase } from 'react-redux'
 import userSlice from './slices/userSlice'
 import ssrSlice from './slices/ssrSlice'
+import leaderboardSlice from './slices/leaderboardSlise'
 import { combineReducers } from 'redux'
 
 declare global {
@@ -13,6 +14,7 @@ declare global {
 export const reducer = combineReducers({
   userSlice,
   ssrSlice,
+  leaderboardSlice,
 })
 
 export const store = configureStore({
