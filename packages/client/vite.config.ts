@@ -8,6 +8,20 @@ dotenv.config()
 export default defineConfig({
   server: {
     port: Number(process.env.CLIENT_PORT) || 3000,
+    headers: {
+      'Content-Security-Policy':
+        process.env.NODE_ENV === 'development'
+          ? [
+              `default-src 'self' 'unsafe-inline' 'unsafe-eval'`,
+              `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
+              `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+              `img-src 'self' data: ${process.env.API || 'http://localhost:3000'}`,
+              `font-src 'self' https://fonts.gstatic.com`,
+              `connect-src 'self' ${process.env.API} ws://localhost:*`,
+              `form-action 'self'`,
+            ].join('; ')
+          : '',
+    },
   },
   define: {
     __SERVER_URL__: process.env.SERVER_URL,

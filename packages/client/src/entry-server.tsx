@@ -18,6 +18,12 @@ import { reducer } from './shared/store/store'
 import { setPageHasBeenInitializedOnServer } from './shared/store/slices/ssrSlice'
 import { matchRoutes } from 'react-router-dom'
 
+declare module 'express' {
+  interface Request {
+    nonce?: string
+  }
+}
+
 export const render = async (req: ExpressRequest) => {
   const { query, dataRoutes } = createStaticHandler(routesArr)
 
@@ -69,5 +75,6 @@ export const render = async (req: ExpressRequest) => {
       </StrictMode>,
     ),
     initialState: store.getState(),
+    nonce: req.nonce,
   }
 }
