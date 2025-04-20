@@ -65,9 +65,9 @@ async function createServer() {
           : `'nonce-${nonce}'`
         } https://fonts.googleapis.com`,
       `font-src 'self' https://fonts.gstatic.com`,
-      `img-src 'self' data: ${api}`,
+      `img-src 'self' data: https://ya-praktikum.tech`,
       `form-action 'self'`,
-      `connect-src 'self' ${api} ${isDev ? 'ws://localhost:*' : ''}`,
+      `connect-src 'self' https://ya-praktikum.tech ${isDev ? 'ws://localhost:*' : ''}`,
       `worker-src 'self' blob:`,
       `frame-src 'none'`,
       `object-src 'none'`,
