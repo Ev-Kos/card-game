@@ -10,8 +10,8 @@ services:
         restart: always
         expose:
             - "3000"
-        #ports:
-        #    - "${CLIENT_PORT}:3000"
+        ports:
+           - "${CLIENT_PORT}:3000"
         environment:
           - CLIENT_PORT=${CLIENT_PORT}
           - SERVER_PORT=${SERVER_PORT}
