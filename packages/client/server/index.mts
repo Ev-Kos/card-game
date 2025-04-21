@@ -42,60 +42,37 @@ async function createServer() {
 
     app.use(vite.middlewares)
   } else {
-    // app.use(
-    //   express.static(path.join(clientPath, 'dist/client'), { index: false }),
-    // )
     app.use(
-      '/assets',
-      express.static(path.join(clientPath, 'dist/client/assets'), {
-        setHeaders: (res, path) => {
-          if (path.endsWith('.js')) {
-            res.setHeader('Content-Type', 'text/javascript');
-          }
-          if (path.endsWith('.css')) {
-            res.setHeader('Content-Type', 'text/css');
-          }
-        }
-      })
-    );
-  
-    // Медиа-ресурсы
-    app.use('/music', express.static(path.join(clientPath, 'dist/client/music')));
-    app.use('/sprites', express.static(path.join(clientPath, 'dist/client/sprites')));
-    
-    // Фавиконки и другие корневые файлы
-    app.use(express.static(path.join(clientPath, 'dist/client'), { 
-      index: false,
-      extensions: ['ico', 'webmanifest', 'png']
-    }));
+      express.static(path.join(clientPath, 'dist/client'), { index: false }),
+    )
   }
 
   app.get('*', async (req: ExpressRequest, res, next) => {
     const url = req.originalUrl
-    // const nonce = req.nonce;
+    const nonce = req.nonce;
 
-    // const cspDirectives = [
-    //   `default-src 'self'`,
-    //   `script-src 'self' ${
-    //     isDev 
-    //       ? "'unsafe-inline' 'unsafe-eval'" 
-    //       : `'nonce-${nonce}'`
-    //     }`,
-    //   `style-src 'self' ${
-    //     isDev 
-    //       ? "'unsafe-inline'" 
-    //       : `'nonce-${nonce}'`
-    //     } https://fonts.googleapis.com`,
-    //   `font-src 'self' https://fonts.gstatic.com`,
-    //   `img-src 'self' data: https://ya-praktikum.tech`,
-    //   `form-action 'self'`,
-    //   `connect-src 'self' https://ya-praktikum.tech${isDev ? ' ws://localhost:*' : ''}`,
-    //   `worker-src 'self' blob:`,
-    //   `frame-src 'none'`,
-    //   `object-src 'none'`,
-    // ].join('; ');
+    const cspDirectives = [
+      `default-src 'self'`,
+      `script-src 'self' ${
+        isDev 
+          ? "'unsafe-inline' 'unsafe-eval'" 
+          : `'nonce-${nonce}'`
+        }`,
+      `style-src 'self' ${
+        isDev 
+          ? "'unsafe-inline'" 
+          : `'nonce-${nonce}'`
+        } https://fonts.googleapis.com`,
+      `font-src 'self' https://fonts.gstatic.com`,
+      `img-src 'self' data: https://ya-praktikum.tech`,
+      `form-action 'self'`,
+      `connect-src 'self' https://ya-praktikum.tech${isDev ? ' ws://localhost:*' : ''}`,
+      `worker-src 'self' blob:`,
+      `frame-src 'none'`,
+      `object-src 'none'`,
+    ].join('; ');
 
-    // res.setHeader('Content-Security-Policy', cspDirectives);
+    res.setHeader('Content-Security-Policy', cspDirectives);
 
     try {
       let render: (req: ExpressRequest) => Promise<{ html: string, initialState: unknown }>
@@ -129,20 +106,13 @@ async function createServer() {
 
       const { html: appHtml, initialState } = await render(req)
 
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml).replace(
-        `<!--ssr-initial-state-->`,
-        `<script>window.APP_INITIAL_STATE = ${serialize(initialState, {
-          isJSON: true,
-        })}</script>`
-      )
-
-      // const html = template
-      //   .replace(`<!--ssr-outlet-->`, appHtml)
-      //   .replace(
-      //     `<!--ssr-initial-state-->`,
-      //     `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`
-      //   )
-      //   .replace(/%nonce%/g, nonce || '');
+      const html = template
+        .replace(`<!--ssr-outlet-->`, appHtml)
+        .replace(
+          `<!--ssr-initial-state-->`,
+          `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`
+        )
+        .replace(/%nonce%/g, nonce || '');
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
 

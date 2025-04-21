@@ -29,7 +29,27 @@ async function createServer() {
         app.use(vite.middlewares);
     }
     else {
-        app.use(express.static(path.join(clientPath, 'dist/client'), { index: false }));
+        // app.use(
+        //   express.static(path.join(clientPath, 'dist/client'), { index: false }),
+        // )
+        app.use('/assets', express.static(path.join(clientPath, 'dist/client/assets'), {
+            setHeaders: (res, path) => {
+                if (path.endsWith('.js')) {
+                    res.setHeader('Content-Type', 'text/javascript');
+                }
+                if (path.endsWith('.css')) {
+                    res.setHeader('Content-Type', 'text/css');
+                }
+            }
+        }));
+        // Медиа-ресурсы
+        app.use('/music', express.static(path.join(clientPath, 'dist/client/music')));
+        app.use('/sprites', express.static(path.join(clientPath, 'dist/client/sprites')));
+        // Фавиконки и другие корневые файлы
+        app.use(express.static(path.join(clientPath, 'dist/client'), {
+            index: false,
+            extensions: ['ico', 'webmanifest', 'png']
+        }));
     }
     app.get('*', async (req, res, next) => {
         const url = req.originalUrl;
