@@ -75,6 +75,6 @@ export const render = async (req: ExpressRequest) => {
       </StrictMode>,
     ),
     initialState: store.getState(),
-    nonce: req.nonce,
+    //nonce: req.nonce,
   }
 }
