@@ -49,7 +49,6 @@ async function createServer() {
             `frame-src 'none'`,
             `object-src 'none'`,
         ].join('; ');
-        console.log(cspDirectives);
         res.setHeader('Content-Security-Policy', cspDirectives);
         try {
             let render;
@@ -66,11 +65,9 @@ async function createServer() {
             }
             const { html: appHtml, initialState } = await render(req);
             const html = template
+                .replace(/%nonce%/g, nonce)
                 .replace(`<!--ssr-outlet-->`, appHtml)
-                .replace(`<!--ssr-initial-state-->`, `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`)
-                .replace('<script>window.__staticRouterHydrationData', `<script nonce="${nonce}">window.__staticRouterHydrationData`)
-                .replace(/<script(.*?)>/g, `<script$1 nonce="${nonce}">`)
-                .replace(/%nonce%/g, nonce || '');
+                .replace(`<!--ssr-initial-state-->`, `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`);
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         }
         catch (e) {
