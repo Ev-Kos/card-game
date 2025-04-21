@@ -20,12 +20,13 @@ const port = process.env.CLIENT_PORT || 3000
 const __dirname = path.resolve()
 const clientPath = __dirname
 const isDev = process.env.NODE_ENV === 'development'
+const api = 'https://ya-praktikum.tech'
 
 async function createServer() {
   const app = express()
 
   app.use((req: ExpressRequest, _res, next) => {
-    const nonce = crypto.randomBytes(16).toString('base64');
+    const nonce = crypto.randomBytes(16).toString('base64url');
     req.nonce = nonce
     next();
   })
@@ -53,20 +54,16 @@ async function createServer() {
 
     const cspDirectives = [
       `default-src 'self'`,
-      `script-src 'self' ${
-        isDev 
-          ? "'unsafe-inline' 'unsafe-eval'" 
-          : `'nonce-${nonce}'`
-        }`,
+      `script-src 'self' 'nonce-${nonce}'`,
       `style-src 'self' ${
         isDev 
           ? "'unsafe-inline'" 
           : `'nonce-${nonce}'`
         } https://fonts.googleapis.com`,
       `font-src 'self' https://fonts.gstatic.com`,
-      `img-src 'self' data: https://ya-praktikum.tech`,
+      `img-src 'self' data: ${api}`,
       `form-action 'self'`,
-      `connect-src 'self' https://ya-praktikum.tech${isDev ? ' ws://localhost:*' : ''}`,
+      `connect-src 'self' ${api}${isDev ? ' ws://localhost:*' : ''}`,
       `worker-src 'self' blob:`,
       `frame-src 'none'`,
       `object-src 'none'`,
@@ -112,7 +109,6 @@ async function createServer() {
           `<!--ssr-initial-state-->`,
           `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`
         )
-        .replace(/%nonce%/g, nonce || '');
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
 
