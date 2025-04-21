@@ -11,10 +11,11 @@ const port = process.env.CLIENT_PORT || 3000;
 const __dirname = path.resolve();
 const clientPath = __dirname;
 const isDev = process.env.NODE_ENV === 'development';
+const api = 'https://ya-praktikum.tech';
 async function createServer() {
     const app = express();
     app.use((req, _res, next) => {
-        const nonce = crypto.randomBytes(16).toString('base64');
+        const nonce = crypto.randomBytes(16).toString('base64url');
         req.nonce = nonce;
         next();
     });
@@ -29,52 +30,27 @@ async function createServer() {
         app.use(vite.middlewares);
     }
     else {
-        // app.use(
-        //   express.static(path.join(clientPath, 'dist/client'), { index: false }),
-        // )
-        app.use('/assets', express.static(path.join(clientPath, 'dist/client/assets'), {
-            setHeaders: (res, path) => {
-                if (path.endsWith('.js')) {
-                    res.setHeader('Content-Type', 'text/javascript');
-                }
-                if (path.endsWith('.css')) {
-                    res.setHeader('Content-Type', 'text/css');
-                }
-            }
-        }));
-        // Медиа-ресурсы
-        app.use('/music', express.static(path.join(clientPath, 'dist/client/music')));
-        app.use('/sprites', express.static(path.join(clientPath, 'dist/client/sprites')));
-        // Фавиконки и другие корневые файлы
-        app.use(express.static(path.join(clientPath, 'dist/client'), {
-            index: false,
-            extensions: ['ico', 'webmanifest', 'png']
-        }));
+        app.use(express.static(path.join(clientPath, 'dist/client'), { index: false }));
     }
     app.get('*', async (req, res, next) => {
         const url = req.originalUrl;
-        // const nonce = req.nonce;
-        // const cspDirectives = [
-        //   `default-src 'self'`,
-        //   `script-src 'self' ${
-        //     isDev 
-        //       ? "'unsafe-inline' 'unsafe-eval'" 
-        //       : `'nonce-${nonce}'`
-        //     }`,
-        //   `style-src 'self' ${
-        //     isDev 
-        //       ? "'unsafe-inline'" 
-        //       : `'nonce-${nonce}'`
-        //     } https://fonts.googleapis.com`,
-        //   `font-src 'self' https://fonts.gstatic.com`,
-        //   `img-src 'self' data: https://ya-praktikum.tech`,
-        //   `form-action 'self'`,
-        //   `connect-src 'self' https://ya-praktikum.tech${isDev ? ' ws://localhost:*' : ''}`,
-        //   `worker-src 'self' blob:`,
-        //   `frame-src 'none'`,
-        //   `object-src 'none'`,
-        // ].join('; ');
-        // res.setHeader('Content-Security-Policy', cspDirectives);
+        const nonce = req.nonce;
+        const cspDirectives = [
+            `default-src 'self'`,
+            `script-src 'self' 'nonce-${nonce}' ${isDev ? "'unsafe-eval'" : ""}`,
+            `style-src 'self' ${isDev
+                ? "'unsafe-inline'"
+                : `'nonce-${nonce}'`} https://fonts.googleapis.com`,
+            `font-src 'self' https://fonts.gstatic.com`,
+            `img-src 'self' data: ${api}`,
+            `form-action 'self'`,
+            `connect-src 'self' ${api}${isDev ? ' ws://localhost:*' : ''}`,
+            `worker-src 'self' blob:`,
+            `frame-src 'none'`,
+            `object-src 'none'`,
+        ].join('; ');
+        console.log(cspDirectives);
+        res.setHeader('Content-Security-Policy', cspDirectives);
         try {
             let render;
             let template;
@@ -89,16 +65,12 @@ async function createServer() {
                 render = (await import(pathToServer)).render;
             }
             const { html: appHtml, initialState } = await render(req);
-            const html = template.replace(`<!--ssr-outlet-->`, appHtml).replace(`<!--ssr-initial-state-->`, `<script>window.APP_INITIAL_STATE = ${serialize(initialState, {
-                isJSON: true,
-            })}</script>`);
-            // const html = template
-            //   .replace(`<!--ssr-outlet-->`, appHtml)
-            //   .replace(
-            //     `<!--ssr-initial-state-->`,
-            //     `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`
-            //   )
-            //   .replace(/%nonce%/g, nonce || '');
+            const html = template
+                .replace(`<!--ssr-outlet-->`, appHtml)
+                .replace(`<!--ssr-initial-state-->`, `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`)
+                .replace('<script>window.__staticRouterHydrationData', `<script nonce="${nonce}">window.__staticRouterHydrationData`)
+                .replace(/<script(.*?)>/g, `<script$1 nonce="${nonce}">`)
+                .replace(/%nonce%/g, nonce || '');
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         }
         catch (e) {

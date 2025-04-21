@@ -54,7 +54,7 @@ async function createServer() {
 
     const cspDirectives = [
       `default-src 'self'`,
-      `script-src 'self' 'nonce-${nonce}'`,
+      `script-src 'self' 'nonce-${nonce}' ${isDev ? "'unsafe-eval'" : ""}`,
       `style-src 'self' ${
         isDev 
           ? "'unsafe-inline'" 
@@ -69,6 +69,7 @@ async function createServer() {
       `object-src 'none'`,
     ].join('; ');
 
+    console.log(cspDirectives)
     res.setHeader('Content-Security-Policy', cspDirectives);
 
     try {
@@ -109,6 +110,12 @@ async function createServer() {
           `<!--ssr-initial-state-->`,
           `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`
         )
+        .replace(
+          '<script>window.__staticRouterHydrationData',
+          `<script nonce="${nonce}">window.__staticRouterHydrationData`
+        )
+        .replace(/<script(.*?)>/g, `<script$1 nonce="${nonce}">`)
+        .replace(/%nonce%/g, nonce || '');
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
 
