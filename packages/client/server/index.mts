@@ -20,7 +20,6 @@ const port = process.env.CLIENT_PORT || 3000
 const __dirname = path.resolve()
 const clientPath = __dirname
 const isDev = process.env.NODE_ENV === 'development'
-const api = "https://ya-praktikum.tech"
 
 async function createServer() {
   const app = express()
@@ -67,7 +66,7 @@ async function createServer() {
       `font-src 'self' https://fonts.gstatic.com`,
       `img-src 'self' data: https://ya-praktikum.tech`,
       `form-action 'self'`,
-      `connect-src 'self' https://ya-praktikum.tech ${isDev ? 'ws://localhost:*' : ''}`,
+      `connect-src 'self' https://ya-praktikum.tech${isDev ? ' ws://localhost:*' : ''}`,
       `worker-src 'self' blob:`,
       `frame-src 'none'`,
       `object-src 'none'`,
