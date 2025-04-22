@@ -14,9 +14,9 @@ const isDev = process.env.NODE_ENV === 'development';
 const api = 'https://ya-praktikum.tech';
 async function createServer() {
     const app = express();
-    app.use((req, _res, next) => {
-        const nonce = crypto.randomBytes(16).toString('base64url');
-        req.nonce = nonce;
+    app.use((req, res, next) => {
+        const cspNonce = crypto.randomBytes(16).toString('base64');
+        res.locals.cspNonce = cspNonce; // Сохраняем в res.locals
         next();
     });
     app.use(cookieParser());
@@ -32,15 +32,16 @@ async function createServer() {
     else {
         app.use(express.static(path.join(clientPath, 'dist/client'), { index: false }));
     }
+    console.log(isDev);
     app.get('*', async (req, res, next) => {
         const url = req.originalUrl;
-        const nonce = req.nonce;
+        const cspNonce = res.locals.cspNonce;
         const cspDirectives = [
             `default-src 'self'`,
-            `script-src 'self' 'nonce-${nonce}' ${isDev ? "'unsafe-eval'" : ""}`,
+            `script-src 'self' 'nonce-${cspNonce}' ${isDev ? "'unsafe-eval'" : ""}`,
             `style-src 'self' ${isDev
                 ? "'unsafe-inline'"
-                : `'nonce-${nonce}'`} https://fonts.googleapis.com`,
+                : `'nonce-${cspNonce}'`} https://fonts.googleapis.com`,
             `font-src 'self' https://fonts.gstatic.com`,
             `img-src 'self' data: ${api}`,
             `form-action 'self'`,
@@ -63,11 +64,10 @@ async function createServer() {
                 const pathToServer = path.join(clientPath, 'dist/server/entry-server.mjs');
                 render = (await import(pathToServer)).render;
             }
-            const { html: appHtml, initialState } = await render(req);
+            const { html: appHtml, initialState } = await render(req, cspNonce);
             const html = template
-                .replace(/%nonce%/g, nonce)
                 .replace(`<!--ssr-outlet-->`, appHtml)
-                .replace(`<!--ssr-initial-state-->`, `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`);
+                .replace(`<!--ssr-initial-state-->`, `<script nonce="${cspNonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`);
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         }
         catch (e) {

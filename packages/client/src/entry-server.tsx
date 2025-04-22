@@ -18,13 +18,7 @@ import { reducer } from './shared/store/store'
 import { setPageHasBeenInitializedOnServer } from './shared/store/slices/ssrSlice'
 import { matchRoutes } from 'react-router-dom'
 
-declare module 'express' {
-  interface Request {
-    nonce?: string
-  }
-}
-
-export const render = async (req: ExpressRequest) => {
+export const render = async (req: ExpressRequest, cspNonce: string) => {
   const { query, dataRoutes } = createStaticHandler(routesArr)
 
   const fetchRequest = createFetchRequest(req)
@@ -66,15 +60,21 @@ export const render = async (req: ExpressRequest) => {
 
   const router = createStaticRouter(dataRoutes, context)
 
+  const htmlOutput = renderToString(
+    <StrictMode>
+      <Provider store={store}>
+        <StaticRouterProvider router={router} context={context} />
+      </Provider>
+    </StrictMode>,
+  )
+
+  const modifiedHtml = htmlOutput.replace(
+    /<script>\s*window\.__staticRouterHydrationData\s*=/g,
+    `<script nonce="${cspNonce}">window.__staticRouterHydrationData =`,
+  )
+
   return {
-    html: renderToString(
-      <StrictMode>
-        <Provider store={store}>
-          <StaticRouterProvider router={router} context={context} />
-        </Provider>
-      </StrictMode>,
-    ),
+    html: modifiedHtml,
     initialState: store.getState(),
-    nonce: req.nonce,
   }
 }

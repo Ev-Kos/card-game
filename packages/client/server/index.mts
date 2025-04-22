@@ -10,12 +10,6 @@ import serialize from 'serialize-javascript'
 import cookieParser from 'cookie-parser'
 import crypto from 'crypto';
 
-declare module 'express' {
-  interface Request {
-    nonce?: string
-  }
-}
-
 const port = process.env.CLIENT_PORT || 3000
 const __dirname = path.resolve()
 const clientPath = __dirname
@@ -25,11 +19,11 @@ const api = 'https://ya-praktikum.tech'
 async function createServer() {
   const app = express()
 
-  app.use((req: ExpressRequest, _res, next) => {
-    const nonce = crypto.randomBytes(16).toString('base64url');
-    req.nonce = nonce
+  app.use((req: ExpressRequest, res, next) => {
+    const cspNonce = crypto.randomBytes(16).toString('base64');
+    res.locals.cspNonce = cspNonce; // Сохраняем в res.locals
     next();
-  })
+  });
 
   app.use(cookieParser()) 
 
@@ -48,17 +42,18 @@ async function createServer() {
     )
   }
 
+  console.log(isDev)
   app.get('*', async (req: ExpressRequest, res, next) => {
     const url = req.originalUrl
-    const nonce = req.nonce;
+    const cspNonce = res.locals.cspNonce as string;
 
     const cspDirectives = [
       `default-src 'self'`,
-      `script-src 'self' 'nonce-${nonce}' ${isDev ? "'unsafe-eval'" : ""}`,
+      `script-src 'self' 'nonce-${cspNonce}' ${isDev ? "'unsafe-eval'" : ""}`,
       `style-src 'self' ${
         isDev 
           ? "'unsafe-inline'" 
-          : `'nonce-${nonce}'`
+          : `'nonce-${cspNonce}'`
         } https://fonts.googleapis.com`,
       `font-src 'self' https://fonts.gstatic.com`,
       `img-src 'self' data: ${api}`,
@@ -72,7 +67,7 @@ async function createServer() {
     res.setHeader('Content-Security-Policy', cspDirectives);
 
     try {
-      let render: (req: ExpressRequest) => Promise<{ html: string, initialState: unknown }>
+      let render: (req: ExpressRequest, cspNonce: string) => Promise<{ html: string, initialState: unknown }>
       let template: string
       if (vite) {
         template = await fs.readFile(
@@ -101,14 +96,13 @@ async function createServer() {
         render = (await import(pathToServer)).render
       }
 
-      const { html: appHtml, initialState } = await render(req)
+      const { html: appHtml, initialState } = await render(req, cspNonce);
 
       const html = template
-        .replace(/%nonce%/g, nonce)
         .replace(`<!--ssr-outlet-->`, appHtml)
         .replace(
           `<!--ssr-initial-state-->`,
-          `<script nonce="${nonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`
+          `<script nonce="${cspNonce}">window.APP_INITIAL_STATE = ${serialize(initialState, { isJSON: true })}</script>`
         )
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
