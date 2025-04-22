@@ -15,6 +15,7 @@ const __dirname = path.resolve()
 const clientPath = __dirname
 const isDev = process.env.NODE_ENV === 'development'
 const api = 'https://ya-praktikum.tech'
+const host = 'https://deck-masters-card-game-46.ya-praktikum.tech'
 
 async function createServer() {
   const app = express()
@@ -42,7 +43,6 @@ async function createServer() {
     )
   }
 
-  console.log(isDev)
   app.get('*', async (req: ExpressRequest, res, next) => {
     const url = req.originalUrl
     const cspNonce = res.locals.cspNonce as string;
@@ -56,7 +56,7 @@ async function createServer() {
           : `'nonce-${cspNonce}'`
         } https://fonts.googleapis.com`,
       `font-src 'self' https://fonts.gstatic.com`,
-      `img-src 'self' data: ${api}`,
+      `img-src 'self' data: ${api} blob: ${isDev ? 'http://localhost:3000' : host}`,
       `form-action 'self'`,
       `connect-src 'self' ${api}${isDev ? ' ws://localhost:*' : ''}`,
       `worker-src 'self' blob:`,

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useGetUserData } from '../../shared/hooks/api/useGetUserData'
 import { ButtonGoBack } from '../../shared/button-go-back'
 import { RatingCard } from '../../entities/rating-card'
@@ -6,7 +6,10 @@ import styles from './styles.module.css'
 import { useSelector } from 'react-redux'
 import { leaderboardSelectors } from '../../shared/store/selectors/leaderboardSelector'
 import { useAppDispatch } from '../../shared/store/store'
-import { fetchLeaderboard } from '../../shared/store/slices/leaderboardSlise'
+import {
+  fetchLeaderboard,
+  setLeaderboardAction,
+} from '../../shared/store/slices/leaderboardSlise'
 import { Notice } from '../../shared/notice/notice'
 import { teamName } from '../../assets/assets'
 
@@ -25,6 +28,10 @@ export const RatingPage = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+    dispatch(setLeaderboardAction([]))
+  }, [])
+
+  useEffect(() => {
     if (!hasMore) return
 
     const getLeaderBoardData = async () => {
@@ -34,7 +41,6 @@ export const RatingPage = () => {
           cursor: offset,
           limit: limit,
         }
-
         const result = await dispatch(
           fetchLeaderboard({ data, teamName }),
         ).unwrap()
@@ -78,9 +84,11 @@ export const RatingPage = () => {
   const isShowNoticeAllDataLoaded =
     leaderboard.length % limit === 0 ? false : true
 
-  const leaderBoardSort = leaderboard
-    .slice()
-    .sort((a, b) => b.data.numberOfWins - a.data.numberOfWins)
+  const leaderBoardSort = useMemo(() => {
+    return leaderboard
+      .slice()
+      .sort((a, b) => b.data.numberOfWins - a.data.numberOfWins)
+  }, [leaderboard])
 
   return (
     <div className={styles.pageContentContainer}>
@@ -91,7 +99,6 @@ export const RatingPage = () => {
         }`}>
         <h1 className={styles.title}>Статистика</h1>
       </div>
-
       <ul ref={leaderboardRef} className={styles.rateListContainer}>
         {leaderBoardSort.map((rateItem, idx) => (
           <RatingCard
@@ -104,7 +111,7 @@ export const RatingPage = () => {
         ))}
         {request && <Notice text="Загрузка..." />}
         {!hasMore && !isShowNoticeAllDataLoaded && (
-          <Notice text="Все темы загружены" />
+          <Notice text="Все игроки загружены" />
         )}
       </ul>
     </div>

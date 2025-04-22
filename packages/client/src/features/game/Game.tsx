@@ -98,7 +98,6 @@ export const Game = () => {
 
   useEffect(() => {
     if (!isPlayerWin) return
-
     const updateLeaderboard = async (
       newWins: number,
       user: typeof userData,
@@ -122,7 +121,7 @@ export const Game = () => {
     }
 
     const handleNewUser = async () => {
-      if (leaderboard.length % limit === 0) {
+      if (leaderboard.length % limit === 0 && leaderboard.length !== 0) {
         setOffset(prev => prev + limit)
         setIsGetLeaderboard(true)
       } else {
@@ -136,7 +135,6 @@ export const Game = () => {
       const leaderboardUser = leaderboard.find(
         item => item.data.login_deckMasters === userData?.login,
       )
-
       if (leaderboardUser) {
         const newWins = leaderboardUser.data.numberOfWins + 1
         await updateLeaderboard(newWins, userData)
@@ -171,7 +169,7 @@ export const Game = () => {
           limit: limit,
         }
         await dispatch(fetchLeaderboard({ data, teamName }))
-        setIsGetLeaderboard(true)
+        setIsGetLeaderboard(false)
       } catch (e) {
         console.error('Ошибка getLeaderboard:', e)
       }
@@ -218,6 +216,9 @@ export const Game = () => {
     setPlayer(false)
     setPlayerWin(false)
     setNobodyWin(false)
+    if (leaderboard.length === 0) {
+      setIsGetLeaderboard(true)
+    }
   }
 
   const onClickNewGame = () => {

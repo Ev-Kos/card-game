@@ -34,7 +34,11 @@ const initialState: TLeaderboardSlice = {
 const leaderboardSlice = createSlice({
   name: 'leaderboard',
   initialState,
-  reducers: {},
+  reducers: {
+    setLeaderboardAction(state, action) {
+      state.leaderboard = action.payload
+    },
+  },
   extraReducers: builder => {
     builder.addCase(fetchLeaderboard.pending, state => {
       state.request = true
@@ -64,4 +68,5 @@ const leaderboardSlice = createSlice({
   },
 })
 
+export const { setLeaderboardAction } = leaderboardSlice.actions
 export default leaderboardSlice.reducer

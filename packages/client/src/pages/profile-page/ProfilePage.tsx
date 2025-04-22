@@ -75,7 +75,8 @@ export const ProfilePage = () => {
   const changeAvatar = async () => {
     if (!file) return
     try {
-      await changeUserAvatar(file)
+      const res = await changeUserAvatar(file)
+      dispatch(getUserAction(res))
       setFile(null)
       setChangeAvatarModalOpen(false)
     } catch (error) {
@@ -111,7 +112,8 @@ export const ProfilePage = () => {
     setChangeInfo(false)
     if (Object.keys(formData).length !== 0) {
       try {
-        await changeUserProfile(formData)
+        const res = await changeUserProfile(formData)
+        dispatch(getUserAction(res))
       } catch (error) {
         console.error('Ошибка обновления профиля:', error)
       }
